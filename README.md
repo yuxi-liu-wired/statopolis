@@ -211,24 +211,24 @@ It is essential that you refer to the [deliverables page](http://cs.anu.edu.au/c
 ### Part One
 
 In the first part of the assignment you will:
-* Create a UML model of your *initial* design for the final assignment (Task #1).
-* Implement parts of the text interface to the game (Tasks #2, #3, and #5).
-* Implement a simple viewer that allows you to visualise game states (Task #4).
+* Create a UML model of your *initial* design for the final assignment (Task #2).
+* Implement parts of the text interface to the game (Tasks #3, #4, and #6).
+* Implement a simple viewer that allows you to visualise game states (Task #5).
 
 The criteria for the [completion of part one](https://gitlab.cecs.anu.edu.au/comp1110/comp1110/wikis/deliverables#d2c-assignment-2-stage-c-2-marks-group)
 is as follows:
 
 <a name="p"></a>
 **Pass**
-* Tasks #2 and #3.
+* Tasks #2, #3 and #4.
 
 <a name="cr"></a>
 **Credit**
-* Task #4 *(in addition to all tasks required for Pass)*.
+* Task #5 *(in addition to all tasks required for Pass)*.
 
 <a name="d"></a>
 **Distinction**
-* Task #5 *(in addition to all tasks required for Credit)*.
+* Task #6 *(in addition to all tasks required for Credit)*.
 
 
 ### Part Two
@@ -259,7 +259,7 @@ runtime).
 **Pass**
 * Correctly implements all of the <b>Part One</b> criteria.
 * Appropriate use of git (as demonstrated by the history of your repo).
-* Completion of Tasks #6 and #7.
+* Completion of Task #7.
 * Executable on a standard lab computer from a runnable jar file, game.jar, which resides in the root level of your group repo.
 
 <a name="2c"></a>
