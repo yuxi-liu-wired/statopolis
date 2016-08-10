@@ -154,5 +154,4 @@ public class GameField {
         GameField gf = new GameField();
         System.out.println(gf.toString());
     }
-
 }
