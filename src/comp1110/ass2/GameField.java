@@ -36,10 +36,12 @@ public class GameField {
      * -   This is done by getting all its neighbors' coordinates (only check neighbors that are within bound!),
      * -   and checking if at least one of them has height >= 1
      * -   If yes, return true, else, return false.
-     * - If the tile is placed on height h, h >= 1, then test if it touches at least two different tiles below.
-     * -   This is done by getting all its coordinates, and checking the pieceField to see if at least two different
-     * -   ids are registered in the coordinates.
-     * -   If yes, that means this tile straddles two different tiles, thus return true, else, return false.
+     * - If the tile is placed on height h, h >= 1, then
+     * -   First test if it touches legal colors. If any illegal colors appear, return false.
+     * -   Then test if it touches at least two different tiles below.
+     * -     This is done by getting all its coordinates, and checking the pieceField to see if at least two different
+     * -     ids are registered in the coordinates.
+     * -     If yes, that means this tile straddles two different tiles, thus return true, else, return false.
      *
      * @param piece The play piece that you want to add to the board.
      * @return True if the play piece can be added.
@@ -80,7 +82,18 @@ public class GameField {
                 }
             }
             return false;
-        } else { // test if it touches at least two different tiles below.
+        } else {
+            // test if it touches legal colors
+            for (int i = 0; i < blocksOfPiece.length; i++) {
+                c = blocksOfPiece[i];
+                Color color1 = piece.getColorAt(c);
+                Color color2 = colorField[c.x][c.y];
+                if (!color1.isCompatibleWith(color2)) {
+                    return false;
+                }
+            }
+
+            // test if it touches at least two different tiles below.
             int[] idNumbers = new int[blocksOfPiece.length];
             for (int i = 0; i < blocksOfPiece.length; i++) {
                 c = blocksOfPiece[i];
