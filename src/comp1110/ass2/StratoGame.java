@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import java.util.Scanner;
+
 /**
  * This class provides the text interface for the Strato Game
  *
@@ -20,8 +22,11 @@ public class StratoGame {
      * @return True if the tile placement is well-formed
      */
     static boolean isTilePlacementWellFormed(String tilePlacement) {
-        // FIXME Task 3: determine whether a tile placement is well-formed
-        return false;
+        return tilePlacement.length() == 4 &&
+               "ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(Character.toString(tilePlacement.charAt(0))) &&
+               "ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(Character.toString(tilePlacement.charAt(1))) &&
+               "ABCDEFGHIJKLMNOPQRSTU".contains(Character.toString(tilePlacement.charAt(2))) &&
+               "ABCD".contains(Character.toString(tilePlacement.charAt(3)));
     }
 
     /**
@@ -37,9 +42,56 @@ public class StratoGame {
      * @return True if the placement is well-formed
      */
     static boolean isPlacementWellFormed(String placement) {
-        // FIXME Task 4: determine whether a placement is well-formed
-        String foo;
-        return false;
+        int l = placement.length();
+        if (l % 4 != 0 || l < 4 * 1 || l > 4 * 41) {
+            return false;
+        }
+
+        int kindsOfPieces = 21; // There are 21 kinds of pieces in total, from A to U.
+
+        int[] piecesUsed = new int[kindsOfPieces]; // a record of all the pieces used in the placement string;
+        for (int i = 0; i < kindsOfPieces; i++) {piecesUsed[i] = 0;}
+
+        String tile; // temporary variable, used in the loop only
+        for (int i = 1; i <= l / 4; i++) {
+            tile = placement.substring(4 * i - 4, 4 * i);
+
+            System.out.println("considering whether " + tile + " can be placed...");
+
+            if (!isTilePlacementWellFormed(tile)) { return false; } // tile placement must be well-formed
+
+            if (i == 1) {
+                if (!tile.equals("MMUA")) {
+                    System.out.println(tile + " is the first tile, but it's not MMUA!");
+                    return false;
+                } // zeroth tile placement must be "MMUA"
+            } else if (i % 2 == 0 && !"KLMNOPQRST".contains(Character.toString(tile.charAt(2)))) {
+                System.out.println(tile + " is number " + i + " but it's not green!");
+                return false; // the even tiles must be green
+            } else if (i % 2 == 1 && !"ABCDEFGHIJ".contains(Character.toString(tile.charAt(2)))) {
+                System.out.println(tile + " is number " + i + " but it's not red!");
+                return false; // the odd tiles must be red
+            }
+            piecesUsed[tile.charAt(2) - 'A']++; // Recording the fact that this piece is used one more time.
+        }
+        System.out.print("the pieces used are ");
+        for (int i = 0; i < kindsOfPieces; i++) {
+            System.out.print(piecesUsed[i] + " ");
+        }
+        System.out.println("");
+
+        for (int i = 0; i < kindsOfPieces; i++) {
+            if (piecesUsed[i] >= 3) {
+                System.out.println("the " + i + "tile is used more than twice!");
+                return false; } // Some piece is used more than twice.
+        }
+
+        if (piecesUsed[20] > 1) {
+            System.out.println("The U tile is used more than once!");
+            return false; // the U tile must be used exactly once, at the start of the game.
+        }
+
+        return true;
     }
 
     /**
@@ -80,5 +132,24 @@ public class StratoGame {
     static String generateMove(String placement, char piece, char opponentsPiece) {
         // FIXME Task 10: generate a valid move
         return null;
+    }
+
+    // This main method is only for debugging. Remove it after the project is done.
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        String tile;
+        while(true) {
+            System.out.println("Input a placement string");
+            tile = in.next();
+            if (tile.equals("q")){
+                break;
+            }
+            if (isPlacementWellFormed(tile)) {
+                System.out.println(tile + " is well formed.");
+            } else {
+                System.out.println(tile + " is not well formed.");
+            }
+        }
+
     }
 }
