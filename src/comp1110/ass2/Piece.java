@@ -164,6 +164,21 @@ public class Piece {
         }
     }
 
+    public Color getColorAt(Coordinate p) {
+        return  getColorAt(p.x, p.y);
+    }
+    public Color getColorAt(int x, int y) {
+        Coordinate c;
+        for(int i = 0; i < coordinates.length; i++) {
+            c = coordinates[i];
+            if (c.x + origin.x == x && c.y + origin.y == y) {
+                return colorList[i];
+            }
+        }
+        System.out.println("WARNING: Cannot get the color of a nonexistent block (" + x + ", " + y + ") on the piece " + this.toString());
+        return Color.BLACK;
+    }
+
     public Coordinate[] blocks() {
         Coordinate[] movedCoords = new Coordinate[coordinates.length];
         Coordinate c;
@@ -219,7 +234,7 @@ public class Piece {
     public String toString() {
         String str = "";
         for (int i = 0; i < size; i++) {
-            str += ("(" + coordinates[i].x + "," + coordinates[i].y + "," + colorList[i] + ")");
+            str += ("(" + (coordinates[i].x + origin.x) + "," + (coordinates[i].y + origin.y) + "," + colorList[i] + ")");
         }
         return  str;
     }
@@ -248,5 +263,8 @@ public class Piece {
             System.out.print(c);
         }
         System.out.println(' ');
+
+        System.out.println(q.getColorAt(new Coordinate(3,5)));
+
     }
 }
