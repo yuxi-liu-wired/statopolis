@@ -15,6 +15,7 @@ public class GameField {
     GameField() {
         colorField = new Color[FIELD_SIZE][FIELD_SIZE];
         heightField = new int[FIELD_SIZE][FIELD_SIZE];
+        pieceField = new int[FIELD_SIZE][FIELD_SIZE];
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
                 colorField[i][j] = Color.BLACK;
@@ -29,12 +30,13 @@ public class GameField {
      * Determine whether a tile placement is well-formed according to the tests, made in the order:
      * - Test if it's out of bounds.
      * -   If it is, return false, else, continue.
-     * - Test if all three blocks of the tile are on the same level.
-     * -   If it is not, return false, else, record the level and continue.
-     * - If the tile is placed on level 0, then test if it touches one existing tile.
-     * -   This is done by getting all its neighbors' coordinates, and checking if at least one of them has height >= 1
+     * - Test if all three blocks of the tile are on the same height.
+     * -   If it is not, return false, else, record the height and continue.
+     * - If the tile is placed on height 0, then test if it touches one existing tile.
+     * -   This is done by getting all its neighbors' coordinates (only check neighbors that are within bound!),
+     * -   and checking if at least one of them has height >= 1
      * -   If yes, return true, else, return false.
-     * - If the tile is placed on level n, n >= 1, then test if it touches at least two different tiles below.
+     * - If the tile is placed on height h, h >= 1, then test if it touches at least two different tiles below.
      * -   This is done by getting all its coordinates, and checking the pieceField to see if at least two different
      * -   ids are registered in the coordinates.
      * -   If yes, that means this tile straddles two different tiles, thus return true, else, return false.
@@ -66,6 +68,8 @@ public class GameField {
             System.out.println("WARNING: The piece " + piece + "cannot be added to the board!");
             return;
         }
+
+
     }
 
     @Override
@@ -73,11 +77,28 @@ public class GameField {
         String str = "";
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
-                str += " " + colorField[i][j] + pieceField[i][j] + " ";
+                String c = "";
+                switch (colorField[i][j]) {
+                    case BLACK:
+                        c = "B";
+                        break;
+                    case RED:
+                        c = "R";
+                        break;
+                    case GREEN:
+                        c = "G";
+                        break;
+                }
+                str += " " + c + heightField[i][j] + " ";
             }
             str += '\n';
         }
         return  str;
+    }
+
+    public static void main(String[] args) {
+        GameField gf = new GameField();
+        System.out.println(gf.toString());
     }
 
 }

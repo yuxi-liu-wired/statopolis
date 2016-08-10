@@ -1,232 +1,252 @@
 package comp1110.ass2;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by Yuxi Liu (u5950011) on 8/10/16.
  */
 public class Piece {
 
     private int size;
-    private int[] xList;
-    private int[] yList;
+    private Coordinate[] coordinates;
     private Color[] colorList;
-    private int xOrigin;
-    private int yOrigin;
+    private Coordinate origin;
 
-    Piece (int size, int[] xList, int[] yList, Color[] colorList) {
+    /**
+     * This is a general constructor for Piece, but it's not going to be used unless arbitrarily shaped pieces are
+     * needed.
+     * @param size The number of blocks in the piece.
+     * @param coordinates The list of coordinates for each block.
+     * @param colorList The list of colors on each block.
+     * @param origin The origin. It denotes the translation underwent by the piece. Should be (0,0) at initialization.
+     */
+    Piece (int size, Coordinate[] coordinates, Color[] colorList, Coordinate origin) {
         this.size = size;
-        this.xList = xList;
-        this.yList = yList;
+        this.coordinates = coordinates;
         this.colorList = colorList;
+        this.origin = origin;
     }
 
     /**
      * Create a new instance, which must be one of the 21 given types of pieces.
-     * @param name A one-letter string, between A and U
+     * @param name A one-letter string, between A and U.
      *
      */
     Piece (String name) {
-        xOrigin = 0;
-        yOrigin = 0;
+        origin = new Coordinate(0,0);
+        if ("ABCDEFGHIJKLMNOPQRST".contains(name)) {
+            size = 3;
+            coordinates = new Coordinate[] {new Coordinate(0,0),new Coordinate(1,0),new Coordinate(0,1)};
+        } else if ("U".contains(name)) {
+            size = 2;
+            coordinates = new Coordinate[] {new Coordinate(0,0),new Coordinate(0,1)};
+        } else {
+            System.out.println("WARNING: Cannot initialize piece: " + name);
+            size = 0;
+            coordinates = new Coordinate[] {};
+            colorList = new Color[] {};
+            return;
+        }
         switch (name) {
             case "A":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.RED, Color.BLACK, Color.BLACK};
                 break;
             case "B":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.BLACK, Color.BLACK, Color.RED};
                 break;
             case "C":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.BLACK, Color.RED, Color.BLACK};
                 break;
             case "D":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.RED, Color.BLACK, Color.RED};
                 break;
             case "E":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.BLACK, Color.RED, Color.RED};
                 break;
             case "F":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.RED, Color.RED, Color.BLACK};
                 break;
             case "G":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.RED, Color.GREEN, Color.RED};
                 break;
             case "H":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.GREEN, Color.RED, Color.RED};
                 break;
             case "I":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.RED, Color.RED, Color.GREEN};
                 break;
             case "J":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.RED, Color.RED, Color.RED};
                 break;
             case "K":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.GREEN, Color.BLACK, Color.BLACK};
                 break;
             case "L":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.BLACK, Color.BLACK, Color.GREEN};
                 break;
             case "M":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.BLACK, Color.GREEN, Color.BLACK};
                 break;
             case "N":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.GREEN, Color.BLACK, Color.GREEN};
                 break;
             case "O":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.BLACK, Color.GREEN, Color.GREEN};
                 break;
             case "P":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.GREEN, Color.GREEN, Color.BLACK};
                 break;
             case "Q":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.GREEN, Color.RED, Color.GREEN};
                 break;
             case "R":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.RED, Color.GREEN, Color.GREEN};
                 break;
             case "S":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.GREEN, Color.GREEN, Color.RED};
                 break;
             case "T":
-                size = 3;
-                xList = new int[] {0,1,0};
-                yList = new int[] {0,0,1};
                 colorList = new Color[] {Color.GREEN, Color.GREEN, Color.GREEN};
                 break;
             case "U":
-                size = 2;
-                xList = new int[] {0,0};
-                yList = new int[] {0,1};
                 colorList = new Color[] {Color.RED, Color.GREEN};
                 break;
-
         }
     }
 
-    public int getSize() {
-        return size;
-    }
-    public int[] getXList() {
-        return xList;
-    }
-    public int[] getYList() {
-        return yList;
-    }
-    public Color[] getcolorList() {
-        return colorList;
-    }
-    public int getXOrigin() {
-        return xOrigin;
-    }
-    public int getYOrigin() {
-        return yOrigin;
-    }
+    public int getSize() { return size; }
+    public Coordinate[] getCoordinates() { return coordinates; }
+    public Color[] getcolorList() { return colorList; }
+    public Coordinate getOrigin() { return origin; }
 
 
+
+    public void translateTo (Coordinate origin) {
+        this.origin = new Coordinate(origin.x, origin.y);
+    }
     public void translateTo (int x, int y) {
-        xOrigin = x;
-        yOrigin = y;
+        origin = new Coordinate(x,y);
     }
 
     public void rotate90CW () {
+        Coordinate oldCoordinate;
         int x;
         int y;
         for (int i = 0; i < size; i++) {
-            x = xList[i];
-            y = yList[i];
-            xList[i] = -y;
-            yList[i] = x;
+            oldCoordinate = coordinates[i];
+            x = oldCoordinate.x;
+            y = oldCoordinate.y;
+            coordinates[i] = new Coordinate(-y, x);
         }
     }
     public void rotate180CW () {
-        for (int i = 0; i < size; i++) {
-            xList[i] = -xList[i];
-            yList[i] = -yList[i];
-        }
-    }
-    public void rotate270CW () {
+        Coordinate oldCoordinate;
         int x;
         int y;
         for (int i = 0; i < size; i++) {
-            x = xList[i];
-            y = yList[i];
-            xList[i] = y;
-            yList[i] = -x;
+            oldCoordinate = coordinates[i];
+            x = oldCoordinate.x;
+            y = oldCoordinate.y;
+            coordinates[i] = new Coordinate(-x, -y);
         }
     }
+    public void rotate270CW () {
+        Coordinate oldCoordinate;
+        int x;
+        int y;
+        for (int i = 0; i < size; i++) {
+            oldCoordinate = coordinates[i];
+            x = oldCoordinate.x;
+            y = oldCoordinate.y;
+            coordinates[i] = new Coordinate(y, -x);
+        }
+    }
+
+    public Coordinate[] blocks() {
+        Coordinate[] movedCoords = new Coordinate[coordinates.length];
+        Coordinate c;
+        for(int i = 0; i < coordinates.length; i++) {
+            c = coordinates[i];
+            movedCoords[i] = new Coordinate(c.x + origin.x, c.y + origin.y);
+        }
+        return movedCoords;
+    }
+    // The union of the mooreNeighborhood of each of coordinates, subtract the coordinates themselves.
+    public Coordinate[] neighborBlocks() {
+        Set<Coordinate> neighbors = new HashSet<Coordinate>();
+        for (Coordinate block : coordinates) {
+            neighbors.addAll(mooreNeighborhood(block));
+        }
+        neighbors.removeAll(new HashSet<Coordinate>(Arrays.asList(coordinates)));
+
+        Coordinate[] unmovedCoords = neighbors.toArray(new Coordinate[neighbors.size()]);
+
+        Coordinate[] movedCoords = new Coordinate[unmovedCoords.length];
+        Coordinate c;
+        for(int i = 0; i < unmovedCoords.length; i++) {
+            c = unmovedCoords[i];
+            movedCoords[i] = new Coordinate(c.x + origin.x, c.y + origin.y);
+        }
+        return movedCoords;
+
+    }
+
+    /* the 8 neighbors of a given coordinate, like this:
+     * OOO
+     * O.O
+     * OOO
+     */
+    private static Set<Coordinate> mooreNeighborhood(Coordinate coordinate) {
+        int x = coordinate.x;
+        int y = coordinate.y;
+        Set<Coordinate> neighbors = new HashSet<Coordinate>();
+        neighbors.add(new Coordinate(x-1, y-1));
+        neighbors.add(new Coordinate(x  , y-1));
+        neighbors.add(new Coordinate(x+1, y-1));
+        neighbors.add(new Coordinate(x-1, y  ));
+        neighbors.add(new Coordinate(x+1, y  ));
+        neighbors.add(new Coordinate(x-1, y+1));
+        neighbors.add(new Coordinate(x  , y+1));
+        neighbors.add(new Coordinate(x+1, y+1));
+        return neighbors;
+
+    }
+
 
     @Override
     public String toString() {
         String str = "";
         for (int i = 0; i < size; i++) {
-            str += ("(" + xList[i] + "," + yList[i] + "," + colorList[i] + ")");
+            str += ("(" + coordinates[i].x + "," + coordinates[i].y + "," + colorList[i] + ")");
         }
         return  str;
     }
 
+    // just a test.
     public static void main(String[] args) {
-        Piece[] p = new Piece[21];
-        String str = "ABCDEFGHIJKLMNOPQRSTU";
-        for (int i = 0; i < 21; i++) {
+        Piece[] p = new Piece[22];
+        String str = "ABCDEFGHIJKLMNOPQRSTUV";
+        for (int i = 0; i < 22; i++) {
             p[i] = new Piece(Character.toString(str.charAt(i)));
         }
-        for (int i = 0; i < 21; i++) {
+        for (int i = 0; i < 22; i++) {
             System.out.println(Character.toString(str.charAt(i)) + ": " + p[i]);
+            System.out.println("Its blocks are at ");
+            for (Coordinate c : p[i].blocks()) { System.out.print(c); }
+            System.out.println(' ');
+            System.out.print("Its neightbors are at ");
+            for (Coordinate c : p[i].neighborBlocks()) { System.out.print(c); }
+            System.out.println(' ');
         }
+
+        Piece q = new Piece("A");
+        q.translateTo(3,5);
+        q.rotate270CW();
+        for (Coordinate c : q.neighborBlocks()) {
+            System.out.print(c);
+        }
+        System.out.println(' ');
     }
 }
