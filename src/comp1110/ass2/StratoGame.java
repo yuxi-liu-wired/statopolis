@@ -102,8 +102,45 @@ public class StratoGame {
      * @return True if the placement is valid
      */
     static boolean isPlacementValid(String placement) {
-        // FIXME Task 6: determine whether a placement is valid
-        return false;
+        if (!isPlacementWellFormed(placement)) { return false; }
+
+        GameField gameField = new GameField();
+
+        String tile; // temporary variable, used in the loop only
+        for (int i = 1; i <= placement.length()/4; i++) {
+            tile = placement.substring(4 * i - 4, 4 * i);
+            Piece p = tileToPiece(tile);
+            System.out.println("Tile: " + tile + " becomes Piece: " + p);
+            if (!gameField.canAddPiece(p)) {
+                return false;
+            }
+            gameField.addPiece(p);
+        }
+        System.out.println(gameField);
+        return true;
+    }
+
+    private static Piece tileToPiece(String tile) {
+        int x = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(tile.charAt(0));
+        int y = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(tile.charAt(1));
+        String tileName = tile.substring(2,3);
+        String orientation = tile.substring(3,4);
+        Piece p = new Piece(tileName);
+        p.translateTo(x, y);
+        switch (orientation) {
+            case "A":
+                break;
+            case "B":
+                p.rotate90CW();
+                break;
+            case "C":
+                p.rotate180CW();
+                break;
+            case "D":
+                p.rotate270CW();
+                break;
+        }
+        return p;
     }
 
     /**
@@ -144,10 +181,10 @@ public class StratoGame {
             if (tile.equals("q")){
                 break;
             }
-            if (isPlacementWellFormed(tile)) {
-                System.out.println(tile + " is well formed.");
+            if (isPlacementValid(tile)) {
+                System.out.println(tile + " is valid.");
             } else {
-                System.out.println(tile + " is not well formed.");
+                System.out.println(tile + " is not valid.");
             }
         }
 

@@ -8,6 +8,7 @@ public class GameField {
     private int[][] heightField; // This records the current height of the block.
     private int[][] pieceField; // This records the id of the piece that is currently at the top of the block.
     private int numberOfPiecesPlayed; // This number is used to give each played piece a unique id.
+    private boolean isEmpty;
 
     public static final int FIELD_SIZE = 26; // side length of the playing field
 
@@ -24,12 +25,14 @@ public class GameField {
                 numberOfPiecesPlayed = 0;
             }
         }
+        isEmpty = true;
     }
 
     /**
      * Determine whether a tile placement is well-formed according to the tests, made in the order:
      * - Test if it's out of bounds.
      * -   If it is, return false, else, continue.
+     * - Test if the board is empty. If so, return true (otherwise there's no way to begin!).
      * - Test if all three blocks of the tile are on the same height.
      * -   If it is not, return false, else, record the height and continue.
      * - If the tile is placed on height 0, then test if it touches one existing tile.
@@ -47,16 +50,18 @@ public class GameField {
      * @return True if the play piece can be added.
      */
     public boolean canAddPiece (Piece piece) {
-
         Coordinate[] blocksOfPiece = piece.blocks();
         Coordinate c;
         Piece p;
         for (int i = 0; i < blocksOfPiece.length; i++) {
             c = blocksOfPiece[i];
             if (c.x <= -1 || c.x >= FIELD_SIZE || c.y <= -1 || c.y >= FIELD_SIZE) { // test if it's out of bounds.
+                System.out.println(c + "is out of bounds!");
                 return false;
             }
         }
+
+        if (isEmpty) { return true; } // If the board is empty, then any that's within bounds should be alright.
 
         int[] hList = new int[blocksOfPiece.length];
         for (int i = 0; i < blocksOfPiece.length; i++) {
@@ -67,6 +72,7 @@ public class GameField {
 
         for (int i = 1; i < hList.length; i++) {
             if (hList[i] != height) { // test if　all three blocks of the tile are on the same height
+                System.out.println("the blocks are not of the same height!");
                 return false;
             }
         }
@@ -81,6 +87,7 @@ public class GameField {
                     return true;
                 }
             }
+            System.out.println("It doesn't touch an existing tile!");
             return false;
         } else {
             // test if it touches legal colors
@@ -89,6 +96,7 @@ public class GameField {
                 Color color1 = piece.getColorAt(c);
                 Color color2 = colorField[c.x][c.y];
                 if (!color1.isCompatibleWith(color2)) {
+                    System.out.println("The colors are not compatible!");
                     return false;
                 }
             }
@@ -104,6 +112,7 @@ public class GameField {
                     return true;
                 }
             }
+            System.out.println("It doesn't straddle two different tiles below!");
             return false;
         }
     }
@@ -131,19 +140,21 @@ public class GameField {
         Coordinate[] newBlocks = piece.blocks(); // The blocks that the new piece covers, thus needs updating.
 
         for (Coordinate c : newBlocks) {
-        colorField[c.x][c.y] = piece.getColorAt(c);
-        heightField[c.x][c.y]++;
-        pieceField[c.x][c.y] = numberOfPiecesPlayed;
+            colorField[c.x][c.y] = piece.getColorAt(c);
+            heightField[c.x][c.y]++;
+            pieceField[c.x][c.y] = numberOfPiecesPlayed;
         }
 
         numberOfPiecesPlayed++;
+
+        if (isEmpty) { isEmpty = false; } // the board is no longer empty!
     }
 
     @Override
     public String toString() {
         String str = "";
-        for (int i = 0; i < FIELD_SIZE; i++) {
-            for (int j = 0; j < FIELD_SIZE; j++) {
+        for (int j = 0; j < FIELD_SIZE; j++) {
+            for (int i = 0; i < FIELD_SIZE; i++) {
                 String c = "";
                 switch (colorField[i][j]) {
                     case BLACK:

@@ -12,10 +12,11 @@ public abstract class Player {
     /**
      * Given the playing field, and the piece available for play, the player must make a move.
      * @param field The field of game that the player faces now.
-     * @param piece The piece that the player can play.
+     * @param myPiece The piece that the player can play.
+     * @param opponentsPiece The piece that the opponent can play next turn.
      * @return
      */
-    abstract Piece move(GameField field, Piece piece);
+    abstract Piece move(GameField field, Piece myPiece, Piece opponentsPiece);
 
     @Override
     public String toString() {return name;}
