@@ -1,5 +1,6 @@
 package comp1110.ass2;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -44,6 +45,7 @@ public class StratoGame {
     static boolean isPlacementWellFormed(String placement) {
         int l = placement.length();
         if (l % 4 != 0 || l < 4 * 1 || l > 4 * 41) {
+            System.out.println("The string length is not a multiple of 4!");
             return false;
         }
 
@@ -56,7 +58,7 @@ public class StratoGame {
         for (int i = 1; i <= l / 4; i++) {
             tile = placement.substring(4 * i - 4, 4 * i);
 
-            System.out.println("considering whether " + tile + " can be placed...");
+            System.out.println("considering whether " + tile + " can be placed..."); // TODO: delete this after feeling confident.
 
             if (!isTilePlacementWellFormed(tile)) { return false; } // tile placement must be well-formed
 
@@ -64,7 +66,7 @@ public class StratoGame {
                 if (!tile.equals("MMUA")) {
                     System.out.println(tile + " is the first tile, but it's not MMUA!");
                     return false;
-                } // zeroth tile placement must be "MMUA"
+                } // first tile placement must be "MMUA"
             } else if (i % 2 == 0 && !"KLMNOPQRST".contains(Character.toString(tile.charAt(2)))) {
                 System.out.println(tile + " is number " + i + " but it's not green!");
                 return false; // the even tiles must be green
@@ -72,9 +74,11 @@ public class StratoGame {
                 System.out.println(tile + " is number " + i + " but it's not red!");
                 return false; // the odd tiles must be red
             }
-            piecesUsed[tile.charAt(2) - 'A']++; // Recording the fact that this piece is used one more time.
+            piecesUsed[tile.charAt(2) - 'A']++;
+            // 'A' - 'A' is 0, 'Z' - 'A' is 25.
         }
-        System.out.print("the pieces used are ");
+
+        System.out.print("the pieces used are "); // TODO: delete this after feeling confident.
         for (int i = 0; i < kindsOfPieces; i++) {
             System.out.print(piecesUsed[i] + " ");
         }
@@ -82,12 +86,12 @@ public class StratoGame {
 
         for (int i = 0; i < kindsOfPieces; i++) {
             if (piecesUsed[i] >= 3) {
-                System.out.println("the " + i + "tile is used more than twice!");
-                return false; } // Some piece is used more than twice.
+                System.out.println("the " + ("ABCDEFGHIJKLMNOPQRSTU".charAt(i)) + "tile is used more than twice!");
+                return false; } // Every piece can be used at most twice.
         }
 
-        if (piecesUsed[20] > 1) {
-            System.out.println("The U tile is used more than once!");
+        if (piecesUsed[20] != 1) {
+            System.out.println("The U tile is not used exactly once!");
             return false; // the U tile must be used exactly once, at the start of the game.
         }
 
@@ -110,14 +114,35 @@ public class StratoGame {
         for (int i = 1; i <= placement.length()/4; i++) {
             tile = placement.substring(4 * i - 4, 4 * i);
             Piece p = tileToPiece(tile);
-            System.out.println("Tile: " + tile + " becomes Piece: " + p);
             if (!gameField.canAddPiece(p)) {
                 return false;
             }
             gameField.addPiece(p);
         }
-        System.out.println(gameField);
+        System.out.println(gameField); // TODO: delete this after feeling confident.
         return true;
+    }
+
+    /**
+     * Returns the GameField corresponding to the placement.
+     *
+     * @param placement A placement string
+     * @return The GameField corresponding to the placement, or null if it's an invalid placement.
+     */
+    static GameField placementToGameField(String placement) {
+        if (!isPlacementValid(placement)) {
+            System.out.println("The placement " + placement + " is invalid!");
+            return null;
+        }
+
+        GameField gameField = new GameField();
+        String tile; // temporary variable, used in the loop only
+        for (int i = 1; i <= placement.length()/4; i++) {
+            tile = placement.substring(4 * i - 4, 4 * i);
+            Piece p = tileToPiece(tile);
+            gameField.addPiece(p);
+        }
+        return gameField;
     }
 
     private static Piece tileToPiece(String tile) {
@@ -143,6 +168,27 @@ public class StratoGame {
         return p;
     }
 
+    private static String coordinateToAlphabet(Coordinate c) {
+        if (c.x <= -1 || c.x >= 26 || c.y <= -1 || c.y >= 26) {
+            System.out.println(c + " is out of bounds!");
+            return null;
+        }
+        return ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(c.x,c.x+1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(c.y));
+    }
+    private static Coordinate alphabetToCoordinate(String alphabet) {
+        if (alphabet.length() != 2) {
+            System.out.println("WARNING: trying to convert illegal string: " + alphabet + " to coordinate");
+            return null;
+        }
+        int x = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(alphabet.charAt(0));
+        int y = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(alphabet.charAt(1));
+        if (x == -1 || y == -1) {
+            System.out.println("WARNING: trying to convert illegal string: " + alphabet + " to coordinate");
+            return null;
+        }
+        return new Coordinate(x,y);
+    }
+
     /**
      * Determine the score for a player given a placement, following the
      * scoring rules for the game.
@@ -153,7 +199,11 @@ public class StratoGame {
      * @return the score for the requested player, given the placement
      */
     static int getScoreForPlacement(String placement, boolean green) {
+        GameField gameField = placementToGameField(placement);
+
         // FIXME Task 7: determine the score for a player given a placement
+        /*int[] scores = gameField.scoring(green ? Color.GREEN : Color.RED);
+        return scores[0];*/
         return 0;
     }
 
@@ -161,14 +211,58 @@ public class StratoGame {
      * Generate a valid move that follows from: the given placement, a piece to
      * play, and the piece the opponent will play next.
      *
-     * @param placement  A valid placement string indicating a game state
-     * @param piece  The piece you are to play ('A' to 'T')
+     * @param placement A valid placement string indicating a game state.
+     * @param piece The piece you are to play ('A' to 'T').
      * @param opponentsPiece The piece your opponent will be asked to play next ('A' to 'T' or 0 if last move).
      * @return A string indicating a valid tile placement that represents your move.
      */
     static String generateMove(String placement, char piece, char opponentsPiece) {
-        // FIXME Task 10: generate a valid move
-        return null;
+        return generatePossibleMoves(placement, piece)[0];
+    }
+
+    /**
+     * Given a placement of the game, returns all possible moves
+     *
+     * Note: The gameboard given can accommodate at least 12 * 13 = 156 blocks, and the players can only play 40 blocks
+     * so there are always possible moves.
+     * @param placement A valid placement string indicating a game state.
+     * @param piece The piece you are to play ('A' to 'T').
+     * @return A list of strings indicating all valid tile placements that you can move.
+     */
+    static String[] generatePossibleMoves(String placement, char piece) {
+
+        GameField gameField = placementToGameField(placement);
+        Coordinate[] coveredBlocks = gameField.getCoveredBlocks();
+        Coordinate[] neighborBlocks = Coordinate.neighborBlocks(coveredBlocks);
+
+        ArrayList<String> possibleMoves = new ArrayList<String>();
+
+        String tile;
+        String coordStr; // AA to ZZ
+        String orientation = "ABCD";
+
+        for (Coordinate c : coveredBlocks) {
+            coordStr = coordinateToAlphabet(c);
+            for (int i = 0; i < orientation.length(); i++) {
+                tile = coordStr + piece + orientation.charAt(i);
+                if (gameField.canAddPiece(tileToPiece(tile)))
+                    possibleMoves.add(tile);
+            }
+        }
+
+        for (Coordinate c : neighborBlocks) {
+            if (!GameField.coordinateWithinRange(c)) // skip neighbors that are out of bounds!
+                continue;
+
+            coordStr = coordinateToAlphabet(c);
+            for (int i = 0; i < orientation.length(); i++) {
+                tile = coordStr + piece + orientation.charAt(i);
+                if (gameField.canAddPiece(tileToPiece(tile)))
+                    possibleMoves.add(tile);
+            }
+        }
+
+        return possibleMoves.toArray(new String[possibleMoves.size()]);
     }
 
     // This main method is only for debugging. Remove it after the project is done.
