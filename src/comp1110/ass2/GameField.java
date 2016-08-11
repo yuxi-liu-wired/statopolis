@@ -1,6 +1,7 @@
 package comp1110.ass2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Yuxi Liu (u5950011) on 8/10/16.
@@ -170,15 +171,117 @@ public class GameField {
     }
 
     /**
-     * Returns the list of score of each connected component, sorted by the area (height is irrelevant) of the
+     * Returns the list of score of each connected component, sorted by the AREA (height is IRRELEVANT) of the
      * component, from big to small.
      * @param color The color to score.
      * @return A list of integers, representing the score of each connected component, sorted by
      * the area (height is irrelevant) of the component, from big to small.
      */
     public int[] scoring(Color color) {
-        // TODO: something something connected components.
+        int[][] ccLabelMatrix = connectedComponents();
+        int[] redSizeList
+
         return null;
+    }
+
+    /**
+     * This is the main function used in scoring. It read the colorField matrix and return a connected components
+     * labelling of it.
+     * It uses the algorithm presented in http://aishack.in/tutorials/connected-component-labelling/
+     * combined with the the union-find algorithm in https://www.cs.princeton.edu/~rs/AlgsDS07/01UnionFind.pdf
+     * @returna A connected components labelling of colorField, with all black blocks considered as "background"
+     * and given the default label -1.
+     */
+    private int[][] connectedComponents() {
+        // colorField
+        int[][] ccLabelMatrix = new int[FIELD_SIZE][FIELD_SIZE];
+        Arrays.fill(ccLabelMatrix, -1); // The default label -1 indicates that it's in the background.
+
+        int id = 0; // Used to give each semi-cluster a unique id in the first pass, to be merged in the second pass.
+        UnionFind labelSet = new UnionFind(FIELD_SIZE*FIELD_SIZE);
+
+        // First pass. Warning: a lot of repetitive code to deal with (literally) edge cases.
+
+        Color color; // Color of the block itself.
+        Color color1; // Color of the neighbor on the left.
+        int cluster1; // Semi-cluster index of the neighbor on the left.
+        Color color2; // Color of the neighbor on the above.
+        int cluster2; // Semi-cluster index of the neighbor on the above.
+
+        // case (0, 0), the left-up corner of the field.
+        color = colorField[0][0];
+        if (color != Color.BLACK) { // black blocks are ignored, because they belong to the background.
+            ccLabelMatrix[0][0] = id;
+            id++;
+        }
+        // case (0, j), j >= 1, the left edge of the field.
+        for (int j = 1; j < FIELD_SIZE; j++) {
+            color = colorField[0][j];
+            if (color != Color.BLACK) {
+                // neighbor on the above, but no neighbor on the left
+                color2 = colorField[0][j - 1];
+                cluster2 = ccLabelMatrix[0][j - 1];
+
+                if (color != color2) { // this block belongs to a new semi-cluster.
+                    ccLabelMatrix[0][j] = id;
+                    id++;
+                } else if (color == color2) { // this block belongs to the same cluster as above
+                    ccLabelMatrix[0][j] = cluster2;
+                }
+            }
+        }
+        for (int i = 1; i < FIELD_SIZE; i++) {
+            // case (i, 0), i >= 1, the up edge of the field.
+            color = colorField[i][0];
+            if (color != Color.BLACK) {
+                // neighbor on the left, but no neighbor on the above
+                color1 = colorField[i - 1][0];
+                cluster1 = ccLabelMatrix[i - 1][0];
+
+                if (color != color1) { // this block belongs to a new semi-cluster.
+                    ccLabelMatrix[i][0] = id;
+                    id++;
+                } else if (color == color1) { // this block belongs to the same cluster as left
+                    ccLabelMatrix[i][0] = cluster1;
+                }
+            }
+            // case (i, j), i >= 1, j >= 1, the general case.
+            for (int j = 1; j < FIELD_SIZE; j++) {
+                color = colorField[i][j];
+                if (color != Color.BLACK) {
+
+                    // neighbor on the left
+                    color1 = colorField[i - 1][j];
+                    cluster1 = ccLabelMatrix[i - 1][j];
+                    // neighbor on the above
+                    color2 = colorField[i][j - 1];
+                    cluster2 = ccLabelMatrix[i][j - 1];
+
+                    if (color != color1 && color != color2) { // this block belongs to a new semi-cluster.
+                        ccLabelMatrix[i][j] = id;
+                        id++;
+                    } else if (color == color1 && color != color2) { // this block belongs to the same cluster as left
+                        ccLabelMatrix[i][j] = cluster1;
+                    } else if (color != color1 && color == color2) { // this block belongs to the same cluster as above
+                        ccLabelMatrix[i][j] = cluster2;
+                    } else if (color == color1 && color == color2) { // The remaining case. Requires merging later!
+                        ccLabelMatrix[i][j] = cluster1;
+                        labelSet.union(cluster1, cluster2);
+                    }
+                }
+            }
+        }
+
+        // Second pass.
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            for (int j = 0; j < FIELD_SIZE; j++) {
+                if (ccLabelMatrix[i][j] != -1) {
+                    ccLabelMatrix[i][j] = labelSet.find(ccLabelMatrix[i][j]);
+                }
+            }
+        }
+
+        return ccLabelMatrix;
     }
 
     @Override
