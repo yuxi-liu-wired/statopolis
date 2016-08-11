@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import java.util.ArrayList;
+
 /**
  * Created by Yuxi Liu (u5950011) on 8/10/16.
  */
@@ -8,7 +10,6 @@ public class GameField {
     private int[][] heightField; // This records the current height of the block.
     private int[][] pieceField; // This records the id of the piece that is currently at the top of the block.
     private int numberOfPiecesPlayed; // This number is used to give each played piece a unique id.
-    private boolean isEmpty;
 
     public static final int FIELD_SIZE = 26; // side length of the playing field
 
@@ -25,7 +26,24 @@ public class GameField {
                 numberOfPiecesPlayed = 0;
             }
         }
-        isEmpty = true;
+    }
+
+
+    public static boolean coordinateWithinRange (Coordinate c) {
+        return !(c.x <= -1 || c.x >= FIELD_SIZE || c.y <= -1 || c.y >= FIELD_SIZE);
+    }
+
+    /**
+     * Returns all blocks that are covered by at least one piece.
+     * @return The list of coordinates that are covered.
+     */
+    public Coordinate[] getCoveredBlocks () {
+        ArrayList coveredBlocks = new ArrayList();
+        for (int i = 0; i < FIELD_SIZE; i++)
+            for (int j = 0; j < FIELD_SIZE; j++)
+                if (heightField[i][j] != 0)
+                    coveredBlocks.add(new Coordinate(i,j));
+        return (Coordinate[]) coveredBlocks.toArray(new Coordinate[coveredBlocks.size()]);
     }
 
     /**
@@ -40,7 +58,7 @@ public class GameField {
      * -   and checking if at least one of them has height >= 1
      * -   If yes, return true, else, return false.
      * - If the tile is placed on height h, h >= 1, then
-     * -   First test if it touches legal colors. If any illegal colors appear, return false.
+     * -   First test if it touches compatible colors. If any incompatible colors appear, return false.
      * -   Then test if it touches at least two different tiles below.
      * -     This is done by getting all its coordinates, and checking the pieceField to see if at least two different
      * -     ids are registered in the coordinates.
@@ -55,13 +73,16 @@ public class GameField {
         Piece p;
         for (int i = 0; i < blocksOfPiece.length; i++) {
             c = blocksOfPiece[i];
-            if (c.x <= -1 || c.x >= FIELD_SIZE || c.y <= -1 || c.y >= FIELD_SIZE) { // test if it's out of bounds.
+            if (!coordinateWithinRange(c)) { // test if it's out of bounds.
                 System.out.println(c + "is out of bounds!");
                 return false;
             }
         }
 
-        if (isEmpty) { return true; } // If the board is empty, then any that's within bounds should be alright.
+        if (numberOfPiecesPlayed == 0) { return true; }
+        /* If the board is empty, then any that's within bounds should be alright.
+        /* The assignment requires the first piece to be U piece in the center, but this should be enforced by
+        /* some class else. GameField class doesn't need to know such restrictions. */
 
         int[] hList = new int[blocksOfPiece.length];
         for (int i = 0; i < blocksOfPiece.length; i++) {
@@ -80,7 +101,7 @@ public class GameField {
         if (height == 0) { // test if it touches one existing tile.
             Coordinate[] neighbors = piece.neighborBlocks();
             for (Coordinate neighborC : neighbors) {
-                if (neighborC.x <= -1 || neighborC.x >= FIELD_SIZE || neighborC.y <= -1 || neighborC.y >= FIELD_SIZE) {
+                if (!coordinateWithinRange(neighborC)) {
                     continue; // out of bounds coordinate!
                 }
                 if (heightField[neighborC.x][neighborC.y] >= 1) {
@@ -90,7 +111,7 @@ public class GameField {
             System.out.println("It doesn't touch an existing tile!");
             return false;
         } else {
-            // test if it touches legal colors
+            // test if it touches compatible colors
             for (int i = 0; i < blocksOfPiece.length; i++) {
                 c = blocksOfPiece[i];
                 Color color1 = piece.getColorAt(c);
@@ -146,8 +167,18 @@ public class GameField {
         }
 
         numberOfPiecesPlayed++;
+    }
 
-        if (isEmpty) { isEmpty = false; } // the board is no longer empty!
+    /**
+     * Returns the list of score of each connected component, sorted by the area (height is irrelevant) of the
+     * component, from big to small.
+     * @param color The color to score.
+     * @return A list of integers, representing the score of each connected component, sorted by
+     * the area (height is irrelevant) of the component, from big to small.
+     */
+    public int[] scoring(Color color) {
+        // TODO: something something connected components.
+        return null;
     }
 
     @Override
