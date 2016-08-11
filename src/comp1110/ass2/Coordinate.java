@@ -1,5 +1,9 @@
 package comp1110.ass2;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * A (int, int) tuple.
  * Created by Yuxi Liu (u5950011) on 8/10/16.
@@ -11,6 +15,42 @@ public class Coordinate {
     Coordinate(int x, int y){
         this.x = x;
         this.y = y;
+    }
+
+    /**
+     * The union of the mooreNeighborhood of each coordinate, minus the coordinates themselves.
+     * @param coordinates The list of coordinates whose neighbors need to be computed.
+     * @return The list of coordinates of the neighbors.
+     */
+    public static Coordinate[] neighborBlocks(Coordinate[] coordinates) {
+        Set<Coordinate> neighbors = new HashSet<Coordinate>();
+        for (Coordinate block : coordinates) {
+            neighbors.addAll(mooreNeighborhood(block));
+        }
+        neighbors.removeAll(new HashSet<Coordinate>(Arrays.asList(coordinates)));
+
+        return neighbors.toArray(new Coordinate[neighbors.size()]);
+    }
+
+    /* the 8 neighbors of a given coordinate, like this:
+     * OOO
+     * O.O
+     * OOO
+     */
+    private static Set<Coordinate> mooreNeighborhood(Coordinate coordinate) {
+        int x = coordinate.x;
+        int y = coordinate.y;
+        Set<Coordinate> neighbors = new HashSet<Coordinate>();
+        neighbors.add(new Coordinate(x-1, y-1));
+        neighbors.add(new Coordinate(x  , y-1));
+        neighbors.add(new Coordinate(x+1, y-1));
+        neighbors.add(new Coordinate(x-1, y  ));
+        neighbors.add(new Coordinate(x+1, y  ));
+        neighbors.add(new Coordinate(x-1, y+1));
+        neighbors.add(new Coordinate(x  , y+1));
+        neighbors.add(new Coordinate(x+1, y+1));
+        return neighbors;
+
     }
 
     @Override

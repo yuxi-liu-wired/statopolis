@@ -190,45 +190,8 @@ public class Piece {
     }
     // The union of the mooreNeighborhood of each of coordinates, subtract the coordinates themselves.
     public Coordinate[] neighborBlocks() {
-        Set<Coordinate> neighbors = new HashSet<Coordinate>();
-        for (Coordinate block : coordinates) {
-            neighbors.addAll(mooreNeighborhood(block));
-        }
-        neighbors.removeAll(new HashSet<Coordinate>(Arrays.asList(coordinates)));
-
-        Coordinate[] unmovedCoords = neighbors.toArray(new Coordinate[neighbors.size()]);
-
-        Coordinate[] movedCoords = new Coordinate[unmovedCoords.length];
-        Coordinate c;
-        for(int i = 0; i < unmovedCoords.length; i++) {
-            c = unmovedCoords[i];
-            movedCoords[i] = new Coordinate(c.x + origin.x, c.y + origin.y);
-        }
-        return movedCoords;
-
+        return Coordinate.neighborBlocks(this.blocks());
     }
-
-    /* the 8 neighbors of a given coordinate, like this:
-     * OOO
-     * O.O
-     * OOO
-     */
-    private static Set<Coordinate> mooreNeighborhood(Coordinate coordinate) {
-        int x = coordinate.x;
-        int y = coordinate.y;
-        Set<Coordinate> neighbors = new HashSet<Coordinate>();
-        neighbors.add(new Coordinate(x-1, y-1));
-        neighbors.add(new Coordinate(x  , y-1));
-        neighbors.add(new Coordinate(x+1, y-1));
-        neighbors.add(new Coordinate(x-1, y  ));
-        neighbors.add(new Coordinate(x+1, y  ));
-        neighbors.add(new Coordinate(x-1, y+1));
-        neighbors.add(new Coordinate(x  , y+1));
-        neighbors.add(new Coordinate(x+1, y+1));
-        return neighbors;
-
-    }
-
 
     @Override
     public String toString() {
