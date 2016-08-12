@@ -6,8 +6,11 @@ package comp1110.ass2;
  * Created by Yuxi Liu (u5950011) on 8/11/16.
  */
 public abstract class Player {
-
     private String name;
+
+    Player(String name) {
+        this.name = name;
+    }
 
     /**
      * Given the playing field, and the piece available for play, the player must make a move.
@@ -16,7 +19,7 @@ public abstract class Player {
      * @param opponentsPiece The piece that the opponent can play next turn.
      * @return
      */
-    abstract Piece move(GameField field, Piece myPiece, Piece opponentsPiece);
+    abstract Piece move(GameField field, char myPiece, char opponentsPiece);
 
     @Override
     public String toString() {return name;}
