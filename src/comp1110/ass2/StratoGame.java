@@ -58,9 +58,6 @@ public class StratoGame {
         String tile; // temporary variable, used in the loop only
         for (int i = 1; i <= l / 4; i++) {
             tile = placement.substring(4 * i - 4, 4 * i);
-
-            System.out.println("considering whether " + tile + " can be placed..."); // TODO: delete this after feeling confident.
-
             if (!isTilePlacementWellFormed(tile)) { return false; } // tile placement must be well-formed
 
             if (i == 1) {
@@ -79,12 +76,6 @@ public class StratoGame {
             // 'A' - 'A' is 0, 'Z' - 'A' is 25.
         }
 
-        System.out.print("the pieces used are "); // TODO: delete this after feeling confident.
-        for (int i = 0; i < kindsOfPieces; i++) {
-            System.out.print(piecesUsed[i] + " ");
-        }
-        System.out.println("");
-
         for (int i = 0; i < kindsOfPieces; i++) {
             if (piecesUsed[i] >= 3) {
                 System.out.println("the " + ("ABCDEFGHIJKLMNOPQRSTU".charAt(i)) + "tile is used more than twice!");
@@ -95,7 +86,6 @@ public class StratoGame {
             System.out.println("The U tile is not used exactly once!");
             return false; // the U tile must be used exactly once, at the start of the game.
         }
-
         return true;
     }
 
@@ -120,7 +110,6 @@ public class StratoGame {
             }
             gameField.addPiece(p);
         }
-        System.out.println(gameField); // TODO: delete this after feeling confident.
         return true;
     }
 
@@ -283,7 +272,6 @@ public class StratoGame {
         String placement = "MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC";
         GameField gameField = placementToGameField(placement);
         int[][] ccMatrix = gameField.connectedComponents();
-        System.out.println(ccMatrix.length);
         for (int i = 0; i < 26; i++) {
             for (int j = 0; j < 26; j++) {
                 System.out.print(ccMatrix[i][j] + " ");
@@ -294,7 +282,6 @@ public class StratoGame {
         int [] scoreRed = gameField.scoring(Color.RED);
         int [] scoreGreen = gameField.scoring(Color.GREEN);
 
-        System.out.println(scoreGreen.length);
         System.out.println("The score list of GREEN is:");
         System.out.println(Arrays.toString(scoreGreen));
         System.out.println("The score list of RED is:");

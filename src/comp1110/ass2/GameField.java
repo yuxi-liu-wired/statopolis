@@ -416,9 +416,4 @@ public class GameField {
         }
         return  str;
     }
-
-    public static void main(String[] args) {
-        GameField gf = new GameField();
-        System.out.println(gf.toString());
-    }
 }
