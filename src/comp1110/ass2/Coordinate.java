@@ -31,6 +31,19 @@ public class Coordinate {
 
         return neighbors.toArray(new Coordinate[neighbors.size()]);
     }
+    /**
+     * The union of the orthogonalNeighborhood of each coordinate, and the coordinates themselves.
+     * @param coordinates The list of coordinates whose neighbors need to be computed.
+     * @return The list of coordinates of the neighbors.
+     */
+    public static Coordinate[] neighborBlocksAndThemselves(Coordinate[] coordinates) {
+        Set<Coordinate> neighbors = new HashSet<Coordinate>();
+        for (Coordinate block : coordinates) {
+            neighbors.addAll(orthogonalNeighborhood(block));
+        }
+
+        return neighbors.toArray(new Coordinate[neighbors.size()]);
+    }
 
     /* the 4 neighbors of a given coordinate, like this:
      *  O

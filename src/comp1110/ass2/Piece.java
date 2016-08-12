@@ -9,6 +9,7 @@ public class Piece {
     private Coordinate[] coordinates;
     private Color[] colorList;
     private Coordinate origin;
+    private String name;
 
     /**
      * This is a general constructor for Piece, but it's not going to be used unless arbitrarily shaped pieces are
@@ -18,11 +19,12 @@ public class Piece {
      * @param colorList The list of colors on each block.
      * @param origin The origin. It denotes the translation underwent by the piece. Should be (0,0) at initialization.
      */
-    Piece (int size, Coordinate[] coordinates, Color[] colorList, Coordinate origin) {
+    Piece (int size, Coordinate[] coordinates, Color[] colorList, Coordinate origin, String name) {
         this.size = size;
         this.coordinates = coordinates;
         this.colorList = colorList;
         this.origin = origin;
+        this.name = name;
     }
 
     /**
@@ -32,6 +34,7 @@ public class Piece {
      */
     Piece (String name) {
         origin = new Coordinate(0,0);
+        this.name = name;
         if ("ABCDEFGHIJKLMNOPQRST".contains(name)) {
             size = 3;
             coordinates = new Coordinate[] {new Coordinate(0,0),new Coordinate(1,0),new Coordinate(0,1)};
