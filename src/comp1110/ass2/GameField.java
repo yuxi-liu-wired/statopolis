@@ -3,6 +3,12 @@ package comp1110.ass2;
 import java.util.*;
 
 /**
+ * This is the datastructure that represents the game field. The basic idea is to represent the field's state using
+ * three matrices. The first matrix is colorField, which records the color visible at the top of the blocks. The second
+ * matrix is heightField, which records the current height of the block. The third matrix is pieceField, which records
+ * the id of the piece that is visible at the top of the block. Using these three matrices, it suffices to compute
+ * the legal moves at each step, and the scores of each side.
+ *
  * Created by Yuxi Liu (u5950011) on 8/10/16.
  */
 public class GameField {

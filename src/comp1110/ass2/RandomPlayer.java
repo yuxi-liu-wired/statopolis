@@ -4,6 +4,7 @@ import java.util.Random;
 
 /**
  * A player that takes a random legal move.
+ *
  * Created by Yuxi Liu (u5950011) on 8/12/16.
  */
 public class RandomPlayer extends Player {

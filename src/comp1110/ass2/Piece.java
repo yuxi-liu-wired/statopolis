@@ -1,15 +1,16 @@
 package comp1110.ass2;
 
 /**
+ * This is the datastructure that represents a piece.
+ *
  * Created by Yuxi Liu (u5950011) on 8/10/16.
  */
 public class Piece {
-
-    private int size;
-    private Coordinate[] coordinates;
-    private Color[] colorList;
-    private Coordinate origin;
-    private String name;
+    private int size; // The number of blocks in the piece.
+    private Coordinate[] coordinates; // The coordinates of the blocks in the piece, measured relative to origin.
+    private Color[] colorList; // The color at each block of the piece.
+    private Coordinate origin; // When a piece is translated, its origin moves, but its coordinates doesn't.
+    private String name; // The name of the piece. Should be a letter from "A" to "U".
 
     /**
      * This is a general constructor for Piece, but it's not going to be used unless arbitrarily shaped pieces are
@@ -119,6 +120,7 @@ public class Piece {
     public Coordinate[] getCoordinates() { return coordinates; }
     public Color[] getcolorList() { return colorList; }
     public Coordinate getOrigin() { return origin; }
+    public String getName() { return name; }
 
 
 
@@ -175,7 +177,7 @@ public class Piece {
             }
         }
         System.out.println("WARNING: Cannot get the color of a nonexistent block (" + x + ", " + y + ") on the piece " + this.toString());
-        return Color.BLACK;
+        return null;
     }
 
     public Coordinate[] blocks() {

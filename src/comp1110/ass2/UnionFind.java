@@ -6,6 +6,8 @@ package comp1110.ass2;
  * with reference to https://www.cs.princeton.edu/~rs/AlgsDS07/01UnionFind.pdf
  * For additional documentation, see <a href="http://algs4.cs.princeton.edu/15uf">Section 1.5</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *
+ * Copied by Yuxi Liu (u5950011) on 8/11/16.
  */
 public class UnionFind {
     private int[] parent;  // parent[i] = parent of i
