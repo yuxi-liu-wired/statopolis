@@ -431,6 +431,34 @@ public class GameField {
         return ccLabelMatrix;
     }
 
+    /**
+     * Determines the winner of the game. Can be computed at anytime, even when the game isn't finished.
+     * @return "GREEN", "RED", or "BLACK". "BLACK" stands for a draw.
+     */
+    public Color winner() {
+        int[] redScores = scoring(Color.RED);
+        int[] greenScores = scoring(Color.GREEN);
+
+        int i = 0;
+        while (i < redScores.length && i < greenScores.length) {
+            if (redScores[i] > greenScores[i]) {
+                return Color.RED;
+            } else if (redScores[i] < greenScores[i]) {
+                return Color.GREEN;
+            }
+            // attempt to break the tie by comparing the next biggest regions.
+            i++;
+        }
+        // at least one side has run out of regions to score!
+        if (redScores.length > greenScores.length) { // red has more regions to score.
+            return Color.RED;
+        } else if (redScores.length < greenScores.length) { // green has more regions to score.
+            return Color.GREEN;
+        } else {
+            return Color.BLACK;
+        }
+    }
+
     @Override
     public String toString() {
         String str = "";
