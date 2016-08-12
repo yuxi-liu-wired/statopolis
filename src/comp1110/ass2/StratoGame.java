@@ -104,7 +104,7 @@ public class StratoGame {
         String tile; // temporary variable, used in the loop only
         for (int i = 1; i <= placement.length()/4; i++) {
             tile = placement.substring(4 * i - 4, 4 * i);
-            Piece p = tileToPiece(tile);
+            Piece p = stringToPiece(tile);
             if (!gameField.canAddPiece(p)) {
                 return false;
             }
@@ -129,13 +129,13 @@ public class StratoGame {
         String tile; // temporary variable, used in the loop only
         for (int i = 1; i <= placement.length()/4; i++) {
             tile = placement.substring(4 * i - 4, 4 * i);
-            Piece p = tileToPiece(tile);
+            Piece p = stringToPiece(tile);
             gameField.addPiece(p);
         }
         return gameField;
     }
 
-    private static Piece tileToPiece(String tile) {
+    private static Piece stringToPiece(String tile) {
         int x = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(tile.charAt(0));
         int y = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(tile.charAt(1));
         String tileName = tile.substring(2,3);
@@ -217,10 +217,9 @@ public class StratoGame {
      * @return A list of strings indicating all valid tile placements that you can move.
      */
     static String[] generatePossibleMoves(String placement, char piece) {
-
         GameField gameField = placementToGameField(placement);
         Coordinate[] coveredBlocks = gameField.getCoveredBlocks();
-        Coordinate[] neighborBlocks = Coordinate.neighborBlocks(coveredBlocks);
+        Coordinate[] twiceNeighbors = Coordinate.neighborBlocksAndThemselves(Coordinate.neighborBlocksAndThemselves(coveredBlocks));
 
         ArrayList<String> possibleMoves = new ArrayList<String>();
 
@@ -228,24 +227,16 @@ public class StratoGame {
         String coordStr; // AA to ZZ
         String orientation = "ABCD";
 
-        for (Coordinate c : coveredBlocks) {
-            coordStr = coordinateToAlphabet(c);
-            for (int i = 0; i < orientation.length(); i++) {
-                tile = coordStr + piece + orientation.charAt(i);
-                if (gameField.canAddPiece(tileToPiece(tile)))
-                    possibleMoves.add(tile);
-            }
-        }
-
-        for (Coordinate c : neighborBlocks) {
-            if (!GameField.coordinateWithinRange(c)) // skip neighbors that are out of bounds!
+        for (Coordinate c : twiceNeighbors) {
+            if (c.x <= -1 || c.x >= 26 || c.y <= -1 || c.y >= 26) {
                 continue;
-
-            coordStr = coordinateToAlphabet(c);
-            for (int i = 0; i < orientation.length(); i++) {
-                tile = coordStr + piece + orientation.charAt(i);
-                if (gameField.canAddPiece(tileToPiece(tile)))
-                    possibleMoves.add(tile);
+            } else {
+                coordStr = coordinateToAlphabet(c);
+                for (int i = 0; i < orientation.length(); i++) {
+                    tile = coordStr + piece + orientation.charAt(i);
+                    if (gameField.canAddPiece(stringToPiece(tile)))
+                        possibleMoves.add(tile);
+                }
             }
         }
 

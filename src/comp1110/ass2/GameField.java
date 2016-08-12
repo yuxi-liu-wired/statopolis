@@ -203,6 +203,44 @@ public class GameField {
     }
 
     /**
+     * Given a placement of the game, returns all possible moves
+     *
+     * Note: The gameboard given can accommodate at least 12 * 13 = 156 blocks, and the players can only play 40 blocks
+     * so there are always possible moves.
+     * @param piece The piece you are to play ('A' to 'T').
+     * @return A list of strings indicating all valid tile placements that you can move.
+     */
+    public Piece[] getPossibleMoves(char piece) {
+
+        Coordinate[] coveredBlocks = getCoveredBlocks();
+        Coordinate[] twiceNeighbors = Coordinate.neighborBlocksAndThemselves(Coordinate.neighborBlocksAndThemselves(coveredBlocks));
+        // Twice neighbors are all blocks within distance 2 of the covered blocks. The origin of any new piece must be
+        // a twice-neighbor of a covered block (draw a picture!).
+
+        ArrayList<Piece> possibleMoves = new ArrayList<Piece>();
+
+        Piece pieceA = new Piece(piece + "");
+        Piece pieceB = new Piece(piece + "");
+        pieceB.rotate90CW();
+        Piece pieceC = new Piece(piece + "");
+        pieceC.rotate180CW();
+        Piece pieceD = new Piece(piece + "");
+        pieceD.rotate270CW();
+        Piece[] pieces = {pieceA, pieceB, pieceC, pieceD};
+
+        for (Coordinate c : twiceNeighbors) {
+            for (Piece p : pieces) {
+                p.translateTo(c);
+                if (canAddPiece(p)) {
+                    possibleMoves.add(p);
+                }
+            }
+        }
+
+        return possibleMoves.toArray(new Piece[possibleMoves.size()]);
+    }
+
+    /**
      * Returns the list of score of each connected component, sorted by the AREA (height is IRRELEVANT) of the
      * component, from big to small.
      * @param color The color to score.
