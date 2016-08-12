@@ -34,6 +34,24 @@ public class GameField {
         }
     }
 
+    // used by the copy() method.
+    private GameField(Color[][] colorField, int[][] heightField, int[][] pieceField, int numberOfPiecesPlayed) {
+        this.colorField = colorField;
+        this.heightField = heightField;
+        this.pieceField = pieceField;
+        this.numberOfPiecesPlayed = numberOfPiecesPlayed;
+    }
+
+    /**
+     * This method returns an exact copy of the GameField for the player to play with.
+     * The reason for this is that computing a GameField from scratch slows tree-search too much.
+     * @return An exact copy of the game field.
+     */
+    @Override
+    public GameField clone() {
+        return new GameField(colorField,heightField,pieceField,numberOfPiecesPlayed);
+    }
+
     int[][] getHeightField() {
         int[][] copy = new int[FIELD_SIZE][FIELD_SIZE];
         for (int i = 0; i < FIELD_SIZE; i++)
@@ -209,21 +227,28 @@ public class GameField {
     }
 
     /**
-     * Given a placement of the game, returns all possible moves
+     * Given a placement of the game, returns all possible moves.
+     *
+     * Note: The gameboard given can accommodate at least 12 * 13 = 156 blocks, and the players can only play 40 blocks
+     * so there are always possible moves.
+     *
+     * WARNING: This function doesn't care about whose turn it "really" is. In other words. It doesn't enforce
+     * the rule saying "Green moves first, then they take turns". No. This function only cares about where a piece
+     * MIGHT be placed, if it will be placed on the board next.
      *
      * Note: The gameboard given can accommodate at least 12 * 13 = 156 blocks, and the players can only play 40 blocks
      * so there are always possible moves.
      * @param piece The piece you are to play ('A' to 'T').
-     * @return A list of strings indicating all valid tile placements that you can move.
+     * @return A list of Moves indicating all valid ways you can move.
      */
-    public Piece[] getPossibleMoves(char piece) {
+    public Move[] getPossibleMoves(char piece) {
 
         Coordinate[] coveredBlocks = getCoveredBlocks();
         Coordinate[] twiceNeighbors = Coordinate.neighborBlocksAndThemselves(Coordinate.neighborBlocksAndThemselves(coveredBlocks));
         // Twice neighbors are all blocks within distance 2 of the covered blocks. The origin of any new piece must be
         // a twice-neighbor of a covered block (draw a picture!).
 
-        ArrayList<Piece> possibleMoves = new ArrayList<Piece>();
+        ArrayList<Move> possibleMoves = new ArrayList<Move>();
 
         Piece pieceA = new Piece(piece + "");
         Piece pieceB = new Piece(piece + "");
@@ -235,15 +260,25 @@ public class GameField {
         Piece[] pieces = {pieceA, pieceB, pieceC, pieceD};
 
         for (Coordinate c : twiceNeighbors) {
-            for (Piece p : pieces) {
-                p.translateTo(c);
-                if (canAddPiece(p)) {
-                    possibleMoves.add(p);
-                }
+            pieceA.translateTo(c);
+            if (canAddPiece(pieceA)) {
+                possibleMoves.add(new Move(c,piece,"A"));
+            }
+            pieceB.translateTo(c);
+            if (canAddPiece(pieceB)) {
+                possibleMoves.add(new Move(c,piece,"B"));
+            }
+            pieceC.translateTo(c);
+            if (canAddPiece(pieceC)) {
+                possibleMoves.add(new Move(c,piece,"C"));
+            }
+            pieceD.translateTo(c);
+            if (canAddPiece(pieceD)) {
+                possibleMoves.add(new Move(c,piece,"D"));
             }
         }
 
-        return possibleMoves.toArray(new Piece[possibleMoves.size()]);
+        return possibleMoves.toArray(new Move[possibleMoves.size()]);
     }
 
     /**

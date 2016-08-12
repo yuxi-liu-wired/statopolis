@@ -135,29 +135,7 @@ public class StratoGame {
         return gameField;
     }
 
-    private static Piece stringToPiece(String tile) {
-        int x = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(tile.charAt(0));
-        int y = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(tile.charAt(1));
-        String tileName = tile.substring(2,3);
-        String orientation = tile.substring(3,4);
-        Piece p = new Piece(tileName);
-        p.translateTo(x, y);
-        switch (orientation) {
-            case "A":
-                break;
-            case "B":
-                p.rotate90CW();
-                break;
-            case "C":
-                p.rotate180CW();
-                break;
-            case "D":
-                p.rotate270CW();
-                break;
-        }
-        return p;
-    }
-
+    // These two functions translate between the alphabetical coordinates and the integer coordinates.
     private static String coordinateToAlphabet(Coordinate c) {
         if (c.x <= -1 || c.x >= 26 || c.y <= -1 || c.y >= 26) {
             System.out.println(c + " is out of bounds!");
@@ -177,6 +155,22 @@ public class StratoGame {
             return null;
         }
         return new Coordinate(x,y);
+    }
+
+    // These three methods translate between the String representation of a move and the Move representation.
+    private static Move stringToMove(String tile) {
+        int x = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(tile.charAt(0));
+        int y = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(tile.charAt(1));
+        char tileName = tile.charAt(2);
+        String orientation = tile.substring(3,4);
+        Move move = new Move(new Coordinate(x,y),tileName,orientation);
+        return move;
+    }
+    private static String moveToString(Move move) {
+        return coordinateToAlphabet(move.origin) + move.pieceName + move.orientation;
+    }
+    private static Piece stringToPiece(String tile) {
+        return stringToMove(tile).toPiece();
     }
 
     /**
@@ -223,29 +217,12 @@ public class StratoGame {
      */
     static String[] generatePossibleMoves(String placement, char piece) {
         GameField gameField = placementToGameField(placement);
-        Coordinate[] coveredBlocks = gameField.getCoveredBlocks();
-        Coordinate[] twiceNeighbors = Coordinate.neighborBlocksAndThemselves(Coordinate.neighborBlocksAndThemselves(coveredBlocks));
-
-        ArrayList<String> possibleMoves = new ArrayList<String>();
-
-        String tile;
-        String coordStr; // AA to ZZ
-        String orientation = "ABCD";
-
-        for (Coordinate c : twiceNeighbors) {
-            if (c.x <= -1 || c.x >= 26 || c.y <= -1 || c.y >= 26) {
-                continue;
-            } else {
-                coordStr = coordinateToAlphabet(c);
-                for (int i = 0; i < orientation.length(); i++) {
-                    tile = coordStr + piece + orientation.charAt(i);
-                    if (gameField.canAddPiece(stringToPiece(tile)))
-                        possibleMoves.add(tile);
-                }
-            }
+        Move[] possibleMoves = gameField.getPossibleMoves(piece);
+        String[] stringMoves = new String[possibleMoves.length];
+        for (int i = 0; i < possibleMoves.length; i++) {
+            stringMoves[i] = moveToString(possibleMoves[i]);
         }
-
-        return possibleMoves.toArray(new String[possibleMoves.size()]);
+        return stringMoves;
     }
 
     // This main method is only for debugging. Remove it after the project is done.
@@ -268,5 +245,10 @@ public class StratoGame {
         System.out.println(Arrays.toString(scoreGreen));
         System.out.println("The score list of RED is:");
         System.out.println(Arrays.toString(scoreRed));
+
+        String[] moves = generatePossibleMoves("MMUA",'A');
+        for (String s : moves) {
+            System.out.print(s + " ");
+        }
     }
 }
