@@ -1,7 +1,5 @@
 package comp1110.ass2;
 
-import java.util.Arrays;
-
 /**
  * A player that looks one step ahead and play the minimax move.
  *
@@ -25,12 +23,38 @@ public class OneLookaheadPlayer extends Player {
         Color myColor = whatsMyColor(myPiece);
         Color theirColor = whatsMyColor(opponentsPiece);
 
+        if (theirColor == Color.BLACK) { // The opponent has no next move!
+            GameField field = StratoGame.placementToGameField(placement);
+            Move[] myMoves = field.getPossibleMoves(myPiece);
+
+            int moveScore;
+            int bestMove;
+            int bestMoveScore;
+
+            Move myMove;
+            GameField nextField;
+
+            myMove = myMoves[0];
+            nextField = field.nextField(myMove);
+            bestMoveScore = evaluationFunction(nextField, myColor);
+            bestMove = 0;
+
+            for (int i = 1; i < myMoves.length; i++) {
+                myMove = myMoves[i];
+                nextField = field.nextField(myMove);
+                moveScore = evaluationFunction(nextField, myColor);
+
+                if (moveScore > bestMoveScore) {
+                    bestMoveScore = moveScore;
+                    bestMove = i;
+                }
+            }
+            return myMoves[bestMove];
+        }
+
         GameField field = StratoGame.placementToGameField(placement);
         Move[] myMoves = field.getPossibleMoves(myPiece);
         Move[] theirMoves;
-
-        int[][] moveValue = new int[myMoves.length][];
-        Arrays.fill(moveValue, 0);
 
         int bestMove;
         int bestMoveScore;
@@ -96,7 +120,13 @@ public class OneLookaheadPlayer extends Player {
     }
 
     private Color whatsMyColor(char myPiece) {
-        return ("ABCDEFGHIJ".contains(Character.toString(myPiece))? Color.RED : Color.GREEN);
+        if ("ABCDEFGHIJ".contains(Character.toString(myPiece))) {
+            return Color.RED;
+        } else if ("KLMNOPQRST".contains(Character.toString(myPiece))) {
+            return Color.GREEN;
+        } else {
+            return Color.BLACK; // The opponent has no moves left!
+        }
     }
 
     private int evaluationFunction(GameField field, Color myColor) {
