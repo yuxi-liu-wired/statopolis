@@ -208,10 +208,15 @@ public class StratoGame {
     }
 
     /**
-     * Given a placement of the game, returns all possible moves
+     * Given a placement of the game, returns all possible moves.
      *
      * Note: The gameboard given can accommodate at least 12 * 13 = 156 blocks, and the players can only play 40 blocks
      * so there are always possible moves.
+     *
+     * WARNING: This function doesn't care about whose turn it "really" is. In other words. It doesn't enforce
+     * the rule saying "Green moves first, then they take turns". No. This function only cares about where a piece
+     * MIGHT be placed, if it will be placed on the board next.
+     *
      * @param placement A valid placement string indicating a game state.
      * @param piece The piece you are to play ('A' to 'T').
      * @return A list of strings indicating all valid tile placements that you can move.
@@ -245,27 +250,13 @@ public class StratoGame {
 
     // This main method is only for debugging. Remove it after the project is done.
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        String tile;
-        /*while(true) {
-            System.out.println("Input a placement string");
-            tile = in.next();
-            if (tile.equals("q")){
-                break;
-            }
-            if (isPlacementValid(tile)) {
-                System.out.println(tile + " is valid.");
-            } else {
-                System.out.println(tile + " is not valid.");
-            }
-        }*/
 
         String placement = "MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC";
         GameField gameField = placementToGameField(placement);
         int[][] ccMatrix = gameField.connectedComponents();
-        for (int i = 0; i < 26; i++) {
-            for (int j = 0; j < 26; j++) {
-                System.out.print(ccMatrix[i][j] + " ");
+        for (int j = 0; j < 26; j++) {
+            for (int i = 0; i < 26; i++) {
+                System.out.print((ccMatrix[i][j]==-1?"":" ") + ccMatrix[i][j] + " ");
             }
             System.out.println("");
         }
@@ -277,6 +268,5 @@ public class StratoGame {
         System.out.println(Arrays.toString(scoreGreen));
         System.out.println("The score list of RED is:");
         System.out.println(Arrays.toString(scoreRed));
-
     }
 }
