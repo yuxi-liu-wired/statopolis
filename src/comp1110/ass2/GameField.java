@@ -3,7 +3,6 @@ package comp1110.ass2;
 import java.util.*;
 
 /**
- *
  * Created by Yuxi Liu (u5950011) on 8/10/16.
  */
 public class GameField {
@@ -27,6 +26,39 @@ public class GameField {
                 numberOfPiecesPlayed = 0;
             }
         }
+    }
+
+    int[][] getHeightField() {
+        int[][] copy = new int[FIELD_SIZE][FIELD_SIZE];
+        for (int i = 0; i < FIELD_SIZE; i++)
+            for (int j = 0; j < FIELD_SIZE; j++)
+                copy[i][j] = heightField[i][j];
+        return copy;
+    }
+    Color[][] getColorField() {
+        Color[][] copy = new Color[FIELD_SIZE][FIELD_SIZE];
+        for (int i = 0; i < FIELD_SIZE; i++)
+            for (int j = 0; j < FIELD_SIZE; j++) {
+                switch (colorField[i][j]) {
+                    case BLACK:
+                        copy[i][j] = Color.BLACK;
+                        break;
+                    case GREEN:
+                        copy[i][j] = Color.GREEN;
+                        break;
+                    case RED:
+                        copy[i][j] = Color.RED;
+                        break;
+                }
+            }
+        return copy;
+    }
+    int[][] getPieceField() {
+        int[][] copy = new int[FIELD_SIZE][FIELD_SIZE];
+        for (int i = 0; i < FIELD_SIZE; i++)
+            for (int j = 0; j < FIELD_SIZE; j++)
+                copy[i][j] = pieceField[i][j];
+        return copy;
     }
 
 
