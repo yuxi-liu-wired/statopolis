@@ -29,27 +29,44 @@ public class GameField {
                 colorField[i][j] = Color.BLACK;
                 heightField[i][j] = 0;
                 pieceField[i][j] = -1; // -1 is the "null id", meaning that "no piece has been played here yet".
-                numberOfPiecesPlayed = 0;
             }
         }
-    }
-
-    // used by the copy() method.
-    private GameField(Color[][] colorField, int[][] heightField, int[][] pieceField, int numberOfPiecesPlayed) {
-        this.colorField = colorField;
-        this.heightField = heightField;
-        this.pieceField = pieceField;
-        this.numberOfPiecesPlayed = numberOfPiecesPlayed;
+        numberOfPiecesPlayed = 0;
     }
 
     /**
-     * This method returns an exact copy of the GameField for the player to play with.
-     * The reason for this is that computing a GameField from scratch slows tree-search too much.
-     * @return An exact copy of the game field.
+     * This method returns an exact copy of the game field that would result after the move is made.
+     * This method doesn't change the calling object itself.
+     * @param move The move to be made next.
+     * @return An exact copy of the game field that would result after the move is made..
      */
+    public GameField nextField(Move move) {
+        GameField nextField = this.clone();
+        Piece p = move.toPiece();
+        if (!nextField.canAddPiece(p)) {
+            System.out.println("Warning: trying to make an illegal move in method: nextField.");
+            return null;
+        }
+        nextField.addPiece(p);
+        return nextField;
+    }
     @Override
     public GameField clone() {
         return new GameField(colorField,heightField,pieceField,numberOfPiecesPlayed);
+    }
+    // used by the copy() method.
+    private GameField(Color[][] colorField, int[][] heightField, int[][] pieceField, int numberOfPiecesPlayed) {
+        colorField = new Color[FIELD_SIZE][FIELD_SIZE];
+        heightField = new int[FIELD_SIZE][FIELD_SIZE];
+        pieceField = new int[FIELD_SIZE][FIELD_SIZE];
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            for (int j = 0; j < FIELD_SIZE; j++) {
+                this.colorField[i][j] = colorField[i][j];
+                this.heightField[i][j] = heightField[i][j];
+                this.pieceField[i][j] = pieceField[i][j];
+            }
+        }
+        this.numberOfPiecesPlayed = numberOfPiecesPlayed;
     }
 
     int[][] getHeightField() {
