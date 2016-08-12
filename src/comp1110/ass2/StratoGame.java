@@ -1,6 +1,7 @@
 package comp1110.ass2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -200,11 +201,8 @@ public class StratoGame {
      */
     static int getScoreForPlacement(String placement, boolean green) {
         GameField gameField = placementToGameField(placement);
-
-        // FIXME Task 7: determine the score for a player given a placement
-        /*int[] scores = gameField.scoring(green ? Color.GREEN : Color.RED);
-        return scores[0];*/
-        return 0;
+        int[] scores = gameField.scoring(green ? Color.GREEN : Color.RED);
+        return scores[0];
     }
 
     /**
@@ -269,7 +267,7 @@ public class StratoGame {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         String tile;
-        while(true) {
+        /*while(true) {
             System.out.println("Input a placement string");
             tile = in.next();
             if (tile.equals("q")){
@@ -280,7 +278,27 @@ public class StratoGame {
             } else {
                 System.out.println(tile + " is not valid.");
             }
+        }*/
+
+        String placement = "MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC";
+        GameField gameField = placementToGameField(placement);
+        int[][] ccMatrix = gameField.connectedComponents();
+        System.out.println(ccMatrix.length);
+        for (int i = 0; i < 26; i++) {
+            for (int j = 0; j < 26; j++) {
+                System.out.print(ccMatrix[i][j] + " ");
+            }
+            System.out.println("");
         }
+
+        int [] scoreRed = gameField.scoring(Color.RED);
+        int [] scoreGreen = gameField.scoring(Color.GREEN);
+
+        System.out.println(scoreGreen.length);
+        System.out.println("The score list of GREEN is:");
+        System.out.println(Arrays.toString(scoreGreen));
+        System.out.println("The score list of RED is:");
+        System.out.println(Arrays.toString(scoreRed));
 
     }
 }

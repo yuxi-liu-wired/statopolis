@@ -34,9 +34,10 @@ public class UnionFind {
      * @return the component identifier for the component containing site p.
      */
     public int find(int p) {
-        while (p != parent[p])
+        while (p != parent[p]) {
             parent[p] = parent[parent[p]]; // path compression
             p = parent[p];
+        }
         return p;
     }
 

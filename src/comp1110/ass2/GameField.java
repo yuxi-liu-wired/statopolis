@@ -185,7 +185,6 @@ public class GameField {
 
         Map<Integer, SizeHeight> redMap = new HashMap<Integer, SizeHeight>();
         Map<Integer, SizeHeight> greenMap = new HashMap<Integer, SizeHeight>();
-        Map<Integer, SizeHeight> map = new HashMap<Integer, SizeHeight>();
         // Integer is the name of the cluster, and SizeHeight is the size and height of the cluster.
 
         int cluster; // The cluster that the block belongs to.
@@ -265,10 +264,11 @@ public class GameField {
      * @returna A connected components labelling of colorField, with all black blocks considered as "background"
      * and given the default label -1.
      */
-    private int[][] connectedComponents() {
-        // colorField
+    // TODO: change it to private after testing done.
+    public int[][] connectedComponents() {
         int[][] ccLabelMatrix = new int[FIELD_SIZE][FIELD_SIZE];
-        Arrays.fill(ccLabelMatrix, -1); // The default label -1 indicates that it's in the background.
+        for (int[] row: ccLabelMatrix)
+            Arrays.fill(row, -1); // The default label -1 indicates that it's in the background.
 
         int id = 0; // Used to give each semi-cluster a unique id in the first pass, to be merged in the second pass.
         UnionFind labelSet = new UnionFind(FIELD_SIZE*FIELD_SIZE);
