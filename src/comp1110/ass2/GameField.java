@@ -248,7 +248,8 @@ public class GameField {
             this.height = height;
         }
         public int compareTo(SizeHeight that) { // when comparing two clusters, only size matters.
-            return Integer.compare(this.size, that.size);
+            return Integer.compare(that.size, this.size);
+            // I need the sorting to be descending, so I had to reverse the sign.
         }
         @Override
         public String toString(){
