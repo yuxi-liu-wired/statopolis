@@ -3,6 +3,7 @@ package comp1110.ass2;
 import java.util.*;
 
 /**
+ *
  * Created by Yuxi Liu (u5950011) on 8/10/16.
  */
 public class GameField {
@@ -248,8 +249,12 @@ public class GameField {
             this.height = height;
         }
         public int compareTo(SizeHeight that) { // when comparing two clusters, only size matters.
-            return Integer.compare(that.size, this.size);
-            // I need the sorting to be descending, so I had to reverse the sign.
+            int sizeComparison = Integer.compare(that.size, this.size);
+            if (sizeComparison != 0) {
+                return Integer.compare(that.size, this.size);
+            } else { // tie-breaking using height.
+                return Integer.compare(that.height, this.height);
+            }
         }
         @Override
         public String toString(){
@@ -265,7 +270,6 @@ public class GameField {
      * @returna A connected components labelling of colorField, with all black blocks considered as "background"
      * and given the default label -1.
      */
-    // TODO: change it to private after testing done.
     public int[][] connectedComponents() {
         int[][] ccLabelMatrix = new int[FIELD_SIZE][FIELD_SIZE];
         for (int[] row: ccLabelMatrix)

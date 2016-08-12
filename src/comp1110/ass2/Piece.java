@@ -184,7 +184,7 @@ public class Piece {
         }
         return movedCoords;
     }
-    // The union of the mooreNeighborhood of each of coordinates, subtract the coordinates themselves.
+    // The union of the orthogonalNeighborhood of each of coordinates, subtract the coordinates themselves.
     public Coordinate[] neighborBlocks() {
         return Coordinate.neighborBlocks(this.blocks());
     }

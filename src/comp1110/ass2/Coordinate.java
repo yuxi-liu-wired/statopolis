@@ -18,37 +18,33 @@ public class Coordinate {
     }
 
     /**
-     * The union of the mooreNeighborhood of each coordinate, minus the coordinates themselves.
+     * The union of the orthogonalNeighborhood of each coordinate, minus the coordinates themselves.
      * @param coordinates The list of coordinates whose neighbors need to be computed.
      * @return The list of coordinates of the neighbors.
      */
     public static Coordinate[] neighborBlocks(Coordinate[] coordinates) {
         Set<Coordinate> neighbors = new HashSet<Coordinate>();
         for (Coordinate block : coordinates) {
-            neighbors.addAll(mooreNeighborhood(block));
+            neighbors.addAll(orthogonalNeighborhood(block));
         }
         neighbors.removeAll(new HashSet<Coordinate>(Arrays.asList(coordinates)));
 
         return neighbors.toArray(new Coordinate[neighbors.size()]);
     }
 
-    /* the 8 neighbors of a given coordinate, like this:
-     * OOO
+    /* the 4 neighbors of a given coordinate, like this:
+     *  O
      * O.O
-     * OOO
+     *  O
      */
-    private static Set<Coordinate> mooreNeighborhood(Coordinate coordinate) {
+    private static Set<Coordinate> orthogonalNeighborhood(Coordinate coordinate) {
         int x = coordinate.x;
         int y = coordinate.y;
         Set<Coordinate> neighbors = new HashSet<Coordinate>();
-        neighbors.add(new Coordinate(x-1, y-1));
-        neighbors.add(new Coordinate(x  , y-1));
-        neighbors.add(new Coordinate(x+1, y-1));
         neighbors.add(new Coordinate(x-1, y  ));
         neighbors.add(new Coordinate(x+1, y  ));
-        neighbors.add(new Coordinate(x-1, y+1));
+        neighbors.add(new Coordinate(x  , y-1));
         neighbors.add(new Coordinate(x  , y+1));
-        neighbors.add(new Coordinate(x+1, y+1));
         return neighbors;
 
     }
