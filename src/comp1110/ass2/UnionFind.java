@@ -42,9 +42,9 @@ public class UnionFind {
 
     /**
      * Returns true if the the two sites are in the same component.
-     * @param  p the integer representing one site.
-     * @param  q the integer representing the other site.
-     * @return true if the two sites p and q are in the same component, false otherwise.
+     * @param p the integer representing one site.
+     * @param q the integer representing the other site.
+     * @return true iff the two sites p and q are in the same component.
      */
     public boolean connected(int p, int q) {
         return find(p) == find(q);
@@ -52,8 +52,8 @@ public class UnionFind {
 
     /**
      * Merges the component containing site p with the component containing site q.
-     * @param  p the integer representing one site
-     * @param  q the integer representing the other site
+     * @param p the integer representing one site
+     * @param q the integer representing the other site
      */
     public void union(int p, int q) {
         int rootP = find(p);

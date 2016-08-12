@@ -1,7 +1,6 @@
 package comp1110.ass2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Created by Yuxi Liu (u5950011) on 8/10/16.
@@ -178,10 +177,84 @@ public class GameField {
      * the area (height is irrelevant) of the component, from big to small.
      */
     public int[] scoring(Color color) {
-        int[][] ccLabelMatrix = connectedComponents();
-        int[] redSizeList
+        if (color == Color.BLACK) {
+            return null;
+        }
 
-        return null;
+        int[][] ccLabelMatrix = connectedComponents();
+
+        Map<Integer, SizeHeight> redMap = new HashMap<Integer, SizeHeight>();
+        Map<Integer, SizeHeight> greenMap = new HashMap<Integer, SizeHeight>();
+        Map<Integer, SizeHeight> map = new HashMap<Integer, SizeHeight>();
+        // Integer is the name of the cluster, and SizeHeight is the size and height of the cluster.
+
+        int cluster; // The cluster that the block belongs to.
+        int height; // The height of the block.
+        SizeHeight sizeHeight;
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            for (int j = 0; j < FIELD_SIZE; j++) {
+                if (colorField[i][j] == Color.GREEN) {
+                    cluster = ccLabelMatrix[i][j];
+                    height = heightField[i][j];
+                    sizeHeight = greenMap.get(cluster);
+                    if (sizeHeight == null) {
+                        greenMap.put(cluster, new SizeHeight(1, height));
+                    } else {
+                        sizeHeight.size++;
+                        sizeHeight.height = Math.max(sizeHeight.height, height);
+                    }
+                } else if (colorField[i][j] == Color.RED) { // the same thing, just with red, not green.
+                    cluster = ccLabelMatrix[i][j];
+                    height = heightField[i][j];
+                    sizeHeight = redMap.get(cluster);
+                    if (sizeHeight == null) {
+                        redMap.put(cluster, new SizeHeight(1, height));
+                    } else {
+                        sizeHeight.size++;
+                        sizeHeight.height = Math.max(sizeHeight.height, height);
+                    }
+                }
+            }
+        }
+
+        int[] scoreValues;
+        if (color == Color.GREEN) {
+            List<SizeHeight> greenClusterList = new ArrayList<SizeHeight>(greenMap.values());
+            Collections.sort(greenClusterList);
+
+            scoreValues = new int[greenClusterList.size()];
+            for (int i = 0; i < scoreValues.length; i++) {
+                SizeHeight sh = greenClusterList.get(i);
+                scoreValues[i] = sh.size * sh.height;
+            }
+        } else if (color == Color.RED) {
+            List<SizeHeight> redClusterList = new ArrayList<SizeHeight>(redMap.values());
+            Collections.sort(redClusterList);
+
+            scoreValues = new int[redClusterList.size()];
+            for (int i = 0; i < scoreValues.length; i++) {
+                SizeHeight sh = redClusterList.get(i);
+                scoreValues[i] = sh.size * sh.height;
+            }
+        } else { scoreValues = null; }
+
+        return scoreValues;
+    }
+    // only used in the scoring function, as a tuple with an ordering.
+    private class SizeHeight implements Comparable<SizeHeight> {
+        public int size;
+        public int height;
+        SizeHeight (int size, int height) {
+            this.size = size;
+            this.height = height;
+        }
+        public int compareTo(SizeHeight that) { // when comparing two clusters, only size matters.
+            return Integer.compare(this.size, that.size);
+        }
+        @Override
+        public String toString(){
+            return ("(size = "+size+", height = "+height+")");
+        }
     }
 
     /**
@@ -249,7 +322,6 @@ public class GameField {
             for (int j = 1; j < FIELD_SIZE; j++) {
                 color = colorField[i][j];
                 if (color != Color.BLACK) {
-
                     // neighbor on the left
                     color1 = colorField[i - 1][j];
                     cluster1 = ccLabelMatrix[i - 1][j];
