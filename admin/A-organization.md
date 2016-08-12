@@ -6,10 +6,9 @@ Members:
 * Yuxi Liu, u5950011
 
 Roles:
-To be determined at the first meeting.
-(Probably horribly intermingled and no distinct roles will emerge.)
+All of them.
 
 Weekly meeting time:
-Not yet determined, but probably Friday evening.
+Friday 17:00 - 18:00, usually in CSIT N109
 
 Contact details: contacted through ANU email and WeChat
