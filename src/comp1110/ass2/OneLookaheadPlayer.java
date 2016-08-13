@@ -19,7 +19,7 @@ public class OneLookaheadPlayer extends Player {
      * @return The minimax move, one step ahead.
      */
     @Override
-    Move move(String placement, char myPiece, char opponentsPiece) {
+    Move move(String placement, String myPiece, String opponentsPiece) {
         Color myColor = whatsMyColor(myPiece);
         Color theirColor = whatsMyColor(opponentsPiece);
 
@@ -119,10 +119,10 @@ public class OneLookaheadPlayer extends Player {
         return myMoves[bestMove];
     }
 
-    private Color whatsMyColor(char myPiece) {
-        if ("ABCDEFGHIJ".contains(Character.toString(myPiece))) {
+    private Color whatsMyColor(String myPiece) {
+        if ("ABCDEFGHIJ".contains(myPiece)) {
             return Color.RED;
-        } else if ("KLMNOPQRST".contains(Character.toString(myPiece))) {
+        } else if ("KLMNOPQRST".contains(myPiece)) {
             return Color.GREEN;
         } else {
             return Color.BLACK; // The opponent has no moves left!
