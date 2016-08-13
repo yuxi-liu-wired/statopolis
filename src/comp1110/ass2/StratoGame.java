@@ -195,7 +195,7 @@ public class StratoGame {
      * @return A string indicating a valid tile placement that represents your move.
      */
     static String generateMove(String placement, char piece, char opponentsPiece) {
-        return generatePossibleMoves(placement, piece)[0];
+        return generatePossibleMoves(placement, Character.toString(piece))[0];
     }
 
     /**
@@ -212,7 +212,7 @@ public class StratoGame {
      * @param piece The piece you are to play ('A' to 'T').
      * @return A list of strings indicating all valid tile placements that you can move.
      */
-    static String[] generatePossibleMoves(String placement, char piece) {
+    static String[] generatePossibleMoves(String placement, String piece) {
         GameField gameField = placementToGameField(placement);
         Move[] possibleMoves = gameField.getPossibleMoves(piece);
         String[] stringMoves = new String[possibleMoves.length];
@@ -243,7 +243,7 @@ public class StratoGame {
         System.out.println("The score list of RED is:");
         System.out.println(Arrays.toString(scoreRed));
 
-        String[] moves = generatePossibleMoves("MMUA",'A');
+        String[] moves = generatePossibleMoves("MMUA","A");
         for (String s : moves) {
             System.out.print(s + " ");
         }
