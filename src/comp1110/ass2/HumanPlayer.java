@@ -11,7 +11,7 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    Move move(String placement, char myPiece, char opponentsPiece) {
+    Move move(String placement, String myPiece, String opponentsPiece) {
         // TODO: implement this method! You'd probably use the GUI.
         return null;
     }
