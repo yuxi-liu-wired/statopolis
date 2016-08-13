@@ -34,6 +34,7 @@ public class Viewer extends Application {
 
     private final Group root = new Group();
     private final Group controls = new Group();
+    private final Group boardDisplay = new Group();
     TextField textField;
 
 
@@ -43,14 +44,9 @@ public class Viewer extends Application {
      * @param placement  A valid placement string
      */
     void makePlacement(String placement) {
+        boardDisplay.getChildren().clear();
 
-        // TODO: actually remove the squares and numbers and texts everytime the button is pressed.
-        // right now it just "covers it up" by a white square!
-        Rectangle coveringItUp = new Rectangle(0, 0, 635, 580);
-        coveringItUp.setFill(Color.WHITE);
-        root.getChildren().add(coveringItUp);
-
-        int blockSize = 20; // change this if you dislike the size of the blocks.
+        int blockSize = 20;
 
         GameField gf = StratoGame.placementToGameField(placement);
         int[][] heightField = gf.getHeightField();
@@ -88,21 +84,21 @@ public class Viewer extends Application {
             Text round = new Text(115, 20, "40 rounds are finished, game is over! " + whoWon);
             round.setFont(Font.font("Courier", 15));
             round.setFill(Color.BLACK);
-            root.getChildren().add(round);
+            boardDisplay.getChildren().add(round);
         } else {
             Text round = new Text(115, 20, "It's round " + Integer.toString(placement.length() / 4) + ", " + ((placement.length() / 4) % 2 == 1 ? "Green" : "Red") + "'s move.");
             round.setFont(Font.font("Courier", 15));
             round.setFill(Color.BLACK);
-            root.getChildren().add(round);
+            boardDisplay.getChildren().add(round);
         }
         Text gScore = new Text(115, 40, "Green's score is: " + greenScoreStr);
         gScore.setFont(Font.font("Courier", 15));
         gScore.setFill(Color.GREEN);
-        root.getChildren().add(gScore);
+        boardDisplay.getChildren().add(gScore);
         Text rScore = new Text(115, 60, "Red's score is: " + redScoreStr);
         rScore.setFont(Font.font("Courier", 15));
         rScore.setFill(Color.RED);
-        root.getChildren().add(rScore);
+        boardDisplay.getChildren().add(rScore);
 
         for (int i = 0; i < heightField.length; i++) {
             for (int j = 0; j < heightField.length; j++) {
@@ -112,7 +108,7 @@ public class Viewer extends Application {
                 letter.setFont(Font.font("Courier", 9));
                 letter.setFill(Color.GRAY);
                 letter.setOpacity(0.5);
-                root.getChildren().add(letter);
+                boardDisplay.getChildren().add(letter);
 
 
                 comp1110.ass2.Color color = colorField[i][j];
@@ -130,14 +126,14 @@ public class Viewer extends Application {
                         r.setFill(Color.RED);
                     }
                     r.setStrokeWidth(3);
-                    root.getChildren().add(r);
+                    boardDisplay.getChildren().add(r);
 
                     if (height > 1 && color != comp1110.ass2.Color.BLACK) {
                         // height of the block
                         Text t = new Text(115 + blockSize * i + 7, 60 + blockSize * j + 13, Integer.toString(height));
                         t.setFont(Font.font("Helvetica", 10));
                         t.setFill(Color.BLACK);
-                        root.getChildren().add(t);
+                        boardDisplay.getChildren().add(t);
                     }
                 }
             }
@@ -174,6 +170,7 @@ public class Viewer extends Application {
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
 
         root.getChildren().add(controls);
+        root.getChildren().add(boardDisplay);
 
         makeControls();
 
