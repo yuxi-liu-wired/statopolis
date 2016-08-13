@@ -116,7 +116,7 @@ public class StratoGame {
      * @param placement A placement string
      * @return The GameField corresponding to the placement, or null if it's an invalid placement.
      */
-    static GameField placementToGameField(String placement) {
+    public static GameField placementToGameField(String placement) {
         if (!isPlacementValid(placement)) {
             System.out.println("The placement " + placement + " is invalid!");
             return null;

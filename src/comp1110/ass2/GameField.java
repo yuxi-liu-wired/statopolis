@@ -69,14 +69,14 @@ public class GameField {
         this.numberOfPiecesPlayed = numberOfPiecesPlayed;
     }
 
-    int[][] getHeightField() {
+    public int[][] getHeightField() {
         int[][] copy = new int[FIELD_SIZE][FIELD_SIZE];
         for (int i = 0; i < FIELD_SIZE; i++)
             for (int j = 0; j < FIELD_SIZE; j++)
                 copy[i][j] = heightField[i][j];
         return copy;
     }
-    Color[][] getColorField() {
+    public Color[][] getColorField() {
         Color[][] copy = new Color[FIELD_SIZE][FIELD_SIZE];
         for (int i = 0; i < FIELD_SIZE; i++)
             for (int j = 0; j < FIELD_SIZE; j++) {
@@ -94,7 +94,7 @@ public class GameField {
             }
         return copy;
     }
-    int[][] getPieceField() {
+    public int[][] getPieceField() {
         int[][] copy = new int[FIELD_SIZE][FIELD_SIZE];
         for (int i = 0; i < FIELD_SIZE; i++)
             for (int j = 0; j < FIELD_SIZE; j++)
