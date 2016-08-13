@@ -258,7 +258,7 @@ public class GameField {
      * @param piece The piece you are to play ('A' to 'T').
      * @return A list of Moves indicating all valid ways you can move.
      */
-    public Move[] getPossibleMoves(char piece) {
+    public Move[] getPossibleMoves(String piece) {
 
         Coordinate[] coveredBlocks = getCoveredBlocks();
         Coordinate[] twiceNeighbors = Coordinate.neighborBlocksAndThemselves(Coordinate.neighborBlocksAndThemselves(coveredBlocks));
