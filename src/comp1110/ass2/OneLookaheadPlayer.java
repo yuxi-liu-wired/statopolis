@@ -6,7 +6,7 @@ package comp1110.ass2;
  * Created by Yuxi Liu (u5950011) on 8/13/16.
  */
 public class OneLookaheadPlayer extends Player {
-    OneLookaheadPlayer() {
+    public OneLookaheadPlayer() {
         super("One Lookahead Player");
     }
 

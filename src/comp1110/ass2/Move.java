@@ -7,17 +7,17 @@ package comp1110.ass2;
  */
 public class Move {
     public Coordinate origin;
-    public char pieceName;
+    public String pieceName;
     public String orientation;
 
-    Move(Coordinate origin, char pieceName,String orientation) {
+    Move(Coordinate origin, String pieceName,String orientation) {
         this.origin = origin;
         this.pieceName = pieceName;
         this.orientation = orientation;
     }
 
     public Piece toPiece() {
-        Piece p = new Piece(Character.toString(pieceName));
+        Piece p = new Piece(pieceName);
         p.translateTo(origin);
         switch (orientation) {
             case "A":
@@ -37,6 +37,6 @@ public class Move {
 
     @Override
     public String toString() {
-        return (origin + Character.toString(pieceName) + orientation);
+        return (origin + pieceName + orientation);
     }
 }

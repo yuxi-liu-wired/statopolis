@@ -8,7 +8,7 @@ import java.util.Random;
  * Created by Yuxi Liu (u5950011) on 8/12/16.
  */
 public class RandomPlayer extends Player {
-    RandomPlayer() {
+    public RandomPlayer() {
          super("Random Player");
     }
 

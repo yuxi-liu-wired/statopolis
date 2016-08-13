@@ -1,8 +1,6 @@
 package comp1110.ass2;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 /**
  * This class provides the text interface for the Strato Game
@@ -101,9 +99,8 @@ public class StratoGame {
 
         GameField gameField = new GameField();
 
-        String tile; // temporary variable, used in the loop only
         for (int i = 1; i <= placement.length()/4; i++) {
-            tile = placement.substring(4 * i - 4, 4 * i);
+            String tile = placement.substring(4 * i - 4, 4 * i);
             Piece p = stringToPiece(tile);
             if (!gameField.canAddPiece(p)) {
                 return false;
@@ -136,6 +133,7 @@ public class StratoGame {
     }
 
     // These two functions translate between the alphabetical coordinates and the integer coordinates.
+    // For example, AA -> (0,0), BZ -> (1,25).
     private static String coordinateToAlphabet(Coordinate c) {
         if (c.x <= -1 || c.x >= 26 || c.y <= -1 || c.y >= 26) {
             System.out.println(c + " is out of bounds!");
@@ -158,17 +156,16 @@ public class StratoGame {
     }
 
     // These three methods translate between the String representation of a move and the Move representation.
+    // For example, MMUA -> a move with coordinate (12,12), pieceName 'U', orientation 'A'
     private static Move stringToMove(String tile) {
         int x = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(tile.charAt(0));
         int y = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(tile.charAt(1));
-        char tileName = tile.charAt(2);
+        String tileName = tile.substring(2,3);
         String orientation = tile.substring(3,4);
         Move move = new Move(new Coordinate(x,y),tileName,orientation);
         return move;
     }
-    private static String moveToString(Move move) {
-        return coordinateToAlphabet(move.origin) + move.pieceName + move.orientation;
-    }
+    private static String moveToString(Move move) { return coordinateToAlphabet(move.origin) + move.pieceName + move.orientation; }
     private static Piece stringToPiece(String tile) {
         return stringToMove(tile).toPiece();
     }
@@ -225,7 +222,7 @@ public class StratoGame {
         return stringMoves;
     }
 
-    // This main method is only for debugging. Remove it after the project is done.
+    // TODO: This main method is only for debugging. Remove it after the project is done.
     public static void main(String[] args) {
 
         String placement = "MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC";
