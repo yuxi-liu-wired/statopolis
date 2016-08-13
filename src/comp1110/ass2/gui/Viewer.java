@@ -1,5 +1,7 @@
 package comp1110.ass2.gui;
 
+import comp1110.ass2.GameField;
+import comp1110.ass2.StratoGame;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +11,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -37,7 +43,48 @@ public class Viewer extends Application {
      * @param placement  A valid placement string
      */
     void makePlacement(String placement) {
-        // FIXME Task 5: implement the simple placement viewer
+        int blockSize = 20; // change this if you dislike the size of the blocks.
+
+        GameField gf = StratoGame.placementToGameField(placement);
+        int[][] heightField = gf.getHeightField();
+        comp1110.ass2.Color[][] colorField = gf.getColorField();
+
+        for (int i = 0; i < heightField.length; i++) {
+            for (int j = 0; j < heightField.length; j++) {
+
+                String str = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i,i+1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(j));
+                Text letter = new Text(115 + blockSize * i + 5, 60 + blockSize * j + 13, str);
+                letter.setFont(Font.font("Courier", 10));
+                letter.setFill(Color.GRAY);
+                letter.setOpacity(0.5);
+                root.getChildren().add(letter);
+
+
+                comp1110.ass2.Color color = colorField[i][j];
+                int height = heightField[i][j];
+
+                if (height > 0) {
+                    Rectangle r = new Rectangle(115 + blockSize * i,60 + blockSize * j, blockSize, blockSize);
+                    r.setStroke(Color.web("0x2C2C2C"));
+                    if (color == comp1110.ass2.Color.BLACK) {
+                        r.setFill(Color.BLACK);
+                    } else if (color == comp1110.ass2.Color.GREEN) {
+                        r.setFill(Color.GREEN);
+                    } else if (color == comp1110.ass2.Color.RED) {
+                        r.setFill(Color.RED);
+                    }
+                    r.setStrokeWidth(3);
+                    root.getChildren().add(r);
+
+                    if (height > 1 && color != comp1110.ass2.Color.BLACK) {
+                        Text t = new Text(115 + blockSize * i + 7, 60 + blockSize * j + 13, Integer.toString(height));
+                        t.setFont(Font.font("Helvetica", 10));
+                        t.setFill(Color.BLACK);
+                        root.getChildren().add(t);
+                    }
+                }
+            }
+        }
     }
 
 
