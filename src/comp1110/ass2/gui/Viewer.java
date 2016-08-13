@@ -43,18 +43,73 @@ public class Viewer extends Application {
      * @param placement  A valid placement string
      */
     void makePlacement(String placement) {
+
+        // TODO: actually remove the squares and numbers and texts everytime the button is pressed.
+        // right now it just "covers it up" by a white square!
+        Rectangle coveringItUp = new Rectangle(0, 0, 635, 580);
+        coveringItUp.setFill(Color.WHITE);
+        root.getChildren().add(coveringItUp);
+
         int blockSize = 20; // change this if you dislike the size of the blocks.
 
         GameField gf = StratoGame.placementToGameField(placement);
         int[][] heightField = gf.getHeightField();
         comp1110.ass2.Color[][] colorField = gf.getColorField();
+        int[] greenScores = gf.scoring(comp1110.ass2.Color.GREEN);
+        int[] redScores = gf.scoring(comp1110.ass2.Color.RED);
+
+        // prints the score-list of the game.
+        String greenScoreStr = "";
+        for (int i : greenScores) {
+            greenScoreStr += Integer.toString(i) + ", ";
+        }
+        greenScoreStr = greenScoreStr.substring(0,greenScoreStr.length()-2);
+        String redScoreStr = "";
+        for (int i : redScores) {
+            redScoreStr += Integer.toString(i) + ", ";
+        }
+        redScoreStr = redScoreStr.substring(0,redScoreStr.length()-2);
+
+        if (placement.length() == 164) {
+            String whoWon = "";
+            comp1110.ass2.Color c = gf.winner();
+            switch (c) {
+                case RED:
+                    whoWon = "Red wins!";
+                    break;
+                case GREEN:
+                    whoWon = "Green wins!";
+                    break;
+                case BLACK:
+                    whoWon = "It's a draw!";
+                    break;
+            }
+
+            Text round = new Text(115, 20, "40 rounds are finished, game is over! " + whoWon);
+            round.setFont(Font.font("Courier", 15));
+            round.setFill(Color.BLACK);
+            root.getChildren().add(round);
+        } else {
+            Text round = new Text(115, 20, "It's round " + Integer.toString(placement.length() / 4) + ", " + ((placement.length() / 4) % 2 == 1 ? "Green" : "Red") + "'s move.");
+            round.setFont(Font.font("Courier", 15));
+            round.setFill(Color.BLACK);
+            root.getChildren().add(round);
+        }
+        Text gScore = new Text(115, 40, "Green's score is: " + greenScoreStr);
+        gScore.setFont(Font.font("Courier", 15));
+        gScore.setFill(Color.GREEN);
+        root.getChildren().add(gScore);
+        Text rScore = new Text(115, 60, "Red's score is: " + redScoreStr);
+        rScore.setFont(Font.font("Courier", 15));
+        rScore.setFill(Color.RED);
+        root.getChildren().add(rScore);
 
         for (int i = 0; i < heightField.length; i++) {
             for (int j = 0; j < heightField.length; j++) {
-
+                // background texts, showing the coordinates
                 String str = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i,i+1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(j));
-                Text letter = new Text(115 + blockSize * i + 5, 60 + blockSize * j + 13, str);
-                letter.setFont(Font.font("Courier", 10));
+                Text letter = new Text(113 + blockSize * i + 5, 60 + blockSize * j + 13, str);
+                letter.setFont(Font.font("Courier", 9));
                 letter.setFill(Color.GRAY);
                 letter.setOpacity(0.5);
                 root.getChildren().add(letter);
@@ -64,6 +119,7 @@ public class Viewer extends Application {
                 int height = heightField[i][j];
 
                 if (height > 0) {
+                    // color of the block
                     Rectangle r = new Rectangle(115 + blockSize * i,60 + blockSize * j, blockSize, blockSize);
                     r.setStroke(Color.web("0x2C2C2C"));
                     if (color == comp1110.ass2.Color.BLACK) {
@@ -77,6 +133,7 @@ public class Viewer extends Application {
                     root.getChildren().add(r);
 
                     if (height > 1 && color != comp1110.ass2.Color.BLACK) {
+                        // height of the block
                         Text t = new Text(115 + blockSize * i + 7, 60 + blockSize * j + 13, Integer.toString(height));
                         t.setFont(Font.font("Helvetica", 10));
                         t.setFill(Color.BLACK);
