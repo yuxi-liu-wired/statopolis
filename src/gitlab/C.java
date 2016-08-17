@@ -1,4 +1,4 @@
-package gittest;
+package gitlab;
 
 /**
  * Created by u5950011 on 17/08/16.
