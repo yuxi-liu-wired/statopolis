@@ -6,4 +6,6 @@ package gitlab;
 public class A {
     public String toString() {
         return null;
-    }}
+    }
+    A a = new A();
+}
