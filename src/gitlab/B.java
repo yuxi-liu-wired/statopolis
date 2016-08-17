@@ -1,4 +1,4 @@
-package comp1110.ass2.gitlab;
+package gitlab;
 
 /**
  * Created by u5935491 on 17/08/16.
