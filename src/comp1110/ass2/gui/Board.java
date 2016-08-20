@@ -2,14 +2,21 @@ package comp1110.ass2.gui;
 
 import comp1110.ass2.*;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -34,10 +41,6 @@ public class Board extends Application {
     private static final int WINDOW_WIDTH = COLS * SQUARE_SIZE;
     private static final int WINDOW_HEIGHT = ROWS * SQUARE_SIZE;
 
-
-    private static final int BOARD_X = LEFT_MARGIN * SQUARE_SIZE;
-    private static final int BOARD_Y = UP_MARGIN * SQUARE_SIZE;
-
     /* where to find media assets */
     private static final String URI_BASE = "assets/";
 
@@ -47,6 +50,7 @@ public class Board extends Application {
     private final Group boardDisplay = new Group();
     private final Group buttons = new Group();
     private final Group infoTexts = new Group();
+    TextField textField;
 
     /* the Stratopolis game */
     private Game game;
@@ -323,6 +327,91 @@ public class Board extends Application {
         }
     }
 
+    private void makeButtons() {
+        buttons.getChildren().clear();
+
+        Button newGameButton = new Button("New Game");
+        newGameButton.setLayoutX(1 * SQUARE_SIZE);
+        newGameButton.setLayoutY((UP_MARGIN + 26 - 6) * SQUARE_SIZE);
+        newGameButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
+        newGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                newGame();
+            }
+        });
+        buttons.getChildren().add(newGameButton);
+
+        Button saveGameButton = new Button("Save Game");
+        saveGameButton.setLayoutX(1 * SQUARE_SIZE);
+        saveGameButton.setLayoutY((UP_MARGIN + 26 - 4) * SQUARE_SIZE);
+        saveGameButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
+        saveGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                saveGame();
+            }
+        });
+        buttons.getChildren().add(saveGameButton);
+
+
+        Label label1 = new Label("Enter save string: ");
+        textField = new TextField ();
+        textField.setPrefWidth(300);
+        Button button = new Button("Load Game");
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                loadGame(textField.getText());
+                textField.clear();
+            }
+        });
+        HBox hb = new HBox();
+        hb.getChildren().addAll(label1, textField, button);
+        hb.setSpacing(10);
+        hb.setLayoutX((LEFT_MARGIN - 2) * SQUARE_SIZE);
+        hb.setLayoutY((UP_MARGIN + 26 + 1) * SQUARE_SIZE);
+        buttons.getChildren().add(hb);
+
+    }
+
+    private void saveGame() {
+        String saveString = game.base64EncryptedGameState();
+
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        content.putString(saveString);
+        clipboard.setContent(content);
+
+        redrawInfoTexts();
+        Text saveText = new Text(1 * SQUARE_SIZE, (UP_MARGIN + 26 + DOWN_MARGIN - 1) * SQUARE_SIZE, "Save string copied to system clipboard: " + saveString);
+        saveText.setFont(Font.font("Courier", 12));
+        saveText.setFill(Color.BLACK);
+        infoTexts.getChildren().add(saveText);
+    }
+    private void loadGame(String saveString) {
+
+        if (!Game.legalBase64EncryptedGameState(saveString)) {
+            redrawInfoTexts();
+            Text badLoadText = new Text(2 * SQUARE_SIZE, (UP_MARGIN + 26 + 2) * SQUARE_SIZE, "Invalid save string!");
+            badLoadText.setFont(Font.font("Courier", 15));
+            badLoadText.setFill(Color.BLACK);
+            infoTexts.getChildren().add(badLoadText);
+        } else {
+            game.loadBase64EncryptedGameState(saveString);
+            redrawInfoTexts();
+            redrawDraggablePieces();
+            redrawBoardDisplay();
+        }
+    }
+
+    private void newGame() {
+        game = new Game();
+
+        redrawBoardDisplay();
+        redrawDraggablePieces();
+        redrawInfoTexts();
+
+    }
+
     // FIXME Task 11: Implement a game that can play valid moves (even if they are weak moves)
 
     // FIXME Task 12: Implement a game that can play good moves
@@ -338,12 +427,9 @@ public class Board extends Application {
         root.getChildren().add(infoTexts);
 
         draggablePieces.toFront();
+        makeButtons();
 
-        game = new Game();
-
-        redrawBoardDisplay();
-        redrawDraggablePieces();
-        redrawInfoTexts();
+        newGame();
 
         primaryStage.setScene(scene);
         primaryStage.show();

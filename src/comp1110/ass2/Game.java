@@ -117,12 +117,31 @@ public class Game {
      * @param greenStackString
      * @return true if this game can be loaded. false is not.
      */
-    public boolean loadGame(String placement, String redStackString, String greenStackString) {
+    private void loadGame(String placement, String redStackString, String greenStackString) {
+        if (!canLoadGame(placement, redStackString, greenStackString)) {
+            return;
+        }
+
+        this.placement = placement;
+        turnNumber = placement.length()/4;
+
+        redStack.clear();
+        for (int i = 0; i < redStackString.length(); i++) {
+            redStack.add(redStackString.substring(i,i+1));
+        }
+
+        greenStack.clear();
+        for (int i = 0; i < greenStackString.length(); i++) {
+            greenStack.add(greenStackString.substring(i,i+1));
+        }
+    }
+
+
+    private static boolean canLoadGame(String placement, String redStackString, String greenStackString) {
         if (!StratoGame.isPlacementValid(placement)) {
             System.out.println("Trying to load game with invalid placement: "+placement);
             return false;
         }
-
 
         String redPiecesUsed = "";
         String greenPiecesUsed = "";
@@ -149,21 +168,7 @@ public class Game {
         Arrays.sort(sortedGreenPieces);
         if (!String.valueOf(sortedGreenPieces).equals("KKLLMMNNOOPPQQRRSSTT")) {
             System.out.println("The green pieces in the game are not the designated 20 pieces!");
-
-        }
-
-        // All tests passed. Now we load the game in earnest.
-        this.placement = placement;
-        turnNumber = placement.length()/4;
-
-        redStack.clear();
-        for (int i = 0; i < redStackString.length(); i++) {
-            redStack.add(redStackString.substring(i,i+1));
-        }
-
-        greenStack.clear();
-        for (int i = 0; i < greenStackString.length(); i++) {
-            greenStack.add(greenStackString.substring(i,i+1));
+            return false;
         }
         return true;
     }
@@ -180,6 +185,19 @@ public class Game {
         String str = new String(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8))); // This line adapted from http://stackoverflow.com/a/26897706
         String[] parts = str.split(","); // It should be {placement, redStack, greenStack}
         loadGame(parts[0], parts[1],parts[2]);
+    }
+    public static boolean legalBase64EncryptedGameState(String encrypted) {
+        String str = new String(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8))); // This line adapted from http://stackoverflow.com/a/26897706
+        String[] parts = str.split(","); // It should be {placement, redStack, greenStack}
+        if (parts.length != 3) {
+            return false;
+        }
+        return canLoadGame(parts[0], parts[1], parts[2]);
+    }
+
+    public static String reportError(String placement) {
+        String errorMessage = "";
+        return errorMessage;
     }
 
     // TODO: delete this main() before delivery.
