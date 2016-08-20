@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import javafx.application.Platform;
+
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -182,17 +184,26 @@ public class Game {
         return Base64.getEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8)); // This line copied from http://stackoverflow.com/a/26897706
     }
     public void loadBase64EncryptedGameState(String encrypted) {
-        String str = new String(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8))); // This line adapted from http://stackoverflow.com/a/26897706
-        String[] parts = str.split(","); // It should be {placement, redStack, greenStack}
-        loadGame(parts[0], parts[1],parts[2]);
+        try {
+            String str = new String(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8))); // This line adapted from http://stackoverflow.com/a/26897706
+            String[] parts = str.split(","); // It should be {placement, redStack, greenStack}
+            loadGame(parts[0], parts[1], parts[2]);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: Bad bytestring: " + encrypted);
+        }
     }
     public static boolean legalBase64EncryptedGameState(String encrypted) {
-        String str = new String(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8))); // This line adapted from http://stackoverflow.com/a/26897706
-        String[] parts = str.split(","); // It should be {placement, redStack, greenStack}
-        if (parts.length != 3) {
+        try {
+            String str = new String(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8))); // This line adapted from http://stackoverflow.com/a/26897706
+            String[] parts = str.split(","); // It should be {placement, redStack, greenStack}
+            if (parts.length != 3) {
+                return false;
+            }
+            return canLoadGame(parts[0], parts[1], parts[2]);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: Bad bytestring: " + encrypted);
             return false;
         }
-        return canLoadGame(parts[0], parts[1], parts[2]);
     }
 
     public String reportError(Move m) {
