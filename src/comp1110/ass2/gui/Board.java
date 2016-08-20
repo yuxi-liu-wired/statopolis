@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -20,6 +21,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.Comparator;
 
 public class Board extends Application {
 
@@ -50,6 +53,7 @@ public class Board extends Application {
     private final Group controls = new Group();
     private final Group infoTexts = new Group();
     private final Group background = new Group();
+    private final Group newGameScreen = new Group();
     TextField textField;
 
     /* the Stratopolis game */
@@ -367,7 +371,7 @@ public class Board extends Application {
         newGameButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
         newGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                newGame();
+                setNewGameSplashScreen();
             }
         });
         controls.getChildren().add(newGameButton);
@@ -434,13 +438,75 @@ public class Board extends Application {
         }
     }
 
+    private void setNewGameSplashScreen() {
+        Rectangle splashScreen = new Rectangle();
+        splashScreen.setX(0);
+        splashScreen.setY(0);
+        splashScreen.setWidth(WINDOW_WIDTH);
+        splashScreen.setHeight(WINDOW_HEIGHT);
+        splashScreen.setFill(Color.WHITE);
+        newGameScreen.getChildren().add(splashScreen);
+        newGameScreen.toFront();
+
+        Text selectPlayerText = new Text((LEFT_MARGIN + 1) * SQUARE_SIZE, (UP_MARGIN + 10) * SQUARE_SIZE, "Select players...");
+        selectPlayerText.setFont(Font.font("Courier", 20));
+        selectPlayerText.setFill(Color.BLACK);
+        newGameScreen.getChildren().add(selectPlayerText);
+
+        ComboBox<String> redComboBox = new ComboBox<>();
+        redComboBox.getItems().addAll(
+                "Human",
+                "RandomPlayer",
+                "OneLookaheadPlayer"
+        );
+        redComboBox.setPromptText("Red player...");
+        redComboBox.setLayoutX((LEFT_MARGIN + 1) * SQUARE_SIZE);
+        redComboBox.setLayoutY((UP_MARGIN + 26 - 13) * SQUARE_SIZE);
+        newGameScreen.getChildren().add(redComboBox);
+
+        ComboBox<String> greenComboBox = new ComboBox<>();
+        greenComboBox.getItems().addAll(
+                "Human",
+                "RandomPlayer",
+                "OneLookaheadPlayer"
+        );
+        greenComboBox.setPromptText("Green player...");
+        greenComboBox.setLayoutX((LEFT_MARGIN + 13) * SQUARE_SIZE);
+        greenComboBox.setLayoutY((UP_MARGIN + 26 - 13) * SQUARE_SIZE);
+        newGameScreen.getChildren().add(greenComboBox);
+
+        Button startNewGameButton = new Button("Start Game");
+        startNewGameButton.setLayoutX((LEFT_MARGIN + 4) * SQUARE_SIZE);
+        startNewGameButton.setLayoutY((UP_MARGIN + 26 - 6) * SQUARE_SIZE);
+        startNewGameButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
+        startNewGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                newGame();
+            }
+        });
+        newGameScreen.getChildren().add(startNewGameButton);
+        Button cancelNewGameButton = new Button("Cancel");
+        cancelNewGameButton.setLayoutX((LEFT_MARGIN + 15) * SQUARE_SIZE);
+        cancelNewGameButton.setLayoutY((UP_MARGIN + 26 - 6) * SQUARE_SIZE);
+        cancelNewGameButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
+        cancelNewGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                newGameScreen.getChildren().clear();
+            }
+        });
+        newGameScreen.getChildren().add(cancelNewGameButton);
+
+        String redPlayerName = redComboBox.getValue();
+        String greenPlayerName = greenComboBox.getValue();
+    }
+
     private void newGame() {
+        newGameScreen.getChildren().clear();
         game = new Game();
 
         redrawBoardDisplay();
         redrawDraggablePieces();
         redrawInfoTexts();
-
     }
 
 
@@ -457,13 +523,14 @@ public class Board extends Application {
         root.getChildren().add(controls);
         root.getChildren().add(infoTexts);
         root.getChildren().add(background);
+        root.getChildren().add(newGameScreen);
 
         draggablePieces.toFront();
         background.toBack();
         makeControls();
         makeBackground();
 
-        newGame();
+        setNewGameSplashScreen();
 
         primaryStage.setScene(scene);
         primaryStage.show();
