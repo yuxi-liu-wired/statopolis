@@ -55,15 +55,15 @@ public class GameField {
         return new GameField(colorField,heightField,pieceField,numberOfPiecesPlayed);
     }
     // used by the copy() method.
-    private GameField(Color[][] colorField, int[][] heightField, int[][] pieceField, int numberOfPiecesPlayed) {
+    private GameField(Color[][] newColorField, int[][] newHeightField, int[][] newPieceField, int numberOfPiecesPlayed) {
         colorField = new Color[FIELD_SIZE][FIELD_SIZE];
         heightField = new int[FIELD_SIZE][FIELD_SIZE];
         pieceField = new int[FIELD_SIZE][FIELD_SIZE];
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
-                this.colorField[i][j] = colorField[i][j];
-                this.heightField[i][j] = heightField[i][j];
-                this.pieceField[i][j] = pieceField[i][j];
+                this.colorField[i][j] = newColorField[i][j];
+                this.heightField[i][j] = newHeightField[i][j];
+                this.pieceField[i][j] = newPieceField[i][j];
             }
         }
         this.numberOfPiecesPlayed = numberOfPiecesPlayed;
@@ -148,7 +148,6 @@ public class GameField {
         for (int i = 0; i < blocksOfPiece.length; i++) {
             c = blocksOfPiece[i];
             if (!coordinateWithinRange(c)) { // test if it's out of bounds.
-                System.out.println(c + "is out of bounds!");
                 return false;
             }
         }
@@ -167,7 +166,6 @@ public class GameField {
 
         for (int i = 1; i < hList.length; i++) {
             if (hList[i] != height) { // test if　all three blocks of the tile are on the same height
-                System.out.println("the blocks are not of the same height!");
                 return false;
             }
         }
@@ -182,7 +180,6 @@ public class GameField {
                     return true;
                 }
             }
-            System.out.println("It doesn't touch an existing tile!");
             return false;
         } else {
             // test if it touches compatible colors
@@ -191,7 +188,6 @@ public class GameField {
                 Color color1 = piece.getColorAt(c);
                 Color color2 = colorField[c.x][c.y];
                 if (!color1.isCompatibleWith(color2)) {
-                    System.out.println("The colors are not compatible!");
                     return false;
                 }
             }
@@ -207,7 +203,6 @@ public class GameField {
                     return true;
                 }
             }
-            System.out.println("It doesn't straddle two different tiles below!");
             return false;
         }
     }

@@ -11,7 +11,7 @@ public class OneLookaheadPlayer extends Player {
     }
 
     /**
-     * An extremely ugly minimax function.
+     * An extremely ugly minimax function. Not functioning yet!!
      *
      * @param placement The placement of game that the player faces now.
      * @param myPiece The piece that the player can play.
@@ -23,7 +23,7 @@ public class OneLookaheadPlayer extends Player {
         Color myColor = whatsMyColor(myPiece);
         Color theirColor = whatsMyColor(opponentsPiece);
 
-        if (theirColor == Color.BLACK) { // The opponent has no next move!
+        //if (theirColor == Color.BLACK) { // The opponent has no next move!
             GameField field = StratoGame.placementToGameField(placement);
             Move[] myMoves = field.getPossibleMoves(myPiece);
 
@@ -50,9 +50,9 @@ public class OneLookaheadPlayer extends Player {
                 }
             }
             return myMoves[bestMove];
-        }
+        //}
 
-        GameField field = StratoGame.placementToGameField(placement);
+        /*GameField field = StratoGame.placementToGameField(placement);
         Move[] myMoves = field.getPossibleMoves(myPiece);
         Move[] theirMoves;
 
@@ -116,7 +116,7 @@ public class OneLookaheadPlayer extends Player {
             }
         }
 
-        return myMoves[bestMove];
+        return myMoves[bestMove];*/
     }
 
     private Color whatsMyColor(String myPiece) {
@@ -142,6 +142,4 @@ public class OneLookaheadPlayer extends Player {
         }
         return (myColor == Color.GREEN ? greenScore-redScore : redScore-greenScore);
     }
-
-    // TODO: Play against this bot and see if it actually plays good!
 }

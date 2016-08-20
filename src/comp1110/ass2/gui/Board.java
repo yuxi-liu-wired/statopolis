@@ -221,10 +221,8 @@ public class Board extends Application {
     }
 
     private void makeAMoveOnTheBoard(String moveString) {
-        System.out.println(moveString);
         Coordinate c = new Coordinate("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(0)),"ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(1)));;
         Move m = new Move(c, moveString.substring(2,3), moveString.substring(3,4));
-        System.out.println(m);
         game.makeMove(m);
         redrawDraggablePieces();
         redrawInfoTexts();
@@ -450,16 +448,18 @@ public class Board extends Application {
         String redPiece = game.getRedPiece();
         String greenPiece = game.getGreenPiece();
         Move m;
+        String moveString;
 
         switch (greenPlayerName) {
             case NAME_OF_RANDOMPLAYER:
                 m = randomPlayer.move(placement, greenPiece, redPiece);
-                String moveString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.x, m.origin.x + 1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.y, m.origin.y + 1)  + m.pieceName + m.orientation;
+                moveString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.x, m.origin.x + 1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.y, m.origin.y + 1)  + m.pieceName + m.orientation;
                 makeAMoveOnTheBoard(moveString);
                 break;
             case NAME_OF_ONELOOKAHEADPLAYER:
                 m = oneLookaheadPlayer.move(placement, greenPiece, redPiece);
-                makeAMoveOnTheBoard("ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(m.origin.x) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(m.origin.y)  + m.pieceName + m.orientation);
+                moveString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.x, m.origin.x + 1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.y, m.origin.y + 1)  + m.pieceName + m.orientation;
+                makeAMoveOnTheBoard(moveString);
                 break;
 
             default:
@@ -476,15 +476,18 @@ public class Board extends Application {
         String redPiece = game.getRedPiece();
         String greenPiece = game.getGreenPiece();
         Move m;
+        String moveString;
 
         switch (redPlayerName) {
             case NAME_OF_RANDOMPLAYER:
                 m = randomPlayer.move(placement, redPiece, greenPiece);
-                makeAMoveOnTheBoard("ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(m.origin.x) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(m.origin.y)  + m.pieceName + m.orientation);
+                moveString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.x, m.origin.x + 1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.y, m.origin.y + 1)  + m.pieceName + m.orientation;
+                makeAMoveOnTheBoard(moveString);
                 break;
             case NAME_OF_ONELOOKAHEADPLAYER:
                 m = oneLookaheadPlayer.move(placement, redPiece, greenPiece);
-                makeAMoveOnTheBoard("ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(m.origin.x) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(m.origin.y)  + m.pieceName + m.orientation);
+                moveString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.x, m.origin.x + 1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.y, m.origin.y + 1)  + m.pieceName + m.orientation;
+                makeAMoveOnTheBoard(moveString);
                 break;
             default:
                 Text errorMessage = new Text(LEFT_MARGIN * SQUARE_SIZE, 5 * SQUARE_SIZE, "Error: green is not an AI!");
@@ -597,7 +600,7 @@ public class Board extends Application {
         redrawDraggablePieces();
         redrawInfoTexts();
     }
-    
+
     // FIXME Task 12: Implement a game that can play good moves
 
     @Override
