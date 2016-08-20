@@ -1,11 +1,7 @@
 package comp1110.ass2;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * This class models a game of Stratopolis, with a stack of red pieces, a stack of green pieces, a turn number counter,
@@ -44,14 +40,14 @@ public class Game {
 
     public String getPlacement() { return placement; }
     public int getTurnNumber() { return turnNumber; }
-    public String getRedStack() {
+    private String getRedStack() {
         String str = "";
         for (int i = 0; i < redStack.size(); i++) {
             str = str + redStack.get(i);
         }
         return str;
     }
-    public String getGreenStack() {
+    private String getGreenStack() {
         String str = "";
         for (int i = 0; i < greenStack.size(); i++) {
             str = str + greenStack.get(i);
@@ -161,21 +157,44 @@ public class Game {
         // All tests passed. Now we load the game in earnest.
         this.placement = placement;
         turnNumber = placement.length()/4;
+
+        redStack.clear();
         for (int i = 0; i < redStackString.length(); i++) {
             redStack.add(redStackString.substring(i,i+1));
         }
+
+        greenStack.clear();
         for (int i = 0; i < greenStackString.length(); i++) {
             greenStack.add(greenStackString.substring(i,i+1));
         }
         return true;
     }
 
+    /** Returns a Base64 encoding of the game state. The encryption is a little safeguard against cheating!
+     * Warning: will only work in Java 8
+     * See https://docs.oracle.com/javase/tutorial/i18n/text/string.html
+     */
+    public String base64EncryptedGameState() {
+        String str = placement + "," + getRedStack()  + "," + getGreenStack();
+        return Base64.getEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8)); // This line copied from http://stackoverflow.com/a/26897706
+    }
+    public void loadBase64EncryptedGameState(String encrypted) {
+        String str = new String(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8))); // This line adapted from http://stackoverflow.com/a/26897706
+        String[] parts = str.split(","); // It should be {placement, redStack, greenStack}
+        loadGame(parts[0], parts[1],parts[2]);
+    }
+
+    // TODO: delete this main() before delivery.
     public static void main(String[] args) {
         Game g = new Game();
         System.out.println(g.getGreenPiece());
-        g.makeMove(new Move(new Coordinate(14,14), g.getGreenPiece(),"A"));
+        g.makeMove(new Move(new Coordinate(13,13), g.getGreenPiece(),"A"));
         System.out.println(g.getPlacement());
 
-        g.loadGame("MMUA", "AABBCCDDFFGGHEEHIIJJ", "KKLLMMNNOOPPQQRRSSTT");
+        g.loadGame("MMUANLOBLNBC", "AAEEHDBCCDHFFGGIIJJ", "KKLLMMNNOPPQQRRSSTT");
+        System.out.println(g.base64EncryptedGameState());
+
+        g.loadBase64EncryptedGameState("TU1VQU5MT0JMTkJDLEFBRUVIREJDQ0RIRkZHR0lJSkosS0tMTE1NTk5PUFBRUVJSU1NUVA==");
+        System.out.println(g.getPlacement());
     }
 }
