@@ -5,7 +5,6 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,8 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -23,8 +20,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import static javax.swing.text.html.CSS.Attribute.MARGIN;
 
 public class Board extends Application {
 
@@ -40,6 +35,10 @@ public class Board extends Application {
     private static final int SQUARE_SIZE = 20;
     private static final int WINDOW_WIDTH = COLS * SQUARE_SIZE;
     private static final int WINDOW_HEIGHT = ROWS * SQUARE_SIZE;
+    private static final int RED_HOME_X = Math.round((float) (LEFT_MARGIN / 2 - 0.5) * SQUARE_SIZE);
+    private static final int RED_HOME_Y = (UP_MARGIN + 12) * SQUARE_SIZE;
+    private static final int GREEN_HOME_X = Math.round((float) (LEFT_MARGIN + 26 + RIGHT_MARGIN / 2 - 0.5) * SQUARE_SIZE);
+    private static final int GREEN_HOME_Y = (UP_MARGIN + 12) * SQUARE_SIZE;
 
     /* where to find media assets */
     private static final String URI_BASE = "assets/";
@@ -48,8 +47,9 @@ public class Board extends Application {
     private final Group root = new Group();
     private final Group draggablePieces = new Group();
     private final Group boardDisplay = new Group();
-    private final Group buttons = new Group();
+    private final Group controls = new Group();
     private final Group infoTexts = new Group();
+    private final Group background = new Group();
     TextField textField;
 
     /* the Stratopolis game */
@@ -86,11 +86,11 @@ public class Board extends Application {
 
             // Red piece rests on the left. Green piece rests on the right.
             if (color.equals("RED")) {
-                homeX = LEFT_MARGIN / 2 * SQUARE_SIZE;
-                homeY = (UP_MARGIN + 12) * SQUARE_SIZE;
+                homeX = RED_HOME_X;
+                homeY = RED_HOME_Y;
             } else {
-                homeX = (LEFT_MARGIN + 26 + RIGHT_MARGIN / 2) * SQUARE_SIZE;
-                homeY = (UP_MARGIN + 12) * SQUARE_SIZE;
+                homeX = GREEN_HOME_X;
+                homeY = GREEN_HOME_Y;
             }
             setLayoutX(homeX);
             setLayoutY(homeY);
@@ -338,8 +338,28 @@ public class Board extends Application {
         }
     }
 
-    private void makeButtons() {
-        buttons.getChildren().clear();
+    private void makeBackground() {
+        Rectangle redRectangle = new Rectangle();
+        redRectangle.setX(RED_HOME_X - 1 * SQUARE_SIZE);
+        redRectangle.setY(RED_HOME_Y - 1 * SQUARE_SIZE);
+        redRectangle.setWidth(4 * SQUARE_SIZE);
+        redRectangle.setHeight(4 * SQUARE_SIZE);
+        redRectangle.setFill(Color.rgb(255, 0, 0, 0.3));
+        redRectangle.setStroke(Color.BLACK);
+        background.getChildren().add(redRectangle);
+
+        Rectangle greenRectangle = new Rectangle();
+        greenRectangle.setX(GREEN_HOME_X - 1 * SQUARE_SIZE);
+        greenRectangle.setY(GREEN_HOME_Y - 1 * SQUARE_SIZE);
+        greenRectangle.setWidth(4 * SQUARE_SIZE);
+        greenRectangle.setHeight(4 * SQUARE_SIZE);
+        greenRectangle.setFill(Color.rgb(0, 255, 0, 0.3));
+        greenRectangle.setStroke(Color.BLACK);
+        background.getChildren().add(greenRectangle);
+    }
+
+    private void makeControls() {
+        controls.getChildren().clear();
 
         Button newGameButton = new Button("New Game");
         newGameButton.setLayoutX(1 * SQUARE_SIZE);
@@ -350,7 +370,7 @@ public class Board extends Application {
                 newGame();
             }
         });
-        buttons.getChildren().add(newGameButton);
+        controls.getChildren().add(newGameButton);
 
         Button saveGameButton = new Button("Save Game");
         saveGameButton.setLayoutX(1 * SQUARE_SIZE);
@@ -361,7 +381,7 @@ public class Board extends Application {
                 saveGame();
             }
         });
-        buttons.getChildren().add(saveGameButton);
+        controls.getChildren().add(saveGameButton);
 
 
         Label label1 = new Label("Enter save string: ");
@@ -380,7 +400,7 @@ public class Board extends Application {
         hb.setSpacing(10);
         hb.setLayoutX((LEFT_MARGIN - 2) * SQUARE_SIZE);
         hb.setLayoutY((UP_MARGIN + 26 + 1) * SQUARE_SIZE);
-        buttons.getChildren().add(hb);
+        controls.getChildren().add(hb);
 
     }
 
@@ -423,27 +443,29 @@ public class Board extends Application {
 
     }
 
+
     // FIXME Task 11: Implement a game that can play valid moves (even if they are weak moves)
 
     // FIXME Task 12: Implement a game that can play good moves
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
         primaryStage.setTitle("Stratopolis");
         Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
         root.getChildren().add(draggablePieces);
         root.getChildren().add(boardDisplay);
-        root.getChildren().add(buttons);
+        root.getChildren().add(controls);
         root.getChildren().add(infoTexts);
+        root.getChildren().add(background);
 
         draggablePieces.toFront();
-        makeButtons();
+        background.toBack();
+        makeControls();
+        makeBackground();
 
         newGame();
 
         primaryStage.setScene(scene);
         primaryStage.show();
-
     }
 }
