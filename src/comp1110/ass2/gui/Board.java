@@ -402,7 +402,7 @@ public class Board extends Application {
 
         if (!Game.legalBase64EncryptedGameState(saveString)) {
             redrawInfoTexts();
-            Text badLoadText = new Text(2 * SQUARE_SIZE, (UP_MARGIN + 26 + 2) * SQUARE_SIZE, "Invalid save string!");
+            Text badLoadText = new Text(1 * SQUARE_SIZE, (UP_MARGIN + 26 + DOWN_MARGIN - 1) * SQUARE_SIZE, "Invalid save string!");
             badLoadText.setFont(Font.font("Courier", 15));
             badLoadText.setFill(Color.BLACK);
             infoTexts.getChildren().add(badLoadText);
