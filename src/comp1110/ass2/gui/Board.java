@@ -128,7 +128,18 @@ public class Board extends Application {
                     String tileString = toTileString();
                     // Check if it's a legal position.
                     if (!StratoGame.isPlacementValid(game.getPlacement() + tileString)) {
-                        System.out.println("Bad placement: " + game.getPlacement() + tileString);
+                        int x = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(tileString.charAt(0));
+                        int y = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(tileString.charAt(1));
+                        String tileName = tileString.substring(2,3);
+                        String orientation = tileString.substring(3,4);
+                        Move badMove = new Move(new Coordinate(x,y),tileName,orientation);
+
+                        Text errorMessage = new Text(LEFT_MARGIN * SQUARE_SIZE, 5 * SQUARE_SIZE, "Error: " + game.reportError(badMove));
+                        errorMessage.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
+                        errorMessage.setFill(Color.BLACK);
+                        redrawInfoTexts();
+                        infoTexts.getChildren().add(errorMessage);
+
                         snapToHome();
                     } else {
                         makeAMoveOnTheBoard(tileString);
