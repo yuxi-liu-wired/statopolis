@@ -120,6 +120,10 @@ public class OneLookaheadPlayer extends Player {
     }
 
     private Color whatsMyColor(String myPiece) {
+        if (myPiece == null) {
+            return Color.BLACK; // The opponent has no moves left!
+        }
+
         if ("ABCDEFGHIJ".contains(myPiece)) {
             return Color.RED;
         } else if ("KLMNOPQRST".contains(myPiece)) {
