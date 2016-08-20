@@ -19,7 +19,7 @@ public class OneLookaheadPlayer extends Player {
      * @return The minimax move, one step ahead.
      */
     @Override
-    Move move(String placement, String myPiece, String opponentsPiece) {
+    public Move move(String placement, String myPiece, String opponentsPiece) {
         Color myColor = whatsMyColor(myPiece);
         Color theirColor = whatsMyColor(opponentsPiece);
 

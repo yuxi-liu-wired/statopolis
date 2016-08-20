@@ -13,7 +13,7 @@ public class RandomPlayer extends Player {
     }
 
     @Override
-    Move move(String placement, String myPiece, String opponentsPiece) {
+    public Move move(String placement, String myPiece, String opponentsPiece) {
         GameField field = StratoGame.placementToGameField(placement);
         Move[] moves = field.getPossibleMoves(myPiece);
         int rnd = new Random().nextInt(moves.length);

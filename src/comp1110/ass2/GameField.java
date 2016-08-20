@@ -294,7 +294,6 @@ public class GameField {
                 possibleMoves.add(new Move(c,piece,"D"));
             }
         }
-
         return possibleMoves.toArray(new Move[possibleMoves.size()]);
     }
 

@@ -8,7 +8,7 @@ package comp1110.ass2;
 public abstract class Player {
     private String name;
 
-    Player(String name) {
+    public Player(String name) {
         this.name = name;
     }
 
@@ -19,7 +19,7 @@ public abstract class Player {
      * @param opponentsPiece The piece that the opponent can play next turn.
      * @return
      */
-    abstract Move move(String placement, String myPiece, String opponentsPiece);
+    abstract public Move move(String placement, String myPiece, String opponentsPiece);
 
     @Override
     public String toString() {return name;}

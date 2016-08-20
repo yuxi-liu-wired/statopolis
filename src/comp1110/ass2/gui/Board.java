@@ -43,6 +43,15 @@ public class Board extends Application {
     private static final int GREEN_HOME_X = Math.round((float) (LEFT_MARGIN + 26 + RIGHT_MARGIN / 2 - 0.5) * SQUARE_SIZE);
     private static final int GREEN_HOME_Y = (UP_MARGIN + 12) * SQUARE_SIZE;
 
+    private static final Player randomPlayer = new RandomPlayer();
+    private static final Player oneLookaheadPlayer = new OneLookaheadPlayer();
+
+    private static final String NAME_OF_HUMAN = "Human";
+    private static final String NAME_OF_RANDOMPLAYER = "RandomPlayer";
+    private static final String NAME_OF_ONELOOKAHEADPLAYER = "OneLookaheadPlayer";
+    private String redPlayerName = NAME_OF_HUMAN;
+    private String greenPlayerName = NAME_OF_HUMAN;
+
     /* where to find media assets */
     private static final String URI_BASE = "assets/";
 
@@ -212,8 +221,10 @@ public class Board extends Application {
     }
 
     private void makeAMoveOnTheBoard(String moveString) {
+        System.out.println(moveString);
         Coordinate c = new Coordinate("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(0)),"ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(1)));;
         Move m = new Move(c, moveString.substring(2,3), moveString.substring(3,4));
+        System.out.println(m);
         game.makeMove(m);
         redrawDraggablePieces();
         redrawInfoTexts();
@@ -406,6 +417,83 @@ public class Board extends Application {
         hb.setLayoutY((UP_MARGIN + 26 + 1) * SQUARE_SIZE);
         controls.getChildren().add(hb);
 
+        Button greenMoveButton = new Button("Move");
+        greenMoveButton.setLayoutX(GREEN_HOME_X);
+        greenMoveButton.setLayoutY(GREEN_HOME_Y + 5 * SQUARE_SIZE);
+        greenMoveButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
+        greenMoveButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                makeGreenMove();
+            }
+        });
+
+        Button redMoveButton = new Button("Move");
+        redMoveButton.setLayoutX(RED_HOME_X);
+        redMoveButton.setLayoutY(RED_HOME_Y + 5 * SQUARE_SIZE);
+        redMoveButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
+        redMoveButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                makeRedMove();
+            }
+        });
+
+        if (!greenPlayerName.equals(NAME_OF_HUMAN)) {
+            controls.getChildren().add(greenMoveButton);
+        }
+        if (!redPlayerName.equals(NAME_OF_HUMAN)) {
+            controls.getChildren().add(redMoveButton);
+        }
+    }
+
+    private void makeGreenMove() {
+        String placement = game.getPlacement();
+        String redPiece = game.getRedPiece();
+        String greenPiece = game.getGreenPiece();
+        Move m;
+
+        switch (greenPlayerName) {
+            case NAME_OF_RANDOMPLAYER:
+                m = randomPlayer.move(placement, greenPiece, redPiece);
+                String moveString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.x, m.origin.x + 1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.y, m.origin.y + 1)  + m.pieceName + m.orientation;
+                makeAMoveOnTheBoard(moveString);
+                break;
+            case NAME_OF_ONELOOKAHEADPLAYER:
+                m = oneLookaheadPlayer.move(placement, greenPiece, redPiece);
+                makeAMoveOnTheBoard("ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(m.origin.x) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(m.origin.y)  + m.pieceName + m.orientation);
+                break;
+
+            default:
+                Text errorMessage = new Text(LEFT_MARGIN * SQUARE_SIZE, 5 * SQUARE_SIZE, "Error: green is not an AI!");
+                errorMessage.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
+                errorMessage.setFill(Color.BLACK);
+                redrawInfoTexts();
+                infoTexts.getChildren().add(errorMessage);
+                break;
+        }
+    }
+    private void makeRedMove() {
+        String placement = game.getPlacement();
+        String redPiece = game.getRedPiece();
+        String greenPiece = game.getGreenPiece();
+        Move m;
+
+        switch (redPlayerName) {
+            case NAME_OF_RANDOMPLAYER:
+                m = randomPlayer.move(placement, redPiece, greenPiece);
+                makeAMoveOnTheBoard("ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(m.origin.x) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(m.origin.y)  + m.pieceName + m.orientation);
+                break;
+            case NAME_OF_ONELOOKAHEADPLAYER:
+                m = oneLookaheadPlayer.move(placement, redPiece, greenPiece);
+                makeAMoveOnTheBoard("ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(m.origin.x) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(m.origin.y)  + m.pieceName + m.orientation);
+                break;
+            default:
+                Text errorMessage = new Text(LEFT_MARGIN * SQUARE_SIZE, 5 * SQUARE_SIZE, "Error: green is not an AI!");
+                errorMessage.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
+                errorMessage.setFill(Color.BLACK);
+                redrawInfoTexts();
+                infoTexts.getChildren().add(errorMessage);
+                break;
+        }
     }
 
     private void saveGame() {
@@ -455,9 +543,9 @@ public class Board extends Application {
 
         ComboBox<String> redComboBox = new ComboBox<>();
         redComboBox.getItems().addAll(
-                "Human",
-                "RandomPlayer",
-                "OneLookaheadPlayer"
+                NAME_OF_HUMAN,
+                NAME_OF_RANDOMPLAYER,
+                NAME_OF_ONELOOKAHEADPLAYER
         );
         redComboBox.setPromptText("Red player...");
         redComboBox.setLayoutX((LEFT_MARGIN + 1) * SQUARE_SIZE);
@@ -466,9 +554,9 @@ public class Board extends Application {
 
         ComboBox<String> greenComboBox = new ComboBox<>();
         greenComboBox.getItems().addAll(
-                "Human",
-                "RandomPlayer",
-                "OneLookaheadPlayer"
+                NAME_OF_HUMAN,
+                NAME_OF_RANDOMPLAYER,
+                NAME_OF_ONELOOKAHEADPLAYER
         );
         greenComboBox.setPromptText("Green player...");
         greenComboBox.setLayoutX((LEFT_MARGIN + 13) * SQUARE_SIZE);
@@ -481,10 +569,13 @@ public class Board extends Application {
         startNewGameButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
         startNewGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
+                redPlayerName = redComboBox.getValue();
+                greenPlayerName = greenComboBox.getValue();
                 newGame();
             }
         });
         newGameScreen.getChildren().add(startNewGameButton);
+
         Button cancelNewGameButton = new Button("Cancel");
         cancelNewGameButton.setLayoutX((LEFT_MARGIN + 15) * SQUARE_SIZE);
         cancelNewGameButton.setLayoutY((UP_MARGIN + 26 - 6) * SQUARE_SIZE);
@@ -495,23 +586,18 @@ public class Board extends Application {
             }
         });
         newGameScreen.getChildren().add(cancelNewGameButton);
-
-        String redPlayerName = redComboBox.getValue();
-        String greenPlayerName = greenComboBox.getValue();
     }
 
     private void newGame() {
         newGameScreen.getChildren().clear();
         game = new Game();
 
+        makeControls();
         redrawBoardDisplay();
         redrawDraggablePieces();
         redrawInfoTexts();
     }
-
-
-    // FIXME Task 11: Implement a game that can play valid moves (even if they are weak moves)
-
+    
     // FIXME Task 12: Implement a game that can play good moves
 
     @Override
