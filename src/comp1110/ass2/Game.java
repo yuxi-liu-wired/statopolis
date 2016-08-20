@@ -15,7 +15,7 @@ public class Game {
     private List<String> redStack;
     private List<String> greenStack;
 
-    Game() {
+    public Game() {
         placement = "MMUA";
         turnNumber = 1;
 
@@ -37,6 +37,8 @@ public class Game {
     public boolean isGameOver() { return turnNumber >= 41; }
     public boolean isRedMove() { return (!this.isGameOver())&&(turnNumber % 2 == 0); }
     public boolean isGreenMove() { return (!this.isGameOver())&&(turnNumber % 2 == 1); } // Green moves on turn 1.
+    public boolean redHasMovablePiece() { return turnNumber < 41; } // red runs out of pieces on turn 41.
+    public boolean greenHasMovablePiece() { return turnNumber < 40; } // green runs out of pieces on turn 40.
 
     public String getPlacement() { return placement; }
     public int getTurnNumber() { return turnNumber; }
@@ -87,7 +89,7 @@ public class Game {
         } else {
             correctPieceName = getGreenPiece();
         }
-        if (correctPieceName != m.pieceName) {
+        if (!correctPieceName.equals(m.pieceName)) {
             System.out.println("Incorrect piece " + m.pieceName + " used, instead of the correct piece " + correctPieceName);
             return;
         }
@@ -102,10 +104,6 @@ public class Game {
     }
 
     private static String coordinateToAlphabet(Coordinate c) {
-        if (c.x <= -1 || c.x >= 26 || c.y <= -1 || c.y >= 26) {
-            System.out.println(c + " is out of bounds!");
-            return null;
-        }
         return ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(c.x,c.x+1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(c.y));
     }
 

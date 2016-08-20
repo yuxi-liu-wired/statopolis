@@ -10,7 +10,7 @@ public class Move {
     public String pieceName;
     public String orientation;
 
-    Move(Coordinate origin, String pieceName,String orientation) {
+    public Move(Coordinate origin, String pieceName,String orientation) {
         this.origin = origin;
         this.pieceName = pieceName;
         this.orientation = orientation;
