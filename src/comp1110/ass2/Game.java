@@ -195,9 +195,19 @@ public class Game {
         return canLoadGame(parts[0], parts[1], parts[2]);
     }
 
-    public static String reportError(String placement) {
-        String errorMessage = "";
-        return errorMessage;
+    public String reportError(Move m) {
+        String pieceColor = ("ABCDEFGHIJ".contains(m.pieceName) ? "RED" : "GREEN");
+
+        if (pieceColor == "RED" && turnNumber % 2 == 1) {
+            return "It's green's move this turn!";
+        }
+        if (pieceColor == "GREEN" && turnNumber % 2 == 0) {
+            return "It's red's move this turn!";
+        }
+
+        GameField gameField = StratoGame.placementToGameField(placement);
+
+        return gameField.reportError(m);
     }
 
     // TODO: delete this main() before delivery.

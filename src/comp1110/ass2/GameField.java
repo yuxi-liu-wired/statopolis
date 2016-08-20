@@ -517,6 +517,74 @@ public class GameField {
         }
     }
 
+    public String reportError (Move badMove) {
+        Piece piece = badMove.toPiece();
+
+        Coordinate[] blocksOfPiece = piece.blocks();
+        Coordinate c;
+        Piece p;
+        for (int i = 0; i < blocksOfPiece.length; i++) {
+            c = blocksOfPiece[i];
+            if (!coordinateWithinRange(c)) { // test if it's out of bounds.
+                return ("Piece position " + c + " is out of bounds!");
+            }
+        }
+
+        if (numberOfPiecesPlayed == 0) { return "No error."; }
+        /* If the board is empty, then any that's within bounds should be alright.
+        /* The assignment requires the first piece to be U piece in the center, but this should be enforced by
+        /* some class else. GameField class doesn't need to know such restrictions. */
+
+        int[] hList = new int[blocksOfPiece.length];
+        for (int i = 0; i < blocksOfPiece.length; i++) {
+            c = blocksOfPiece[i];
+            hList[i] = heightField[c.x][c.y]; // record the height of each block under the new piece.
+        }
+        int height = hList[0];
+
+        for (int i = 1; i < hList.length; i++) {
+            if (hList[i] != height) { // test if　all three blocks of the tile are on the same height
+                return ("the blocks are not of the same height!");
+            }
+        }
+
+        if (height == 0) { // test if it touches one existing tile.
+            Coordinate[] neighbors = piece.neighborBlocks();
+            for (Coordinate neighborC : neighbors) {
+                if (!coordinateWithinRange(neighborC)) {
+                    continue; // out of bounds coordinate!
+                }
+                if (heightField[neighborC.x][neighborC.y] >= 1) {
+                    return "No error.";
+                }
+            }
+            return ("It doesn't touch an existing tile!");
+        } else {
+            // test if it touches compatible colors
+            for (int i = 0; i < blocksOfPiece.length; i++) {
+                c = blocksOfPiece[i];
+                Color color1 = piece.getColorAt(c);
+                Color color2 = colorField[c.x][c.y];
+                if (!color1.isCompatibleWith(color2)) {
+                    return ("The colors are not compatible!");
+                }
+            }
+
+            // test if it touches at least two different tiles below.
+            int[] idNumbers = new int[blocksOfPiece.length];
+            for (int i = 0; i < blocksOfPiece.length; i++) {
+                c = blocksOfPiece[i];
+                idNumbers[i] = pieceField[c.x][c.y];
+            }
+            for (int i = 1; i < idNumbers.length; i++) {
+                if (idNumbers[i] != idNumbers[0]) {
+                    return "No error.";
+                }
+            }
+            return ("It doesn't straddle two different tiles below!");
+        }
+    }
+
     @Override
     public String toString() {
         String str = "";
