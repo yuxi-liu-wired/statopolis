@@ -22,8 +22,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.Comparator;
-
 public class Board extends Application {
 
     /* board layout */
@@ -62,7 +60,7 @@ public class Board extends Application {
     private final Group background = new Group();
     private final Group newGameScreen = new Group();
     private final Group creditScreen = new Group();
-    TextField textField;
+    TextField saveTextField;
 
     /* the Stratopolis game */
     private Game game = new Game();
@@ -218,6 +216,35 @@ public class Board extends Application {
         }
     }
 
+    class Square extends ImageView {
+        /**
+         * Construct a particular square at a given position
+         * @param color A character representing the color of square to be created.
+         * @param c A Coordinate represeting the place of the square on the game board.
+         */
+        Square(comp1110.ass2.Color color, Coordinate c) {
+            String id;
+            switch (color) {
+                case RED:
+                    id = "RED_3D";
+                    break;
+                case GREEN:
+                    id = "GREEN_3D";
+                    break;
+                case BLACK:
+                    id = "BLACK_3D";
+                    break;
+                default:
+                    throw new IllegalArgumentException("Bad color: " + color);
+            }
+            setImage(new Image(Board.class.getResource(URI_BASE + id + ".png").toString()));
+            setFitHeight(SQUARE_SIZE);
+            setFitWidth(SQUARE_SIZE);
+            setLayoutX((LEFT_MARGIN + c.x) * SQUARE_SIZE);
+            setLayoutY((UP_MARGIN + c.y) * SQUARE_SIZE);
+        }
+    }
+
     private void makeAMoveOnTheBoard(String moveString) {
         Coordinate c = new Coordinate("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(0)),"ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(1)));;
         Move m = new Move(c, moveString.substring(2,3), moveString.substring(3,4));
@@ -333,18 +360,8 @@ public class Board extends Application {
                 int height = heightField[i][j];
 
                 if (height > 0) {
-                    // color of the block
-                    Rectangle r = new Rectangle(LEFT_MARGIN * SQUARE_SIZE + SQUARE_SIZE * i,UP_MARGIN * SQUARE_SIZE + SQUARE_SIZE * j, SQUARE_SIZE, SQUARE_SIZE);
-                    r.setStroke(Color.web("0x2C2C2C"));
-                    if (color == comp1110.ass2.Color.BLACK) {
-                        r.setFill(Color.BLACK);
-                    } else if (color == comp1110.ass2.Color.GREEN) {
-                        r.setFill(Color.GREEN);
-                    } else if (color == comp1110.ass2.Color.RED) {
-                        r.setFill(Color.RED);
-                    }
-                    r.setStrokeWidth(3);
-                    boardDisplay.getChildren().add(r);
+                    Square square = new Square(color, new Coordinate(i,j));
+                    boardDisplay.getChildren().add(square);
 
                     if (height > 1) {
                         // height of the block
@@ -371,7 +388,7 @@ public class Board extends Application {
         creditRectangle.setStroke(Color.BLACK);
         creditScreen.getChildren().add(creditRectangle);
 
-        Text creditText = new Text("Stratopolis is © Gigamic, 2012.\nThis program created by Yuxi Liu as an assignment project for COMP1140 course in Australian National University.\nPlaytested by Yuxi's close acquaintance Petr Hudeček.");
+        Text creditText = new Text("Stratopolis is © Gigamic, 2012.\nThis program created by Yuxi Liu in 2016 August, as an assignment project for COMP1140 course in Australian National University.\nPlaytested by Yuxi's close acquaintance Petr Hudeček.");
         creditText.setLayoutX((LEFT_MARGIN + 2) * SQUARE_SIZE);
         creditText.setLayoutY((UP_MARGIN + 11) * SQUARE_SIZE);
         creditText.setWrappingWidth(22 * SQUARE_SIZE);
@@ -409,15 +426,24 @@ public class Board extends Application {
         greenRectangle.setFill(Color.rgb(0, 255, 0, 0.3));
         greenRectangle.setStroke(Color.BLACK);
         background.getChildren().add(greenRectangle);
+
+        Rectangle boardRectangle = new Rectangle();
+        boardRectangle.setX(LEFT_MARGIN * SQUARE_SIZE);
+        boardRectangle.setY(UP_MARGIN * SQUARE_SIZE);
+        boardRectangle.setWidth(26 * SQUARE_SIZE);
+        boardRectangle.setHeight(26 * SQUARE_SIZE);
+        boardRectangle.setFill(Color.web("#938fba", 0.05));
+        boardRectangle.setStroke(Color.web("#4a5a90", 1));
+        background.getChildren().add(boardRectangle);
     }
 
     private void makeControls() {
         controls.getChildren().clear();
 
         Button newGameButton = new Button("New Game");
-        newGameButton.setLayoutX(0 * SQUARE_SIZE);
+        newGameButton.setLayoutX(1 * SQUARE_SIZE);
         newGameButton.setLayoutY((UP_MARGIN + 26 - 6) * SQUARE_SIZE);
-        newGameButton.setPrefWidth(LEFT_MARGIN * SQUARE_SIZE);
+        newGameButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
         newGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 setNewGameSplashScreen();
@@ -426,9 +452,9 @@ public class Board extends Application {
         controls.getChildren().add(newGameButton);
 
         Button saveGameButton = new Button("Save Game");
-        saveGameButton.setLayoutX(0 * SQUARE_SIZE);
+        saveGameButton.setLayoutX(1 * SQUARE_SIZE);
         saveGameButton.setLayoutY((UP_MARGIN + 26 - 4) * SQUARE_SIZE);
-        saveGameButton.setPrefWidth(LEFT_MARGIN * SQUARE_SIZE);
+        saveGameButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
         saveGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 saveGame();
@@ -437,28 +463,28 @@ public class Board extends Application {
         controls.getChildren().add(saveGameButton);
 
 
-        Label label1 = new Label("Enter save string: ");
-        textField = new TextField ();
-        textField.setPrefWidth(300);
+        Label saveTextBoxLabel = new Label("Enter save string: ");
+        saveTextField = new TextField ();
+        saveTextField.setPrefWidth(300);
         Button button = new Button("Load Game");
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                loadGame(textField.getText());
-                textField.clear();
+                loadGame(saveTextField.getText());
+                saveTextField.clear();
             }
         });
         HBox hb = new HBox();
-        hb.getChildren().addAll(label1, textField, button);
+        hb.getChildren().addAll(saveTextBoxLabel, saveTextField, button);
         hb.setSpacing(10);
         hb.setLayoutX((LEFT_MARGIN - 2) * SQUARE_SIZE);
         hb.setLayoutY((UP_MARGIN + 26 + 1) * SQUARE_SIZE);
         controls.getChildren().add(hb);
 
         Button creditButton = new Button("Credits");
-        creditButton.setLayoutX((LEFT_MARGIN + 26) * SQUARE_SIZE);
+        creditButton.setLayoutX((LEFT_MARGIN + 26 + 1) * SQUARE_SIZE);
         creditButton.setLayoutY((UP_MARGIN + 26 - 4) * SQUARE_SIZE);
-        creditButton.setPrefWidth(LEFT_MARGIN * SQUARE_SIZE);
+        creditButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
         creditButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 makeCreditScreen();

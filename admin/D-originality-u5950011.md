@@ -8,4 +8,6 @@ I declare that the work I have submitted for Stage C of this assignment and all 
 
 * Two lines of code for String <-> Base64 conversion in methods base64EncryptedGameState and loadBase64EncryptedGameState in Game.java came from http://stackoverflow.com/a/26897706
 
+* The code for mouse-draggable JavaFX pieces in Board.java is copied from Assignment 1 of COMP1110, Semester 2, 2016, Australian National University. 
+
 Signed: Yuxi Liu (u5950011)
