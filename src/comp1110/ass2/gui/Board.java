@@ -30,8 +30,8 @@ public class Board extends Application {
     // private static final int BOARD_WIDTH = 933;
     // private static final int BOARD_HEIGHT = 700;
     private static final int UP_MARGIN = 7;
-    private static final int LEFT_MARGIN = 7;
-    private static final int RIGHT_MARGIN = 7;
+    private static final int LEFT_MARGIN = 5;
+    private static final int RIGHT_MARGIN = 5;
     private static final int DOWN_MARGIN = 7;
     private static final int ROWS = UP_MARGIN + 26 + DOWN_MARGIN;
     private static final int COLS = LEFT_MARGIN + 26 + RIGHT_MARGIN;
@@ -205,8 +205,7 @@ public class Board extends Application {
         private Coordinate getCoordinate() {
             int closestGridX = Math.round((float) (getLayoutX() / SQUARE_SIZE));
             int closestGridY = Math.round((float) (getLayoutY() / SQUARE_SIZE));
-
-            Coordinate c = new Coordinate(closestGridX - UP_MARGIN, closestGridY - LEFT_MARGIN);
+            Coordinate c = new Coordinate(closestGridX - LEFT_MARGIN, closestGridY - UP_MARGIN);
             return c;
         }
 
@@ -375,9 +374,9 @@ public class Board extends Application {
         controls.getChildren().clear();
 
         Button newGameButton = new Button("New Game");
-        newGameButton.setLayoutX(1 * SQUARE_SIZE);
+        newGameButton.setLayoutX(0 * SQUARE_SIZE);
         newGameButton.setLayoutY((UP_MARGIN + 26 - 6) * SQUARE_SIZE);
-        newGameButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
+        newGameButton.setPrefWidth(LEFT_MARGIN * SQUARE_SIZE);
         newGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 setNewGameSplashScreen();
@@ -386,9 +385,9 @@ public class Board extends Application {
         controls.getChildren().add(newGameButton);
 
         Button saveGameButton = new Button("Save Game");
-        saveGameButton.setLayoutX(1 * SQUARE_SIZE);
+        saveGameButton.setLayoutX(0 * SQUARE_SIZE);
         saveGameButton.setLayoutY((UP_MARGIN + 26 - 4) * SQUARE_SIZE);
-        saveGameButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
+        saveGameButton.setPrefWidth(LEFT_MARGIN * SQUARE_SIZE);
         saveGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 saveGame();
@@ -509,7 +508,7 @@ public class Board extends Application {
 
         redrawInfoTexts();
         Text saveText = new Text(1 * SQUARE_SIZE, (UP_MARGIN + 26 + DOWN_MARGIN - 1) * SQUARE_SIZE, "Save string copied to system clipboard: " + saveString);
-        saveText.setFont(Font.font("Courier", 12));
+        saveText.setFont(Font.font("Courier", 10));
         saveText.setFill(Color.BLACK);
         infoTexts.getChildren().add(saveText);
     }
@@ -569,7 +568,7 @@ public class Board extends Application {
         Button startNewGameButton = new Button("Start Game");
         startNewGameButton.setLayoutX((LEFT_MARGIN + 4) * SQUARE_SIZE);
         startNewGameButton.setLayoutY((UP_MARGIN + 26 - 6) * SQUARE_SIZE);
-        startNewGameButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
+        startNewGameButton.setPrefWidth(LEFT_MARGIN * SQUARE_SIZE);
         startNewGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 redPlayerName = redComboBox.getValue();
@@ -582,7 +581,7 @@ public class Board extends Application {
         Button cancelNewGameButton = new Button("Cancel");
         cancelNewGameButton.setLayoutX((LEFT_MARGIN + 15) * SQUARE_SIZE);
         cancelNewGameButton.setLayoutY((UP_MARGIN + 26 - 6) * SQUARE_SIZE);
-        cancelNewGameButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
+        cancelNewGameButton.setPrefWidth(LEFT_MARGIN * SQUARE_SIZE);
         cancelNewGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 newGameScreen.getChildren().clear();
