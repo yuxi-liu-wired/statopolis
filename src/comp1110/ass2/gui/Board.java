@@ -539,6 +539,7 @@ public class Board extends Application {
             redrawInfoTexts();
             redrawDraggablePieces();
             redrawBoardDisplay();
+            makeControls();
         }
     }
 

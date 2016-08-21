@@ -25,7 +25,7 @@ public class OneLookaheadPlayer extends Player {
         Color myColor = whatsMyColor(myPiece);
         Color theirColor = whatsMyColor(opponentsPiece);
 
-        //if (theirColor == Color.BLACK) { // The opponent has no next move!
+        if (theirColor == Color.BLACK) { // The opponent has no next move!
             GameField field = StratoGame.placementToGameField(placement);
             Move[] myMoves = field.getPossibleMoves(myPiece);
 
@@ -52,9 +52,9 @@ public class OneLookaheadPlayer extends Player {
                 }
             }
             return myMoves[bestMove];
-        //}
+        }
 
-        /*GameField field = StratoGame.placementToGameField(placement);
+        GameField field = StratoGame.placementToGameField(placement);
         Move[] myMoves = field.getPossibleMoves(myPiece);
         Move[] theirMoves;
 
@@ -62,6 +62,7 @@ public class OneLookaheadPlayer extends Player {
         int bestMoveScore;
         int responseScore;
         int bestResponseScore;
+        int bestResponseMyScore;
 
         Move myMove;
         GameField nextField;
@@ -78,6 +79,7 @@ public class OneLookaheadPlayer extends Player {
         responseScore = evaluationFunction(nextNextField, theirColor);
 
         bestResponseScore = responseScore;
+        bestResponseMyScore = evaluationFunction(nextNextField, myColor);
 
         for (int j = 1; j < theirMoves.length; j++) {
             theirMove = theirMoves[j];
@@ -86,9 +88,10 @@ public class OneLookaheadPlayer extends Player {
 
             if (responseScore > bestResponseScore) {
                 bestResponseScore = responseScore;
+                bestResponseMyScore = evaluationFunction(nextNextField, myColor);
             }
         }
-        bestMoveScore = bestResponseScore;
+        bestMoveScore = bestResponseMyScore;
         bestMove = 0;
 
         for (int i = 1; i < myMoves.length; i++) {
@@ -102,6 +105,7 @@ public class OneLookaheadPlayer extends Player {
             responseScore = evaluationFunction(nextNextField, theirColor);
 
             bestResponseScore = responseScore;
+            bestResponseMyScore = evaluationFunction(nextNextField, myColor);
 
             for (int j = 1; j < theirMoves.length; j++) {
                 theirMove = theirMoves[j];
@@ -110,15 +114,16 @@ public class OneLookaheadPlayer extends Player {
 
                 if (responseScore > bestResponseScore) {
                     bestResponseScore = responseScore;
+                    bestResponseMyScore = evaluationFunction(nextNextField, myColor);
                 }
             }
-            if (bestResponseScore > bestMoveScore) {
-                bestMoveScore = bestResponseScore;
+            if (bestResponseMyScore > bestMoveScore) {
+                bestMoveScore = bestResponseMyScore;
                 bestMove = i;
             }
         }
 
-        return myMoves[bestMove];*/
+        return myMoves[bestMove];
     }
 
     private Color whatsMyColor(String myPiece) {
