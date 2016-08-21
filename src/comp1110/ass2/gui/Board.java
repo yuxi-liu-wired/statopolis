@@ -454,6 +454,7 @@ public class Board extends Application {
         if (!game.isGreenMove()) {
             greenMoveButton.setDisable(true);
         }
+
     }
 
     private void makeGreenMove() {
@@ -586,9 +587,11 @@ public class Board extends Application {
         startNewGameButton.setPrefWidth(LEFT_MARGIN * SQUARE_SIZE);
         startNewGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                redPlayerName = redComboBox.getValue();
-                greenPlayerName = greenComboBox.getValue();
-                newGame();
+                if ((redComboBox.getValue() != null)&&(greenComboBox.getValue() != null)) {
+                    redPlayerName = redComboBox.getValue();
+                    greenPlayerName = greenComboBox.getValue();
+                    newGame();
+                }
             }
         });
         newGameScreen.getChildren().add(startNewGameButton);
