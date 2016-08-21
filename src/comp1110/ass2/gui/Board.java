@@ -64,7 +64,7 @@ public class Board extends Application {
     TextField textField;
 
     /* the Stratopolis game */
-    private Game game;
+    private Game game = new Game();
 
     /**
      * This class represents the draggable piece used by the players to make a move.
@@ -224,6 +224,7 @@ public class Board extends Application {
         redrawDraggablePieces();
         redrawInfoTexts();
         redrawBoardDisplay();
+        makeControls();
     }
 
     // Redraws the next pieces used in the board on both sides of the window.
@@ -233,11 +234,19 @@ public class Board extends Application {
             String redPiece = game.getRedPiece();
             DraggableFXPiece redDraggablePiece = new DraggableFXPiece(redPiece);
             draggablePieces.getChildren().add(redDraggablePiece);
+
+            if (!(game.isRedMove() && redPlayerName.equals(NAME_OF_HUMAN))) {
+                redDraggablePiece.setDisable(true);
+            }
         }
         if (game.greenHasMovablePiece()) {
             String greenPiece = game.getGreenPiece();
             DraggableFXPiece greenDraggablePiece = new DraggableFXPiece(greenPiece);
             draggablePieces.getChildren().add(greenDraggablePiece);
+
+            if (!(game.isGreenMove() && greenPlayerName.equals(NAME_OF_HUMAN))) {
+                greenDraggablePiece.setDisable(true);
+            }
         }
     }
 
@@ -413,7 +422,7 @@ public class Board extends Application {
         controls.getChildren().add(hb);
 
         Button greenMoveButton = new Button("Move");
-        greenMoveButton.setLayoutX(GREEN_HOME_X);
+        greenMoveButton.setLayoutX(GREEN_HOME_X - 3 * (SQUARE_SIZE/2));
         greenMoveButton.setLayoutY(GREEN_HOME_Y + 5 * SQUARE_SIZE);
         greenMoveButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
         greenMoveButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -423,7 +432,7 @@ public class Board extends Application {
         });
 
         Button redMoveButton = new Button("Move");
-        redMoveButton.setLayoutX(RED_HOME_X);
+        redMoveButton.setLayoutX(RED_HOME_X - 3 * (SQUARE_SIZE/2));
         redMoveButton.setLayoutY(RED_HOME_Y + 5 * SQUARE_SIZE);
         redMoveButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
         redMoveButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -437,6 +446,13 @@ public class Board extends Application {
         }
         if (!redPlayerName.equals(NAME_OF_HUMAN)) {
             controls.getChildren().add(redMoveButton);
+        }
+
+        if (!game.isRedMove()) {
+            redMoveButton.setDisable(true);
+        }
+        if (!game.isGreenMove()) {
+            greenMoveButton.setDisable(true);
         }
     }
 
