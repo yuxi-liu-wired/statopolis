@@ -10,6 +10,8 @@ public class OneLookaheadPlayer extends Player {
         super("One Lookahead Player");
     }
 
+
+    // TODO: fix this minimax search.
     /**
      * An extremely ugly minimax function. Not functioning yet!!
      *
@@ -146,4 +148,5 @@ public class OneLookaheadPlayer extends Player {
         }
         return (myColor == Color.GREEN ? greenScore-redScore : redScore-greenScore);
     }
+
 }

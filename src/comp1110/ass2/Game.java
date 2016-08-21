@@ -220,18 +220,4 @@ public class Game {
 
         return gameField.reportError(m);
     }
-
-    // TODO: delete this main() before delivery.
-    public static void main(String[] args) {
-        Game g = new Game();
-        System.out.println(g.getGreenPiece());
-        g.makeMove(new Move(new Coordinate(13,13), g.getGreenPiece(),"A"));
-        System.out.println(g.getPlacement());
-
-        g.loadGame("MMUANLOBLNBC", "AAEEHDBCCDHFFGGIIJJ", "KKLLMMNNOPPQQRRSSTT");
-        System.out.println(g.base64EncryptedGameState());
-
-        g.loadBase64EncryptedGameState("TU1VQU5MT0JMTkJDLEFBRUVIREJDQ0RIRkZHR0lJSkosS0tMTE1NTk5PUFBRUVJSU1NUVA==");
-        System.out.println(g.getPlacement());
-    }
 }

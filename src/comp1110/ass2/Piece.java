@@ -202,33 +202,4 @@ public class Piece {
         }
         return  str;
     }
-
-    // just a test.
-    public static void main(String[] args) {
-        Piece[] p = new Piece[22];
-        String str = "ABCDEFGHIJKLMNOPQRSTUV";
-        for (int i = 0; i < 22; i++) {
-            p[i] = new Piece(Character.toString(str.charAt(i)));
-        }
-        for (int i = 0; i < 22; i++) {
-            System.out.println(Character.toString(str.charAt(i)) + ": " + p[i]);
-            System.out.println("Its blocks are at ");
-            for (Coordinate c : p[i].blocks()) { System.out.print(c); }
-            System.out.println(' ');
-            System.out.print("Its neightbors are at ");
-            for (Coordinate c : p[i].neighborBlocks()) { System.out.print(c); }
-            System.out.println(' ');
-        }
-
-        Piece q = new Piece("A");
-        q.translateTo(3,5);
-        q.rotate270CW();
-        for (Coordinate c : q.neighborBlocks()) {
-            System.out.print(c);
-        }
-        System.out.println(' ');
-
-        System.out.println(q.getColorAt(new Coordinate(3,5)));
-
-    }
 }

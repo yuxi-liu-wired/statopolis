@@ -223,7 +223,7 @@ public class StratoGame {
     }
 
     // TODO: This main method is only for debugging. Remove it after the project is done.
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         String placement = "MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC";
         GameField gameField = placementToGameField(placement);
@@ -247,5 +247,5 @@ public class StratoGame {
         for (String s : moves) {
             System.out.print(s + " ");
         }
-    }
+    }*/
 }
