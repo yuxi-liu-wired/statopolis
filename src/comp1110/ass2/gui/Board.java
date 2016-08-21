@@ -61,6 +61,7 @@ public class Board extends Application {
     private final Group infoTexts = new Group();
     private final Group background = new Group();
     private final Group newGameScreen = new Group();
+    private final Group creditScreen = new Group();
     TextField textField;
 
     /* the Stratopolis game */
@@ -160,7 +161,7 @@ public class Board extends Application {
         }
 
         /**
-         * Snap the piece to its home position (if it is not on the grid)
+         * Snap the piece to its home position.
          */
         private void snapToHome() {
             setLayoutX(homeX);
@@ -172,7 +173,7 @@ public class Board extends Application {
 
 
         /**
-         * Rotate the piece by 90 degrees
+         * Rotate the piece by 90 degrees, keeping the up-left square appear fixed in place.
          */
         private void rotate() {
             int rotationNumber = Math.round((float) ((getRotate() + 90) / 90)) % 4;
@@ -357,6 +358,39 @@ public class Board extends Application {
         }
     }
 
+    private void makeCreditScreen() {
+        creditScreen.getChildren().clear();
+        creditScreen.toFront();
+
+        Rectangle creditRectangle = new Rectangle();
+        creditRectangle.setX((LEFT_MARGIN + 1) * SQUARE_SIZE);
+        creditRectangle.setY((UP_MARGIN + 10) * SQUARE_SIZE);
+        creditRectangle.setWidth(24 * SQUARE_SIZE);
+        creditRectangle.setHeight(8 * SQUARE_SIZE);
+        creditRectangle.setFill(Color.rgb(255, 255, 255, 0.95));
+        creditRectangle.setStroke(Color.BLACK);
+        creditScreen.getChildren().add(creditRectangle);
+
+        Text creditText = new Text("Stratopolis is © Gigamic, 2012.\nThis program created by Yuxi Liu as an assignment project for COMP1140 course in Australian National University.\nPlaytested by Yuxi's close acquaintance Petr Hudeček.");
+        creditText.setLayoutX((LEFT_MARGIN + 2) * SQUARE_SIZE);
+        creditText.setLayoutY((UP_MARGIN + 11) * SQUARE_SIZE);
+        creditText.setWrappingWidth(22 * SQUARE_SIZE);
+        creditText.setFont(Font.font("Helvetica", 15));
+        creditText.setFill(Color.web("#4a5a90",1.0));
+        creditScreen.getChildren().add(creditText);
+
+        Button quitCreditButton = new Button("Cancel");
+        quitCreditButton.setLayoutX((LEFT_MARGIN + 11) * SQUARE_SIZE);
+        quitCreditButton.setLayoutY((UP_MARGIN + 16) * SQUARE_SIZE);
+        quitCreditButton.setPrefWidth(4 * SQUARE_SIZE);
+        quitCreditButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                creditScreen.getChildren().clear();
+            }
+        });
+        creditScreen.getChildren().add(quitCreditButton);
+    }
+
     private void makeBackground() {
         Rectangle redRectangle = new Rectangle();
         redRectangle.setX(RED_HOME_X - 1 * SQUARE_SIZE);
@@ -421,6 +455,18 @@ public class Board extends Application {
         hb.setLayoutY((UP_MARGIN + 26 + 1) * SQUARE_SIZE);
         controls.getChildren().add(hb);
 
+        Button creditButton = new Button("Credits");
+        creditButton.setLayoutX((LEFT_MARGIN + 26) * SQUARE_SIZE);
+        creditButton.setLayoutY((UP_MARGIN + 26 - 4) * SQUARE_SIZE);
+        creditButton.setPrefWidth(LEFT_MARGIN * SQUARE_SIZE);
+        creditButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                makeCreditScreen();
+            }
+        });
+        controls.getChildren().add(creditButton);
+
+
         Button greenMoveButton = new Button("Move");
         greenMoveButton.setLayoutX(GREEN_HOME_X - 3 * (SQUARE_SIZE/2));
         greenMoveButton.setLayoutY(GREEN_HOME_Y + 5 * SQUARE_SIZE);
@@ -454,7 +500,6 @@ public class Board extends Application {
         if (!game.isGreenMove()) {
             greenMoveButton.setDisable(true);
         }
-
     }
 
     private void makeGreenMove() {
@@ -618,8 +663,6 @@ public class Board extends Application {
         redrawInfoTexts();
     }
 
-    // FIXME Task 12: Implement a game that can play good moves
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Stratopolis");
@@ -630,6 +673,7 @@ public class Board extends Application {
         root.getChildren().add(infoTexts);
         root.getChildren().add(background);
         root.getChildren().add(newGameScreen);
+        root.getChildren().add(creditScreen);
 
         draggablePieces.toFront();
         background.toBack();
