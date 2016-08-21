@@ -17,6 +17,7 @@ public class Game {
     private List<String> redStack;
     private List<String> greenStack;
 
+    // Creates a new Game. Initializes to MMUA, randomizes the red and green stacks.
     public Game() {
         placement = "MMUA";
         turnNumber = 1;
@@ -36,9 +37,9 @@ public class Game {
         Collections.shuffle(greenStack);
     }
 
-    public boolean isGameOver() { return turnNumber >= 41; }
-    public boolean isRedMove() { return (!this.isGameOver())&&(turnNumber % 2 == 0); }
-    public boolean isGreenMove() { return (!this.isGameOver())&&(turnNumber % 2 == 1); } // Green moves on turn 1.
+    public boolean isGameOver() { return turnNumber >= 41; } // Game ends on turn 41.
+    public boolean isRedMove() { return (!this.isGameOver())&&(turnNumber % 2 == 0); } // Red moves on turn 2, 4...
+    public boolean isGreenMove() { return (!this.isGameOver())&&(turnNumber % 2 == 1); } // Green moves on turn 1, 3...
     public boolean redHasMovablePiece() { return turnNumber < 41; } // red runs out of pieces on turn 41.
     public boolean greenHasMovablePiece() { return turnNumber < 40; } // green runs out of pieces on turn 40.
 
@@ -79,45 +80,45 @@ public class Game {
 
     // Registers a move if and only if it is a legal move, and uses the correct piece on the stack.
     public void makeMove (Move m) {
+        if (isGameOver()) {
+            System.out.println("The game is over! No more moves can be made.");
+            return;
+        }
+
         String newMove = coordinateToAlphabet(m.origin) + m.pieceName + m.orientation;
         if (!StratoGame.isPlacementValid(placement + newMove)) {
             System.out.println("The move " + newMove + " is illegal!");
             return;
         }
 
-        String correctPieceName;
-        if (isRedMove()) {
-            correctPieceName = getRedPiece();
-        } else {
-            correctPieceName = getGreenPiece();
-        }
+        String correctPieceName = (isRedMove() ? getRedPiece() : getGreenPiece());
         if (!correctPieceName.equals(m.pieceName)) {
             System.out.println("Incorrect piece " + m.pieceName + " used, instead of the correct piece " + correctPieceName);
             return;
         }
 
-        placement = placement + newMove;
+        // All tests passsed. Register the move.
+        placement += newMove;
+
         if (isRedMove()) {
             redStack.remove(0);
         } else {
             greenStack.remove(0);
         }
+
         turnNumber++;
     }
-
     private static String coordinateToAlphabet(Coordinate c) {
         return ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(c.x,c.x+1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(c.y));
     }
 
     /**
      * Given a string representing the placement, a string representing the stack of red, and a string representing the
-     * stack of green, if it is a valid game state, loads the game state and returns true, else, do nothing and return
-     * false.
+     * stack of green, if it is a valid game state, load the game, else do nothing.
      *
-     * @param placement
-     * @param redStackString
-     * @param greenStackString
-     * @return true if this game can be loaded. false is not.
+     * @param placement the string representing the pieces played so far.
+     * @param redStackString the red pieces to be played. The first character is the topmost red piece on the stack.
+     * @param greenStackString the green pieces to be played. The first character is the topmost green piece on the stack.
      */
     private void loadGame(String placement, String redStackString, String greenStackString) {
         if (!canLoadGame(placement, redStackString, greenStackString)) {
@@ -139,12 +140,14 @@ public class Game {
     }
 
 
+    // Checks if it can be loaded correctly.
     private static boolean canLoadGame(String placement, String redStackString, String greenStackString) {
         if (!StratoGame.isPlacementValid(placement)) {
             System.out.println("Trying to load game with invalid placement: "+placement);
             return false;
         }
 
+        // First we get the list of pieces already played.
         String redPiecesUsed = "";
         String greenPiecesUsed = "";
         for (int i = 4; i < placement.length(); i += 4) {
@@ -158,7 +161,8 @@ public class Game {
             }
         }
 
-        // Then we sort the characters to check if the pieces are correct.
+        // Then we combine the list of played pieces with the list of unplayed pieces, sort them to check
+        // if the pieces are exactly as specified.
         char[] sortedRedPieces = (redPiecesUsed + redStackString).toCharArray();
         Arrays.sort(sortedRedPieces);
         if (!String.valueOf(sortedRedPieces).equals("AABBCCDDEEFFGGHHIIJJ")) {
@@ -206,8 +210,15 @@ public class Game {
         }
     }
 
-    public String reportError(Move m) {
-        String pieceColor = ("ABCDEFGHIJ".contains(m.pieceName) ? "RED" : "GREEN");
+    /**
+     * Returns a string explaining why this move cannot be put on the board. This method can be used by the gui to
+     * explain to the human player why a certain move can't be made.
+     *
+     * @param badMove A move that's supposed to be wrong.
+     * @return A string explaining why this move cannot be put on the board. If the move is legal, return "No error."
+     */
+    public String reportError(Move badMove) {
+        String pieceColor = ("ABCDEFGHIJ".contains(badMove.pieceName) ? "RED" : "GREEN");
 
         if (pieceColor == "RED" && turnNumber % 2 == 1) {
             return "It's green's move this turn!";
@@ -217,7 +228,6 @@ public class Game {
         }
 
         GameField gameField = StratoGame.placementToGameField(placement);
-
-        return gameField.reportError(m);
+        return gameField.reportError(badMove);
     }
 }

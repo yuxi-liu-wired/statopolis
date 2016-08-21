@@ -23,6 +23,8 @@ import javafx.stage.Stage;
  * NOTE: This class is separate from your main game class.  This
  * class does not play a game, it just illustrates various piece
  * placements.
+ *
+ * The makePlacement function was written by Yuxi Liu. All other parts are written by course organizers of COMP1140.
  */
 public class Viewer extends Application {
 
@@ -48,6 +50,7 @@ public class Viewer extends Application {
 
         int blockSize = 20;
 
+        // parses the placement string into a GameField
         GameField gf = StratoGame.placementToGameField(placement);
         int[][] heightField = gf.getHeightField();
         comp1110.ass2.Color[][] colorField = gf.getColorField();
@@ -66,7 +69,7 @@ public class Viewer extends Application {
         }
         redScoreStr = redScoreStr.substring(0,redScoreStr.length()-2);
 
-        if (placement.length() == 164) {
+        if (placement.length() == 164) { // The game ends on round 41, at which point placement has length 4*41=164.
             String whoWon = "";
             comp1110.ass2.Color c = gf.winner();
             switch (c) {
@@ -85,7 +88,7 @@ public class Viewer extends Application {
             round.setFont(Font.font("Courier", 15));
             round.setFill(Color.BLACK);
             boardDisplay.getChildren().add(round);
-        } else {
+        } else { // Else, the game hasn't ended yet. Print round number, and whose turn it is.
             Text round = new Text(115, 20, "It's round " + Integer.toString(placement.length() / 4) + ", " + ((placement.length() / 4) % 2 == 1 ? "Green" : "Red") + "'s move.");
             round.setFont(Font.font("Courier", 15));
             round.setFill(Color.BLACK);
@@ -110,11 +113,10 @@ public class Viewer extends Application {
                 letter.setOpacity(0.5);
                 boardDisplay.getChildren().add(letter);
 
-
                 comp1110.ass2.Color color = colorField[i][j];
                 int height = heightField[i][j];
 
-                if (height > 0) {
+                if (height > 0) { // Some block has been laid at this place, so we must draw a block here.
                     // color of the block
                     Rectangle r = new Rectangle(115 + blockSize * i,60 + blockSize * j, blockSize, blockSize);
                     r.setStroke(Color.web("0x2C2C2C"));
@@ -129,7 +131,7 @@ public class Viewer extends Application {
                     boardDisplay.getChildren().add(r);
 
                     if (height > 1 && color != comp1110.ass2.Color.BLACK) {
-                        // height of the block
+                        // Print a number showing how high the blocks are at this place.
                         Text t = new Text(115 + blockSize * i + 7, 60 + blockSize * j + 13, Integer.toString(height));
                         t.setFont(Font.font("Helvetica", 10));
                         t.setFill(Color.BLACK);

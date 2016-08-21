@@ -1,12 +1,12 @@
 package comp1110.ass2;
 
-import java.util.Arrays;
-
 /**
- * This class provides the text interface for the Strato Game
+ * This class provides the text interface for the Stratopolis Game
  *
  * The game is based directly on Gigamic's Stratopolis game
  * (http://boardgamegeek.com/boardgame/125022/stratopolis)
+ *
+ * Written by Yuxi Liu (u5950011).
  */
 public class StratoGame {
 
@@ -221,31 +221,4 @@ public class StratoGame {
         }
         return stringMoves;
     }
-
-    // TODO: This main method is only for debugging. Remove it after the project is done.
-    /*public static void main(String[] args) {
-
-        String placement = "MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC";
-        GameField gameField = placementToGameField(placement);
-        int[][] ccMatrix = gameField.connectedComponents();
-        for (int j = 0; j < 26; j++) {
-            for (int i = 0; i < 26; i++) {
-                System.out.print((ccMatrix[i][j]==-1?"":" ") + ccMatrix[i][j] + " ");
-            }
-            System.out.println("");
-        }
-
-        int [] scoreRed = gameField.scoring(Color.RED);
-        int [] scoreGreen = gameField.scoring(Color.GREEN);
-
-        System.out.println("The score list of GREEN is:");
-        System.out.println(Arrays.toString(scoreGreen));
-        System.out.println("The score list of RED is:");
-        System.out.println(Arrays.toString(scoreRed));
-
-        String[] moves = generatePossibleMoves("MMUA","A");
-        for (String s : moves) {
-            System.out.print(s + " ");
-        }
-    }*/
 }

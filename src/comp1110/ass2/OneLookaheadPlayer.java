@@ -10,10 +10,8 @@ public class OneLookaheadPlayer extends Player {
         super("One Lookahead Player");
     }
 
-
-    // TODO: fix this minimax search.
     /**
-     * An extremely ugly minimax function. Not functioning yet!!
+     * A 1-ply deep minimax method for selecting the next best move.
      *
      * @param placement The placement of game that the player faces now.
      * @param myPiece The piece that the player can play.
@@ -25,7 +23,8 @@ public class OneLookaheadPlayer extends Player {
         Color myColor = whatsMyColor(myPiece);
         Color theirColor = whatsMyColor(opponentsPiece);
 
-        if (theirColor == Color.BLACK) { // The opponent has no next move!
+        if (theirColor == Color.BLACK) {
+            // Pick the move that results in the best board score. No minimax because the opponent has no next move.
             GameField field = StratoGame.placementToGameField(placement);
             Move[] myMoves = field.getPossibleMoves(myPiece);
 
@@ -69,6 +68,7 @@ public class OneLookaheadPlayer extends Player {
         Move theirMove;
         GameField nextNextField;
 
+        // the minimax begins here. Self-explanatory, just very tedious.
         myMove = myMoves[0];
         nextField = field.nextField(myMove);
 
@@ -128,18 +128,24 @@ public class OneLookaheadPlayer extends Player {
 
     private Color whatsMyColor(String myPiece) {
         if (myPiece == null) {
-            return Color.BLACK; // The opponent has no moves left!
+            return Color.BLACK;
         }
-
         if ("ABCDEFGHIJ".contains(myPiece)) {
             return Color.RED;
         } else if ("KLMNOPQRST".contains(myPiece)) {
             return Color.GREEN;
         } else {
-            return Color.BLACK; // The opponent has no moves left!
+            return Color.BLACK;
         }
     }
 
+    /**
+     * This is the heuristic for evaluating the board.
+     *
+     * @param field The GameField to be evaluated.
+     * @param myColor Which color to use. If it's GREEN, then the score would be high if the board favors GREEN.
+     * @return An integer score of how good the board is.
+     */
     private int evaluationFunction(GameField field, Color myColor) {
         int[] greenScores = field.scoring(Color.GREEN);
         int greenScore = 0;
@@ -153,5 +159,4 @@ public class OneLookaheadPlayer extends Player {
         }
         return (myColor == Color.GREEN ? greenScore-redScore : redScore-greenScore);
     }
-
 }

@@ -50,11 +50,13 @@ public class GameField {
         nextField.addPiece(p);
         return nextField;
     }
+    // This method returns an exact copy of this GameField.
     @Override
     public GameField clone() {
         return new GameField(colorField,heightField,pieceField,numberOfPiecesPlayed);
     }
-    // used by the copy() method.
+
+    // A constructor used by the clone() method.
     private GameField(Color[][] newColorField, int[][] newHeightField, int[][] newPieceField, int numberOfPiecesPlayed) {
         colorField = new Color[FIELD_SIZE][FIELD_SIZE];
         heightField = new int[FIELD_SIZE][FIELD_SIZE];
@@ -68,6 +70,7 @@ public class GameField {
         }
         this.numberOfPiecesPlayed = numberOfPiecesPlayed;
     }
+
 
     public int[][] getHeightField() {
         int[][] copy = new int[FIELD_SIZE][FIELD_SIZE];
@@ -94,7 +97,7 @@ public class GameField {
             }
         return copy;
     }
-    public int[][] getPieceField() {
+    public int[][] getPieceField() { // This methoed is not used, but it's kept for completeness' sake.
         int[][] copy = new int[FIELD_SIZE][FIELD_SIZE];
         for (int i = 0; i < FIELD_SIZE; i++)
             for (int j = 0; j < FIELD_SIZE; j++)
@@ -102,7 +105,11 @@ public class GameField {
         return copy;
     }
 
-
+    /**
+     * Test if a coordinate is on the 26x26 board.
+     * @param c The coordinate to be tested.
+     * @return true if and only if the coordinate is in the 26x26 board.
+     */
     public static boolean coordinateWithinRange (Coordinate c) {
         return !(c.x <= -1 || c.x >= FIELD_SIZE || c.y <= -1 || c.y >= FIELD_SIZE);
     }
@@ -125,13 +132,13 @@ public class GameField {
      * - Test if it's out of bounds.
      * -   If it is, return false, else, continue.
      * - Test if the board is empty. If so, return true (otherwise there's no way to begin!).
-     * - Test if all three blocks of the tile are on the same height.
+     * - Test if all 3  blocks of the tile (note: the only 2-block tile is used at the start) are on the same height.
      * -   If it is not, return false, else, record the height and continue.
      * - If the tile is placed on height 0, then test if it touches one existing tile.
      * -   This is done by getting all its neighbors' coordinates (only check neighbors that are within bound!),
      * -   and checking if at least one of them has height >= 1
      * -   If yes, return true, else, return false.
-     * - If the tile is placed on height h, h >= 1, then
+     * - Else, the tile is placed on height h, h >= 1, then
      * -   First test if it touches compatible colors. If any incompatible colors appear, return false.
      * -   Then test if it touches at least two different tiles below.
      * -     This is done by getting all its coordinates, and checking the pieceField to see if at least two different
@@ -177,10 +184,10 @@ public class GameField {
                     continue; // out of bounds coordinate!
                 }
                 if (heightField[neighborC.x][neighborC.y] >= 1) {
-                    return true;
+                    return true; // this neighboring block is covered by some previously laid block
                 }
             }
-            return false;
+            return false; // all neighboring blocks are not covered by some previously laid blocks
         } else {
             // test if it touches compatible colors
             for (int i = 0; i < blocksOfPiece.length; i++) {
@@ -218,7 +225,6 @@ public class GameField {
      *
      * Make sure that the piece can actually be added to the board.
      * If not, it will print a warning message to the console, and changes nothing to the board.
-     * Maybe an exception thrower will be added later, depending on whether it is deemed necessary.
      * @param piece The play piece that you want to add to the board.
      */
     public void addPiece (Piece piece) {
@@ -262,14 +268,13 @@ public class GameField {
 
         ArrayList<Move> possibleMoves = new ArrayList<Move>();
 
-        Piece pieceA = new Piece(piece + "");
-        Piece pieceB = new Piece(piece + "");
+        Piece pieceA = new Piece(piece);
+        Piece pieceB = new Piece(piece);
         pieceB.rotate90CW();
-        Piece pieceC = new Piece(piece + "");
+        Piece pieceC = new Piece(piece);
         pieceC.rotate180CW();
-        Piece pieceD = new Piece(piece + "");
+        Piece pieceD = new Piece(piece);
         pieceD.rotate270CW();
-        Piece[] pieces = {pieceA, pieceB, pieceC, pieceD};
 
         for (Coordinate c : twiceNeighbors) {
             pieceA.translateTo(c);
@@ -294,7 +299,7 @@ public class GameField {
 
     /**
      * Returns the list of score of each connected component, sorted by the AREA (height is IRRELEVANT) of the
-     * component, from big to small.
+     * components, from big to small. If some components have the same area, then sort from high to low.
      * @param color The color to score.
      * @return A list of integers, representing the score of each connected component, sorted by
      * the area (height is irrelevant) of the component, from big to small.
@@ -362,7 +367,7 @@ public class GameField {
 
         return scoreValues;
     }
-    // only used in the scoring function, as a tuple with an ordering.
+    // only used in scoring(), as a tuple with an ordering
     private class SizeHeight implements Comparable<SizeHeight> {
         public int size;
         public int height;
@@ -370,11 +375,11 @@ public class GameField {
             this.size = size;
             this.height = height;
         }
-        public int compareTo(SizeHeight that) { // when comparing two clusters, only size matters.
+        public int compareTo(SizeHeight that) { // when comparing two clusters, first compare area
             int sizeComparison = Integer.compare(that.size, this.size);
             if (sizeComparison != 0) {
                 return Integer.compare(that.size, this.size);
-            } else { // tie-breaking using height.
+            } else { // tie-breaking using height
                 return Integer.compare(that.height, this.height);
             }
         }
@@ -399,10 +404,11 @@ public class GameField {
 
         int id = 0; // Used to give each semi-cluster a unique id in the first pass, to be merged in the second pass.
         UnionFind labelSet = new UnionFind(FIELD_SIZE*FIELD_SIZE);
+        // A union-find set for recording which semi-clusters must be merged in the second pass.
 
         // First pass. Warning: a lot of repetitive code to deal with (literally) edge cases.
 
-        Color color; // Color of the block itself.
+        Color color; // Color of the block being scanned.
         Color color1; // Color of the neighbor on the left.
         int cluster1; // Semi-cluster index of the neighbor on the left.
         Color color2; // Color of the neighbor on the above.
@@ -465,7 +471,7 @@ public class GameField {
                         ccLabelMatrix[i][j] = cluster2;
                     } else if (color == color1 && color == color2) { // The remaining case. Requires merging later!
                         ccLabelMatrix[i][j] = cluster1;
-                        labelSet.union(cluster1, cluster2);
+                        labelSet.union(cluster1, cluster2); // cluster1 and cluster2 belong to the same cluster
                     }
                 }
             }
@@ -485,7 +491,7 @@ public class GameField {
 
     /**
      * Determines the winner of the game. Can be computed at anytime, even when the game isn't finished.
-     * @return "GREEN", "RED", or "BLACK". "BLACK" stands for a draw.
+     * @return GREEN, RED, or BLACK. BLACK stands for a draw.
      */
     public Color winner() {
         int[] redScores = scoring(Color.RED);
@@ -506,11 +512,18 @@ public class GameField {
             return Color.RED;
         } else if (redScores.length < greenScores.length) { // green has more regions to score.
             return Color.GREEN;
-        } else {
+        } else { // They have the same number of regions. That is, they have the same score-list. So it's a tie.
             return Color.BLACK;
         }
     }
 
+    /**
+     * Returns a string explaining why this move cannot be put on the board. This method can be used by the gui to
+     * explain to the human player why a certain move can't be made.
+     *
+     * @param badMove A move. It should be an illegal move, though this method can deal with legal moves too.
+     * @return A string explaining why this move cannot be put on the board. If the move is legal, return "No error."
+     */
     public String reportError (Move badMove) {
         Piece piece = badMove.toPiece();
 
@@ -579,6 +592,7 @@ public class GameField {
         }
     }
 
+    // Prints the ga
     @Override
     public String toString() {
         String str = "";

@@ -22,9 +22,16 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * This is the gui for the Stratopolis game.
+ *
+ * Written by Yuxi Liu (u5950011) from 8/20/16 to 8/21/16
+ */
+
 public class Board extends Application {
 
     /* board layout */
+    // The following numbers are for the layout of the gui.
     private static final int UP_MARGIN = 5;
     private static final int LEFT_MARGIN = 7;
     private static final int RIGHT_MARGIN = 7;
@@ -34,17 +41,19 @@ public class Board extends Application {
     private static final int SQUARE_SIZE = 20;
     private static final int WINDOW_WIDTH = COLS * SQUARE_SIZE;
     private static final int WINDOW_HEIGHT = ROWS * SQUARE_SIZE;
+    // The following four numbers are for snapping the draggable pieces to their default positions.
     private static final int RED_HOME_X = Math.round((float) (LEFT_MARGIN / 2 - 0.5) * SQUARE_SIZE);
     private static final int RED_HOME_Y = (UP_MARGIN + 12) * SQUARE_SIZE;
     private static final int GREEN_HOME_X = Math.round((float) (LEFT_MARGIN + 26 + RIGHT_MARGIN / 2 - 0.5) * SQUARE_SIZE);
     private static final int GREEN_HOME_Y = (UP_MARGIN + 12) * SQUARE_SIZE;
 
+    /* The players used in the program. */
     private static final Player randomPlayer = new RandomPlayer();
     private static final Player oneLookaheadPlayer = new OneLookaheadPlayer();
-
     private static final String NAME_OF_HUMAN = "Human";
     private static final String NAME_OF_RANDOMPLAYER = "RandomPlayer";
     private static final String NAME_OF_ONELOOKAHEADPLAYER = "OneLookaheadPlayer";
+    // Initializes to NAME_OF_HUMAN to prevent some errors when the program launches.
     private String redPlayerName = NAME_OF_HUMAN;
     private String greenPlayerName = NAME_OF_HUMAN;
 
@@ -67,6 +76,7 @@ public class Board extends Application {
 
     /**
      * This class represents the draggable piece used by the players to make a move.
+     * The code for dragging is copied from Board.java of assignment 1 of COMP1110.
      */
     class DraggableFXPiece extends ImageView {
         String piece;
@@ -216,9 +226,12 @@ public class Board extends Application {
         }
     }
 
+    /**
+     * This class represents a picture of a square on the board.
+     */
     class Square extends ImageView {
         /**
-         * Construct a particular square at a given position
+         * Draws a particular square at a given position
          * @param color A character representing the color of square to be created.
          * @param c A Coordinate represeting the place of the square on the game board.
          */
@@ -245,6 +258,7 @@ public class Board extends Application {
         }
     }
 
+    // This method takes a move and makes the move on the board, then updates the whole gui.
     private void makeAMoveOnTheBoard(String moveString) {
         Coordinate c = new Coordinate("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(0)),"ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(1)));;
         Move m = new Move(c, moveString.substring(2,3), moveString.substring(3,4));
@@ -263,6 +277,7 @@ public class Board extends Application {
             DraggableFXPiece redDraggablePiece = new DraggableFXPiece(redPiece);
             draggablePieces.getChildren().add(redDraggablePiece);
 
+            // if it's not red's move, or if it's not a human playing red, then disable dragging.
             if (!(game.isRedMove() && redPlayerName.equals(NAME_OF_HUMAN))) {
                 redDraggablePiece.setDisable(true);
             }
@@ -272,6 +287,7 @@ public class Board extends Application {
             DraggableFXPiece greenDraggablePiece = new DraggableFXPiece(greenPiece);
             draggablePieces.getChildren().add(greenDraggablePiece);
 
+            // if it's not green's move, or if it's not a human playing green, then disable dragging.
             if (!(game.isGreenMove() && greenPlayerName.equals(NAME_OF_HUMAN))) {
                 greenDraggablePiece.setDisable(true);
             }
@@ -284,6 +300,7 @@ public class Board extends Application {
 
         String placement = game.getPlacement();
 
+        // parses the placement string into a GameField
         GameField gf = StratoGame.placementToGameField(placement);
         int[] greenScores = gf.scoring(comp1110.ass2.Color.GREEN);
         int[] redScores = gf.scoring(comp1110.ass2.Color.RED);
@@ -319,7 +336,7 @@ public class Board extends Application {
             round.setFont(Font.font("Courier", 15));
             round.setFill(Color.BLACK);
             infoTexts.getChildren().add(round);
-        } else {
+        } else { // Else, the game hasn't ended yet. Print round number, and whose turn it is.
             Text round = new Text(LEFT_MARGIN * SQUARE_SIZE, 1 * SQUARE_SIZE, "It's round " + Integer.toString(placement.length() / 4) + ", " + ((placement.length() / 4) % 2 == 1 ? "Green" : "Red") + "'s move.");
             round.setFont(Font.font("Courier", 15));
             round.setFill(Color.BLACK);
@@ -341,30 +358,22 @@ public class Board extends Application {
 
         String placement = game.getPlacement();
 
+        // parses the placement string into a GameField
         GameField gf = StratoGame.placementToGameField(placement);
         int[][] heightField = gf.getHeightField();
         comp1110.ass2.Color[][] colorField = gf.getColorField();
 
         for (int i = 0; i < heightField.length; i++) {
             for (int j = 0; j < heightField.length; j++) {
-                // background texts, showing the coordinates
-                String str = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i,i+1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(j));
-                Text letter = new Text(LEFT_MARGIN * SQUARE_SIZE + SQUARE_SIZE * i + 5, UP_MARGIN * SQUARE_SIZE + SQUARE_SIZE * j + 13, str);
-                letter.setFont(Font.font("Courier", 9));
-                letter.setFill(Color.GRAY);
-                letter.setOpacity(0.5);
-                boardDisplay.getChildren().add(letter);
-
-
                 comp1110.ass2.Color color = colorField[i][j];
                 int height = heightField[i][j];
 
-                if (height > 0) {
+                if (height > 0) { // Some block has been laid at this place, so we must draw a block here.
                     Square square = new Square(color, new Coordinate(i,j));
                     boardDisplay.getChildren().add(square);
 
                     if (height > 1) {
-                        // height of the block
+                        // Print a number showing how high the blocks are at this place.
                         Text t = new Text(LEFT_MARGIN * SQUARE_SIZE + SQUARE_SIZE * i + 7, UP_MARGIN * SQUARE_SIZE + SQUARE_SIZE * j + 13, Integer.toString(height));
                         t.setFont(Font.font("Helvetica", FontWeight.BOLD, 10));
                         t.setFill(Color.WHITE);
@@ -375,6 +384,7 @@ public class Board extends Application {
         }
     }
 
+    // shows the credits screen.
     private void makeCreditScreen() {
         creditScreen.getChildren().clear();
         creditScreen.toFront();
@@ -388,7 +398,7 @@ public class Board extends Application {
         creditRectangle.setStroke(Color.BLACK);
         creditScreen.getChildren().add(creditRectangle);
 
-        Text creditText = new Text("Stratopolis is © Gigamic, 2012.\nThis program created by Yuxi Liu in 2016 August, as an assignment project for COMP1140 course in Australian National University.\nPlaytested by Yuxi's close acquaintance Petr Hudeček.");
+        Text creditText = new Text("Stratopolis is © Gigamic, 2012.\nThis program created by Yuxi Liu, Xinyi Qian, and Woojin Ra in 2016 August, as an assignment project for COMP1140 course in Australian National University.");
         creditText.setLayoutX((LEFT_MARGIN + 2) * SQUARE_SIZE);
         creditText.setLayoutY((UP_MARGIN + 11) * SQUARE_SIZE);
         creditText.setWrappingWidth(22 * SQUARE_SIZE);
@@ -408,6 +418,7 @@ public class Board extends Application {
         creditScreen.getChildren().add(quitCreditButton);
     }
 
+    // draws some background blocks
     private void makeBackground() {
         Rectangle redRectangle = new Rectangle();
         redRectangle.setX(RED_HOME_X - 1 * SQUARE_SIZE);
@@ -435,8 +446,21 @@ public class Board extends Application {
         boardRectangle.setFill(Color.web("#938fba", 0.05));
         boardRectangle.setStroke(Color.web("#4a5a90", 1));
         background.getChildren().add(boardRectangle);
+
+        // prints the coordinates of the board
+        for (int i = 0; i < 26; i++) {
+            for (int j = 0; j < 26; j++) {
+                String str = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(i, i + 1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(j));
+                Text letter = new Text(LEFT_MARGIN * SQUARE_SIZE + SQUARE_SIZE * i + 4, UP_MARGIN * SQUARE_SIZE + SQUARE_SIZE * j + 13, str);
+                letter.setFont(Font.font("Courier", 9));
+                letter.setFill(Color.GRAY);
+                letter.setOpacity(0.5);
+                background.getChildren().add(letter);
+            }
+        }
     }
 
+    // adds the buttons. also adds the textbox for loading the save-string
     private void makeControls() {
         controls.getChildren().clear();
 
@@ -492,7 +516,9 @@ public class Board extends Application {
         });
         controls.getChildren().add(creditButton);
 
-
+        // these two buttons cause the computer players to make one move.
+        // I chose to use buttons to make them move, instead of making them move automatically, because I don't want to
+        // complicate the program by introducing time controls into it.
         Button greenMoveButton = new Button("Move");
         greenMoveButton.setLayoutX(GREEN_HOME_X - 3 * (SQUARE_SIZE/2));
         greenMoveButton.setLayoutY(GREEN_HOME_Y + 5 * SQUARE_SIZE);
@@ -513,6 +539,7 @@ public class Board extends Application {
             }
         });
 
+        // Add the move button iff it's a computer opponent playing that side.
         if (!greenPlayerName.equals(NAME_OF_HUMAN)) {
             controls.getChildren().add(greenMoveButton);
         }
@@ -520,6 +547,7 @@ public class Board extends Application {
             controls.getChildren().add(redMoveButton);
         }
 
+        // Enable the button iff it's their move.
         if (!game.isRedMove()) {
             redMoveButton.setDisable(true);
         }
@@ -528,6 +556,7 @@ public class Board extends Application {
         }
     }
 
+    // make green computer player make a move
     private void makeGreenMove() {
         String placement = game.getPlacement();
         String redPiece = game.getRedPiece();
@@ -556,10 +585,14 @@ public class Board extends Application {
                 break;
         }
     }
+    // make red computer player make a move
     private void makeRedMove() {
         String placement = game.getPlacement();
         String redPiece = game.getRedPiece();
-        String greenPiece = game.getGreenPiece();
+        String greenPiece = null;
+        if (game.greenHasMovablePiece()) {
+            greenPiece = game.getGreenPiece(); // This is to deal with turn 40, where green doesn't have a move anymore.
+        }
         Move m;
         String moveString;
 
@@ -584,6 +617,7 @@ public class Board extends Application {
         }
     }
 
+    // generates the save-string for the game, then copies it to the system clipboard.
     private void saveGame() {
         String saveString = game.base64EncryptedGameState();
 
@@ -598,6 +632,8 @@ public class Board extends Application {
         saveText.setFill(Color.BLACK);
         infoTexts.getChildren().add(saveText);
     }
+    // reads the save-string for the game from the text-box, then checks if it's a legal save-string.
+    // if it is, loads the game.
     private void loadGame(String saveString) {
 
         if (!Game.legalBase64EncryptedGameState(saveString)) {
@@ -615,7 +651,11 @@ public class Board extends Application {
         }
     }
 
+    // makes the "New Game" splash screen, with drop-down menus and buttons.
     private void setNewGameSplashScreen() {
+        newGameScreen.getChildren().clear();
+
+        // covering up the whole window
         Rectangle splashScreen = new Rectangle();
         splashScreen.setX(0);
         splashScreen.setY(0);
@@ -658,6 +698,7 @@ public class Board extends Application {
         startNewGameButton.setPrefWidth(LEFT_MARGIN * SQUARE_SIZE);
         startNewGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
+                // allow the game to start iff both drop-down menus have selections
                 if ((redComboBox.getValue() != null)&&(greenComboBox.getValue() != null)) {
                     redPlayerName = redComboBox.getValue();
                     greenPlayerName = greenComboBox.getValue();
@@ -667,6 +708,7 @@ public class Board extends Application {
         });
         newGameScreen.getChildren().add(startNewGameButton);
 
+        // cancels the "New Game" process and returns to the board.
         Button cancelNewGameButton = new Button("Cancel");
         cancelNewGameButton.setLayoutX((LEFT_MARGIN + 15) * SQUARE_SIZE);
         cancelNewGameButton.setLayoutY((UP_MARGIN + 26 - 6) * SQUARE_SIZE);
@@ -679,6 +721,7 @@ public class Board extends Application {
         newGameScreen.getChildren().add(cancelNewGameButton);
     }
 
+    // creates a new game
     private void newGame() {
         newGameScreen.getChildren().clear();
         game = new Game();

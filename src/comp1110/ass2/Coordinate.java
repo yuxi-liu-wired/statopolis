@@ -5,7 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A (int, int) tuple.
+ * A class for (int, int) tuples, representing the positions on the game board.
+ * It also contains some static methods for calculating the neighboring blocks of a given set of blocks.
+ *
  * Created by Yuxi Liu (u5950011) on 8/10/16.
  */
 public class Coordinate {
@@ -20,7 +22,7 @@ public class Coordinate {
     /**
      * The union of the orthogonalNeighborhood of each coordinate, minus the coordinates themselves.
      * @param coordinates The list of coordinates whose neighbors need to be computed.
-     * @return The list of coordinates of the neighbors.
+     * @return The list of coordinates of the neighbors, but without the coordinates themselves.
      */
     public static Coordinate[] neighborBlocks(Coordinate[] coordinates) {
         Set<Coordinate> neighbors = new HashSet<Coordinate>();
@@ -34,7 +36,7 @@ public class Coordinate {
     /**
      * The union of the orthogonalNeighborhood of each coordinate, and the coordinates themselves.
      * @param coordinates The list of coordinates whose neighbors need to be computed.
-     * @return The list of coordinates of the neighbors.
+     * @return The list of coordinates of the neighbors plus the coordinates themselves..
      */
     public static Coordinate[] neighborBlocksAndThemselves(Coordinate[] coordinates) {
         Set<Coordinate> neighbors = new HashSet<Coordinate>();
@@ -45,9 +47,9 @@ public class Coordinate {
         return neighbors.toArray(new Coordinate[neighbors.size()]);
     }
 
-    /* the 4 neighbors of a given coordinate, like this:
+    /* the 4 neighbors (aka Von Neumann neighborhood) of a given coordinate, like this:
      *  O
-     * O.O
+     * OXO
      *  O
      */
     private static Set<Coordinate> orthogonalNeighborhood(Coordinate coordinate) {
@@ -67,7 +69,9 @@ public class Coordinate {
         return "(" + x + "," + y + ")";
     }
 
-    // Alt+Insert -> Generate -> equals() and hashCode()
+    /** Overriding the hashCode() and equas() function is necessary for making Set<Coordinate> collections behave
+    /*  correctly, that is, without duplicates.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,7 +83,7 @@ public class Coordinate {
         return y == that.y;
     }
 
-    // Guaranteed to be injective in the 26x26 field.
+
     @Override
     public int hashCode() {
         return x + 31 * y;

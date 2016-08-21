@@ -122,46 +122,23 @@ public class Piece {
     public Coordinate getOrigin() { return origin; }
     public String getName() { return name; }
 
-
-
     public void translateTo (Coordinate origin) {
         this.origin = new Coordinate(origin.x, origin.y);
     }
-    public void translateTo (int x, int y) {
-        origin = new Coordinate(x,y);
-    }
 
     public void rotate90CW () {
-        Coordinate oldCoordinate;
-        int x;
-        int y;
         for (int i = 0; i < size; i++) {
-            oldCoordinate = coordinates[i];
-            x = oldCoordinate.x;
-            y = oldCoordinate.y;
-            coordinates[i] = new Coordinate(-y, x);
+            coordinates[i] = new Coordinate(-coordinates[i].y, coordinates[i].x);
         }
     }
     public void rotate180CW () {
-        Coordinate oldCoordinate;
-        int x;
-        int y;
         for (int i = 0; i < size; i++) {
-            oldCoordinate = coordinates[i];
-            x = oldCoordinate.x;
-            y = oldCoordinate.y;
-            coordinates[i] = new Coordinate(-x, -y);
+            coordinates[i] = new Coordinate(-coordinates[i].x, -coordinates[i].y);
         }
     }
     public void rotate270CW () {
-        Coordinate oldCoordinate;
-        int x;
-        int y;
         for (int i = 0; i < size; i++) {
-            oldCoordinate = coordinates[i];
-            x = oldCoordinate.x;
-            y = oldCoordinate.y;
-            coordinates[i] = new Coordinate(y, -x);
+            coordinates[i] = new Coordinate(coordinates[i].y, -coordinates[i].x);
         }
     }
 
@@ -180,6 +157,11 @@ public class Piece {
         return null;
     }
 
+    /**
+     * This method translates each block of this piece by the amount specified by its origin position, thus calculating
+     * where each block of this piece is at.
+     * @return The list of coordinates of each the positions of each block in this piece.
+     */
     public Coordinate[] blocks() {
         Coordinate[] movedCoords = new Coordinate[coordinates.length];
         Coordinate c;
@@ -189,7 +171,11 @@ public class Piece {
         }
         return movedCoords;
     }
-    // The union of the orthogonalNeighborhood of each of coordinates, subtract the coordinates themselves.
+
+    /**
+     * The union of the orthogonalNeighborhood of each of coordinates, subtract the coordinates themselves.
+     * @return All blocks neighboring this piece's blocks.
+     */
     public Coordinate[] neighborBlocks() {
         return Coordinate.neighborBlocks(this.blocks());
     }
