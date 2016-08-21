@@ -27,12 +27,10 @@ import java.util.Comparator;
 public class Board extends Application {
 
     /* board layout */
-    // private static final int BOARD_WIDTH = 933;
-    // private static final int BOARD_HEIGHT = 700;
-    private static final int UP_MARGIN = 7;
-    private static final int LEFT_MARGIN = 5;
-    private static final int RIGHT_MARGIN = 5;
-    private static final int DOWN_MARGIN = 7;
+    private static final int UP_MARGIN = 5;
+    private static final int LEFT_MARGIN = 7;
+    private static final int RIGHT_MARGIN = 7;
+    private static final int DOWN_MARGIN = 5;
     private static final int ROWS = UP_MARGIN + 26 + DOWN_MARGIN;
     private static final int COLS = LEFT_MARGIN + 26 + RIGHT_MARGIN;
     private static final int SQUARE_SIZE = 20;
