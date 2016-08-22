@@ -1,7 +1,5 @@
 package comp1110.ass2;
 
-import javafx.application.Platform;
-
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -47,15 +45,15 @@ public class Game {
     public int getTurnNumber() { return turnNumber; }
     private String getRedStack() {
         String str = "";
-        for (int i = 0; i < redStack.size(); i++) {
-            str = str + redStack.get(i);
+        for (String aRedStack : redStack) {
+            str += aRedStack;
         }
         return str;
     }
     private String getGreenStack() {
         String str = "";
-        for (int i = 0; i < greenStack.size(); i++) {
-            str = str + greenStack.get(i);
+        for (String aGreenStack : greenStack) {
+            str += aGreenStack;
         }
         return str;
     }
@@ -97,7 +95,7 @@ public class Game {
             return;
         }
 
-        // All tests passsed. Register the move.
+        // All tests passed. Register the move.
         placement += newMove;
 
         if (isRedMove()) {
@@ -220,10 +218,10 @@ public class Game {
     public String reportError(Move badMove) {
         String pieceColor = ("ABCDEFGHIJ".contains(badMove.pieceName) ? "RED" : "GREEN");
 
-        if (pieceColor == "RED" && turnNumber % 2 == 1) {
+        if (pieceColor.equals("RED") && turnNumber % 2 == 1) {
             return "It's green's move this turn!";
         }
-        if (pieceColor == "GREEN" && turnNumber % 2 == 0) {
+        if (pieceColor.equals("GREEN") && turnNumber % 2 == 0) {
             return "It's red's move this turn!";
         }
 

@@ -11,8 +11,8 @@ import java.util.Set;
  * Created by Yuxi Liu (u5950011) on 8/10/16.
  */
 public class Coordinate {
-    public int x;
-    public int y;
+    public final int x;
+    public final int y;
 
     public Coordinate(int x, int y){
         this.x = x;
@@ -69,7 +69,7 @@ public class Coordinate {
         return "(" + x + "," + y + ")";
     }
 
-    /** Overriding the hashCode() and equas() function is necessary for making Set<Coordinate> collections behave
+    /** Overriding the hashCode() and equals() function is necessary for making Set<Coordinate> collections behave
     /*  correctly, that is, without duplicates.
      */
     @Override

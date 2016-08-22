@@ -17,7 +17,7 @@ public abstract class Player {
      * @param placement The placement of game that the player faces now.
      * @param myPiece The piece that the player can play.
      * @param opponentsPiece The piece that the opponent can play next turn.
-     * @return
+     * @return The move chosen by the player based on the placement, the player's piece, and opponent's piece.
      */
     abstract public Move move(String placement, String myPiece, String opponentsPiece);
 

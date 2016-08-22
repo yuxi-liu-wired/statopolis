@@ -97,7 +97,7 @@ public class GameField {
             }
         return copy;
     }
-    public int[][] getPieceField() { // This methoed is not used, but it's kept for completeness' sake.
+    public int[][] getPieceField() { // This method is not used, but it's kept for completeness' sake.
         int[][] copy = new int[FIELD_SIZE][FIELD_SIZE];
         for (int i = 0; i < FIELD_SIZE; i++)
             for (int j = 0; j < FIELD_SIZE; j++)
@@ -119,12 +119,12 @@ public class GameField {
      * @return The list of coordinates that are covered.
      */
     public Coordinate[] getCoveredBlocks () {
-        ArrayList coveredBlocks = new ArrayList();
+        ArrayList<Coordinate> coveredBlocks = new ArrayList<Coordinate>();
         for (int i = 0; i < FIELD_SIZE; i++)
             for (int j = 0; j < FIELD_SIZE; j++)
                 if (heightField[i][j] != 0)
                     coveredBlocks.add(new Coordinate(i,j));
-        return (Coordinate[]) coveredBlocks.toArray(new Coordinate[coveredBlocks.size()]);
+        return coveredBlocks.toArray(new Coordinate[coveredBlocks.size()]);
     }
 
     /**
@@ -151,7 +151,6 @@ public class GameField {
     public boolean canAddPiece (Piece piece) {
         Coordinate[] blocksOfPiece = piece.blocks();
         Coordinate c;
-        Piece p;
         for (int i = 0; i < blocksOfPiece.length; i++) {
             c = blocksOfPiece[i];
             if (!coordinateWithinRange(c)) { // test if it's out of bounds.
@@ -394,7 +393,7 @@ public class GameField {
      * labelling of it.
      * It uses the algorithm presented in http://aishack.in/tutorials/connected-component-labelling/
      * combined with the the union-find algorithm in https://www.cs.princeton.edu/~rs/AlgsDS07/01UnionFind.pdf
-     * @returna A connected components labelling of colorField, with all black blocks considered as "background"
+     * @return A connected components labelling of colorField, with all black blocks considered as "background"
      * and given the default label -1.
      */
     public int[][] connectedComponents() {
@@ -431,7 +430,7 @@ public class GameField {
                 if (color != color2) { // this block belongs to a new semi-cluster.
                     ccLabelMatrix[0][j] = id;
                     id++;
-                } else if (color == color2) { // this block belongs to the same cluster as above
+                } else { // this block belongs to the same cluster as above
                     ccLabelMatrix[0][j] = cluster2;
                 }
             }
@@ -447,7 +446,7 @@ public class GameField {
                 if (color != color1) { // this block belongs to a new semi-cluster.
                     ccLabelMatrix[i][0] = id;
                     id++;
-                } else if (color == color1) { // this block belongs to the same cluster as left
+                } else { // this block belongs to the same cluster as left
                     ccLabelMatrix[i][0] = cluster1;
                 }
             }
@@ -529,7 +528,6 @@ public class GameField {
 
         Coordinate[] blocksOfPiece = piece.blocks();
         Coordinate c;
-        Piece p;
         for (int i = 0; i < blocksOfPiece.length; i++) {
             c = blocksOfPiece[i];
             if (!coordinateWithinRange(c)) { // test if it's out of bounds.

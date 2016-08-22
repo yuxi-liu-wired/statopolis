@@ -11,9 +11,6 @@ public enum Color {
     BLACK;
 
     public boolean isCompatibleWith (Color c) {
-        if (this.equals(Color.BLACK) || c.equals(Color.BLACK) || this.equals(c)) {
-            return true;
-        }
-        return false;
+        return this.equals(Color.BLACK) || c.equals(Color.BLACK) || this.equals(c);
     }
 }

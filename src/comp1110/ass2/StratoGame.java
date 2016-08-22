@@ -166,8 +166,7 @@ public class StratoGame {
         int y = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(tile.charAt(1));
         String tileName = tile.substring(2,3);
         String orientation = tile.substring(3,4);
-        Move move = new Move(new Coordinate(x,y),tileName,orientation);
-        return move;
+        return new Move(new Coordinate(x,y),tileName,orientation);
     }
     private static String moveToString(Move move) { return coordinateToAlphabet(move.origin) + move.pieceName + move.orientation; }
     private static Piece stringToPiece(String tile) {

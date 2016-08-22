@@ -28,11 +28,10 @@ public class PlacementValidTest {
     public void testGood() {
         Random r = new Random();
 
-        for (int i = 0; i < PLACEMENTS.length; i++) {
-            String p = PLACEMENTS[i];
+        for (String p : PLACEMENTS) {
             for (int j = 0; j < BASE_ITERATIONS / 4; j++) {
-                int end = 1 + r.nextInt((p.length()/4) - 1);
-                String test = p.substring(0, 4*end);
+                int end = 1 + r.nextInt((p.length() / 4) - 1);
+                String test = p.substring(0, 4 * end);
                 assertTrue("Placement '" + test + "' is valid, but failed ", StratoGame.isPlacementValid(test));
             }
         }
@@ -40,8 +39,7 @@ public class PlacementValidTest {
 
     @Test
     public void testBad() {
-        for (int i = 0; i < INVALID_PLACEMENTS.length; i++) {
-            String p = INVALID_PLACEMENTS[i];
+        for (String p : INVALID_PLACEMENTS) {
             assertFalse("Placement '" + p + "' is invalid, but passed ", StratoGame.isPlacementValid(p));
         }
     }

@@ -69,7 +69,7 @@ public class Board extends Application {
     private final Group background = new Group();
     private final Group newGameScreen = new Group();
     private final Group creditScreen = new Group();
-    TextField saveTextField;
+    private TextField saveTextField;
 
     /* the Stratopolis game */
     private Game game = new Game();
@@ -212,8 +212,7 @@ public class Board extends Application {
         private Coordinate getCoordinate() {
             int closestGridX = Math.round((float) (getLayoutX() / SQUARE_SIZE));
             int closestGridY = Math.round((float) (getLayoutY() / SQUARE_SIZE));
-            Coordinate c = new Coordinate(closestGridX - LEFT_MARGIN, closestGridY - UP_MARGIN);
-            return c;
+            return new Coordinate(closestGridX - LEFT_MARGIN, closestGridY - UP_MARGIN);
         }
 
         private String toTileString() {
@@ -233,7 +232,7 @@ public class Board extends Application {
         /**
          * Draws a particular square at a given position
          * @param color A character representing the color of square to be created.
-         * @param c A Coordinate represeting the place of the square on the game board.
+         * @param c A Coordinate representing the place of the square on the game board.
          */
         Square(comp1110.ass2.Color color, Coordinate c) {
             String id;
@@ -260,7 +259,7 @@ public class Board extends Application {
 
     // This method takes a move and makes the move on the board, then updates the whole gui.
     private void makeAMoveOnTheBoard(String moveString) {
-        Coordinate c = new Coordinate("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(0)),"ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(1)));;
+        Coordinate c = new Coordinate("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(0)),"ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(1)));
         Move m = new Move(c, moveString.substring(2,3), moveString.substring(3,4));
         game.makeMove(m);
         redrawDraggablePieces();
