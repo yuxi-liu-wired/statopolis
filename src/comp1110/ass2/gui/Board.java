@@ -21,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.w3c.dom.css.Rect;
 
 /**
  * This is the gui for the Stratopolis game.
@@ -69,6 +70,7 @@ public class Board extends Application {
     private final Group background = new Group();
     private final Group newGameScreen = new Group();
     private final Group creditScreen = new Group();
+    private final Group highlightedMove = new Group();
     private TextField saveTextField;
 
     /* the Stratopolis game */
@@ -154,7 +156,7 @@ public class Board extends Application {
                         String orientation = tileString.substring(3,4);
                         Move badMove = new Move(new Coordinate(x,y),tileName,orientation);
 
-                        Text errorMessage = new Text(LEFT_MARGIN * SQUARE_SIZE, 5 * SQUARE_SIZE, "Error: " + game.reportError(badMove));
+                        Text errorMessage = new Text(LEFT_MARGIN * SQUARE_SIZE, 4 * SQUARE_SIZE, "Error: " + game.reportError(badMove));
                         errorMessage.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
                         errorMessage.setFill(Color.BLACK);
                         redrawInfoTexts();
@@ -266,6 +268,24 @@ public class Board extends Application {
         redrawInfoTexts();
         redrawBoardDisplay();
         makeControls();
+        highlightThisMove(m);
+    }
+
+    // This method highlight the move. Makes it easier to see.
+    private void highlightThisMove(Move m) {
+        highlightedMove.getChildren().clear();
+
+        Coordinate[] coords = m.toPiece().blocks();
+        Rectangle hlSquare;
+        for (Coordinate c : coords) {
+            hlSquare = new Rectangle();
+            hlSquare.setFill(Color.web("#ffffff",0.5));
+            hlSquare.setHeight(SQUARE_SIZE);
+            hlSquare.setWidth(SQUARE_SIZE);
+            hlSquare.setLayoutX((LEFT_MARGIN + c.x) * SQUARE_SIZE);
+            hlSquare.setLayoutY((UP_MARGIN + c.y) * SQUARE_SIZE);
+            highlightedMove.getChildren().add(hlSquare);
+        }
     }
 
     // Redraws the next pieces used in the board on both sides of the window.
@@ -576,7 +596,7 @@ public class Board extends Application {
                 break;
 
             default:
-                Text errorMessage = new Text(LEFT_MARGIN * SQUARE_SIZE, 5 * SQUARE_SIZE, "Error: green is not an AI!");
+                Text errorMessage = new Text(LEFT_MARGIN * SQUARE_SIZE, 4 * SQUARE_SIZE, "Error: green is not an AI!");
                 errorMessage.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
                 errorMessage.setFill(Color.BLACK);
                 redrawInfoTexts();
@@ -607,7 +627,7 @@ public class Board extends Application {
                 makeAMoveOnTheBoard(moveString);
                 break;
             default:
-                Text errorMessage = new Text(LEFT_MARGIN * SQUARE_SIZE, 5 * SQUARE_SIZE, "Error: green is not an AI!");
+                Text errorMessage = new Text(LEFT_MARGIN * SQUARE_SIZE, 4 * SQUARE_SIZE, "Error: green is not an AI!");
                 errorMessage.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
                 errorMessage.setFill(Color.BLACK);
                 redrawInfoTexts();
@@ -723,6 +743,7 @@ public class Board extends Application {
     // creates a new game
     private void newGame() {
         newGameScreen.getChildren().clear();
+        highlightedMove.getChildren().clear();
         game = new Game();
 
         makeControls();
@@ -742,11 +763,13 @@ public class Board extends Application {
         root.getChildren().add(background);
         root.getChildren().add(newGameScreen);
         root.getChildren().add(creditScreen);
+        root.getChildren().add(highlightedMove);
 
         draggablePieces.toFront();
         background.toBack();
         makeControls();
         makeBackground();
+        newGame();
 
         setNewGameSplashScreen();
 
