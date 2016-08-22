@@ -46,6 +46,11 @@ public class Viewer extends Application {
      * @param placement  A valid placement string
      */
     void makePlacement(String placement) {
+        if (!StratoGame.isPlacementValid(placement)) {
+            System.out.println("Attempting to place invalid placement: " + placement);
+            return;
+        }
+
         boardDisplay.getChildren().clear();
 
         int blockSize = 20;
