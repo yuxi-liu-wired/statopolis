@@ -98,7 +98,7 @@ public class StratoGame {
      * @param placement A placement string
      * @return True if the placement is valid
      */
-    static boolean isPlacementValid(String placement) {
+    public static boolean isPlacementValid(String placement) {
         if (!isPlacementWellFormed(placement)) { return false; }
 
         GameField gameField = new GameField();
