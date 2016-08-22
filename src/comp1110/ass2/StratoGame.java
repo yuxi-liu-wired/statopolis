@@ -42,6 +42,10 @@ public class StratoGame {
      * @return True if the placement is well-formed
      */
     static boolean isPlacementWellFormed(String placement) {
+        if (placement == null) { // deal with null input
+            return false;
+        }
+
         int l = placement.length();
         if (l % 4 != 0 || l < 4 * 1 || l > 4 * 41) {
             System.out.println("The string length is not a multiple of 4!");
