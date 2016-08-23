@@ -41,6 +41,22 @@ public class Game {
     public boolean redHasMovablePiece() { return turnNumber < 41; } // red runs out of pieces on turn 41.
     public boolean greenHasMovablePiece() { return turnNumber < 40; } // green runs out of pieces on turn 40.
 
+    // Take back a move.
+    public void takeBackAMove() {
+        if (turnNumber == 1) {
+            System.out.println("It's turn 1, no moves have been made yet, cannot take back a move!");
+            return;
+        }
+        String previousTile = placement.substring(placement.length() - 2, placement.length() - 1);
+        turnNumber--;
+        placement = placement.substring(0,placement.length() - 4);
+        if (isRedMove()){
+            redStack.add(0, previousTile);
+        } else {
+            greenStack.add(0, previousTile);
+        }
+    }
+
     public String getPlacement() { return placement; }
     public int getTurnNumber() { return turnNumber; }
     private String getRedStack() {
