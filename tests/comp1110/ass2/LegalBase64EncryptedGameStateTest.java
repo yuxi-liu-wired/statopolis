@@ -15,8 +15,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class LegalBase64EncryptedGameStateTest {
 
-    private Object ArrayList;
-
     @Test
     public void testEmpty() {
         assertFalse("Null placement string is not OK, but passed", Game.legalBase64EncryptedGameState(null));
