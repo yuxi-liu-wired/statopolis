@@ -21,7 +21,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.w3c.dom.css.Rect;
 
 /**
  * This is the gui for the Stratopolis game.

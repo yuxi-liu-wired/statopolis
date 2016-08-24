@@ -221,6 +221,9 @@ public class Game {
         } catch (IllegalArgumentException e) {
             System.err.println("Error: Bad bytestring: " + encrypted);
             return false;
+        } catch (NullPointerException e) {
+            System.err.println("Error: Null bytestring.");
+            return false;
         }
     }
 
