@@ -43,6 +43,7 @@ public class Coordinate {
         for (Coordinate block : coordinates) {
             neighbors.addAll(orthogonalNeighborhood(block));
         }
+        neighbors.addAll(new HashSet<Coordinate>(Arrays.asList(coordinates)));
 
         return neighbors.toArray(new Coordinate[neighbors.size()]);
     }

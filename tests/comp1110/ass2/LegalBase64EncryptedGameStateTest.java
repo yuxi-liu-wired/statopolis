@@ -38,6 +38,14 @@ public class LegalBase64EncryptedGameStateTest {
     }
 
     @Test
+    public void testFullLengthPlacement() {
+        String p = "MMUANNSALLHANLRAKNHAPLLAMLAAPLTBKKJAJMSCQNGBKLLDMLFBIKPALNBCINQAJPDCHJOANKICMITAGMIAKIKAOJDARMQBFLCAOONAPOFDJHMAQJAALORADLGAENPANJCBIMKCCKEAMQOCEJEBLHNDGKJCGJMAFIBA";
+        String testStr = placementToGameString(p);
+        assertTrue(testStr + " encoded should be accepted, but is not.", Game.legalBase64EncryptedGameState(placementToByteString(p)));
+
+    }
+
+    @Test
     public void testTooFewPiecesInStack() {
         for (String p: PLACEMENTS) {
             String testStr = placementToGameString(p);

@@ -213,7 +213,8 @@ public class Game {
     public static boolean legalBase64EncryptedGameState(String encrypted) {
         try {
             String str = new String(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8))); // This line adapted from http://stackoverflow.com/a/26897706
-            String[] parts = str.split(","); // It should be {placement, redStack, greenStack}
+            String[] parts = str.split(",",-1); // by default, split removes all trailing "". Use -1 to force it to preserve them.
+            System.out.println(parts.length);
             if (parts.length != 3) {
                 return false;
             }

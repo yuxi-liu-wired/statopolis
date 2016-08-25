@@ -18,6 +18,8 @@ public class Move {
         this.orientation = orientation;
     }
 
+
+
     /**
      * Returns a Piece object that this Move corresponds to.
      * @return the Piece object that this Move corresponds to.

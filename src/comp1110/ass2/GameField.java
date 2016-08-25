@@ -382,10 +382,6 @@ public class GameField {
                 return Integer.compare(that.height, this.height);
             }
         }
-        @Override
-        public String toString(){
-            return ("(size = "+size+", height = "+height+")");
-        }
     }
 
     /**
@@ -590,7 +586,6 @@ public class GameField {
         }
     }
 
-    // Prints the ga
     @Override
     public String toString() {
         String str = "";
