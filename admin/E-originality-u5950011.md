@@ -1,4 +1,5 @@
-I declare that the work I have submitted for Stage D of this assignment and all stages before it is entirely my own work, with the following documented exceptions:
+I declare that the work I have submitted for Stage E of this assignment and all stages before it is entirely my own work, with the
+following documented exceptions:
 
 * The idea of using Union-Find algorithm to do the connected component labelling faster, used in class GameField, came from http://aishack.in/tutorials/connected-component-labelling/
   
