@@ -129,7 +129,14 @@ public class Board extends Application {
 
             /* event handlers */
             setOnScroll(event -> {            // scroll to change orientation
-                rotate();
+                double deltaY = event.getDeltaY();
+                if (deltaY < 0) {
+                    rotate();
+                    rotate();
+                    rotate();
+                } else {
+                    rotate();
+                }
                 event.consume();
             });
             setOnMousePressed(event -> {      // mouse press indicates begin of drag
