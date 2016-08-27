@@ -10,7 +10,7 @@ of our project implements the following features:
  - Advanced computer opponent that plays the best move after a 1-ply minimax search
  - Credits and help screen providing the player additional information inside the game
  - Highlighting the previous placed piece
- - "Regret" button allowing the player to taking back previous moves
- - Every time the player plays a wrong move, an error message shows telling the player why the move is wrong
+ - Every time the player plays a wrong move, an error message is printed in the gui telling the player why the move is wrong
  - Save and load games (with the save-string encrypted in Base64 to discourage cheating)
- - 3D-looking tiles
+ - Going forwards and backwards in game history
+ - 3D effects for all tiles! (drawn by Yuxi Liu in GIMP 2.8)
