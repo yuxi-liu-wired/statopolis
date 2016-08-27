@@ -45,6 +45,7 @@ public class Game {
     public boolean isGreenMove() { return (!this.isGameOver())&&(getTurnNumber() % 2 == 1); } // Green moves on turn 1, 3...
     public boolean redHasMovablePiece() { return getTurnNumber() < 41; } // red runs out of pieces on turn 41.
     public boolean greenHasMovablePiece() { return getTurnNumber() < 40; } // green runs out of pieces on turn 40.
+    public boolean canTakeBackAMove() { return getTurnNumber() > 1; }
 
     // Take back a move.
     public void takeBackAMove() {
@@ -130,6 +131,14 @@ public class Game {
         cloned.makeMove(m);
         return cloned;
     }
+    // Registers a move if and only if it is a legal move, and uses the correct piece on the stack. Returns a copy
+    public Game returnPreviousGame () {
+        Game cloned = this.clone();
+        if (cloned.canTakeBackAMove()) {
+            cloned.takeBackAMove();
+        }
+        return cloned;
+    }
 
     private static String coordinateToAlphabet(Coordinate c) {
         return ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(c.x,c.x+1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(c.y));
@@ -212,7 +221,7 @@ public class Game {
     public void loadBase64EncryptedGameState(String encrypted) {
         try {
             String str = new String(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8))); // This line adapted from http://stackoverflow.com/a/26897706
-            String[] parts = str.split(","); // It should be {placement, redStack, greenStack}
+            String[] parts = str.split(",",-1); // It should be {placement, redStack, greenStack}
             loadGame(parts[0], parts[1], parts[2]);
         } catch (IllegalArgumentException e) {
             System.err.println("Error: Bad bytestring: " + encrypted);
@@ -222,7 +231,6 @@ public class Game {
         try {
             String str = new String(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8))); // This line adapted from http://stackoverflow.com/a/26897706
             String[] parts = str.split(",",-1); // by default, split removes all trailing "". Use -1 to force it to preserve them.
-            System.out.println(parts.length);
             if (parts.length != 3) {
                 return false;
             }
