@@ -911,7 +911,7 @@ public class Board extends Application {
         newGameScreen.getChildren().add(greenComboBox);
 
         Button startNewGameButton = new Button("Start Game");
-        startNewGameButton.setLayoutX((LEFT_MARGIN + 4) * SQUARE_SIZE);
+        startNewGameButton.setLayoutX((LEFT_MARGIN + 2) * SQUARE_SIZE);
         startNewGameButton.setLayoutY((UP_MARGIN + 26 - 6) * SQUARE_SIZE);
         startNewGameButton.setPrefWidth(LEFT_MARGIN * SQUARE_SIZE);
         startNewGameButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -928,7 +928,7 @@ public class Board extends Application {
 
         // cancels the "New Game" process and returns to the board.
         Button cancelNewGameButton = new Button("Cancel");
-        cancelNewGameButton.setLayoutX((LEFT_MARGIN + 15) * SQUARE_SIZE);
+        cancelNewGameButton.setLayoutX((LEFT_MARGIN + 14) * SQUARE_SIZE);
         cancelNewGameButton.setLayoutY((UP_MARGIN + 26 - 6) * SQUARE_SIZE);
         cancelNewGameButton.setPrefWidth(LEFT_MARGIN * SQUARE_SIZE);
         cancelNewGameButton.setOnAction(new EventHandler<ActionEvent>() {
