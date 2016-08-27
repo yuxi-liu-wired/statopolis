@@ -37,7 +37,7 @@ public class Viewer extends Application {
     private final Group root = new Group();
     private final Group controls = new Group();
     private final Group boardDisplay = new Group();
-    TextField textField;
+    private TextField textField;
 
 
     /**
