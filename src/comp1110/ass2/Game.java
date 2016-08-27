@@ -11,14 +11,12 @@ import java.util.*;
  */
 public class Game {
     private String placement;
-    private int turnNumber;
     private List<String> redStack;
     private List<String> greenStack;
 
     // Creates a new Game. Initializes to MMUA, randomizes the red and green stacks.
     public Game() {
         placement = "MMUA";
-        turnNumber = 1;
 
         redStack = new ArrayList<String>();
         String redString = "ABCDEFGHIJABCDEFGHIJ";
@@ -35,20 +33,26 @@ public class Game {
         Collections.shuffle(greenStack);
     }
 
-    public boolean isGameOver() { return turnNumber >= 41; } // Game ends on turn 41.
-    public boolean isRedMove() { return (!this.isGameOver())&&(turnNumber % 2 == 0); } // Red moves on turn 2, 4...
-    public boolean isGreenMove() { return (!this.isGameOver())&&(turnNumber % 2 == 1); } // Green moves on turn 1, 3...
-    public boolean redHasMovablePiece() { return turnNumber < 41; } // red runs out of pieces on turn 41.
-    public boolean greenHasMovablePiece() { return turnNumber < 40; } // green runs out of pieces on turn 40.
+    @Override
+    public Game clone() {
+        Game cloned = new Game();
+        cloned.loadBase64EncryptedGameState(this.base64EncryptedGameState());
+        return cloned;
+    }
+
+    public boolean isGameOver() { return getTurnNumber() >= 41; } // Game ends on turn 41.
+    public boolean isRedMove() { return (!this.isGameOver())&&(getTurnNumber() % 2 == 0); } // Red moves on turn 2, 4...
+    public boolean isGreenMove() { return (!this.isGameOver())&&(getTurnNumber() % 2 == 1); } // Green moves on turn 1, 3...
+    public boolean redHasMovablePiece() { return getTurnNumber() < 41; } // red runs out of pieces on turn 41.
+    public boolean greenHasMovablePiece() { return getTurnNumber() < 40; } // green runs out of pieces on turn 40.
 
     // Take back a move.
     public void takeBackAMove() {
-        if (turnNumber == 1) {
+        if (getTurnNumber() == 1) {
             System.out.println("It's turn 1, no moves have been made yet, cannot take back a move!");
             return;
         }
         String previousTile = placement.substring(placement.length() - 2, placement.length() - 1);
-        turnNumber--;
         placement = placement.substring(0,placement.length() - 4);
         if (isRedMove()){
             redStack.add(0, previousTile);
@@ -58,7 +62,7 @@ public class Game {
     }
 
     public String getPlacement() { return placement; }
-    public int getTurnNumber() { return turnNumber; }
+    public int getTurnNumber() { return placement.length()/4; }
     private String getRedStack() {
         String str = "";
         for (String aRedStack : redStack) {
@@ -93,7 +97,7 @@ public class Game {
     }
 
     // Registers a move if and only if it is a legal move, and uses the correct piece on the stack.
-    public void makeMove (Move m) {
+    void makeMove (Move m) {
         if (isGameOver()) {
             System.out.println("The game is over! No more moves can be made.");
             return;
@@ -112,16 +116,21 @@ public class Game {
         }
 
         // All tests passed. Register the move.
-        placement += newMove;
-
         if (isRedMove()) {
             redStack.remove(0);
         } else {
             greenStack.remove(0);
         }
-
-        turnNumber++;
+        placement += newMove;
     }
+
+    // Registers a move if and only if it is a legal move, and uses the correct piece on the stack. Returns a copy
+    public Game returnNextGame (Move m) {
+        Game cloned = this.clone();
+        cloned.makeMove(m);
+        return cloned;
+    }
+
     private static String coordinateToAlphabet(Coordinate c) {
         return ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(c.x,c.x+1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(c.y));
     }
@@ -140,7 +149,6 @@ public class Game {
         }
 
         this.placement = placement;
-        turnNumber = placement.length()/4;
 
         redStack.clear();
         for (int i = 0; i < redStackString.length(); i++) {
@@ -238,10 +246,10 @@ public class Game {
     public String reportError(Move badMove) {
         String pieceColor = ("ABCDEFGHIJ".contains(badMove.pieceName) ? "RED" : "GREEN");
 
-        if (pieceColor.equals("RED") && turnNumber % 2 == 1) {
+        if (pieceColor.equals("RED") && getTurnNumber() % 2 == 1) {
             return "It's green's move this turn!";
         }
-        if (pieceColor.equals("GREEN") && turnNumber % 2 == 0) {
+        if (pieceColor.equals("GREEN") && getTurnNumber() % 2 == 0) {
             return "It's red's move this turn!";
         }
 

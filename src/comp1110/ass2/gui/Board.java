@@ -22,6 +22,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This is the gui for the Stratopolis game.
  *
@@ -75,6 +78,10 @@ public class Board extends Application {
 
     /* the Stratopolis game */
     private Game game = new Game();
+    private final List<Game> gameHistory = new ArrayList<>();
+    {
+        gameHistory.add(game);
+    }
 
     /**
      * This class represents the draggable piece used by the players to make a move.
@@ -263,7 +270,13 @@ public class Board extends Application {
     private void makeAMoveOnTheBoard(String moveString) {
         Coordinate c = new Coordinate("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(0)),"ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(1)));
         Move m = new Move(c, moveString.substring(2,3), moveString.substring(3,4));
-        game.makeMove(m);
+
+        int turnNumber = game.getTurnNumber();
+        // suppose we are on turn 1, then we clear out all game history afterwards, to make room for a brave new history
+        // thus we must clear out gameHistory from index 1 to end, keeping only index 0.
+        gameHistory.subList(turnNumber, gameHistory.size()).clear();
+        game = game.returnNextGame(m); // now game points at the current game board.
+        gameHistory.add(game); // and history registers the move.
         redrawDraggablePieces();
         redrawInfoTexts();
         redrawBoardDisplay();
@@ -271,13 +284,46 @@ public class Board extends Application {
         highlightThisMove(m);
     }
 
-    private void makeRegret() {
-        game.takeBackAMove();
+    private void goBackwards() {
+        int turnNumber = game.getTurnNumber();
+
+        if (turnNumber == 1) {
+            System.out.println("No regrets, only Stratopolis now.");
+            return;
+        }
+        game = gameHistory.get(turnNumber - 2);
         redrawDraggablePieces();
         redrawInfoTexts();
         redrawBoardDisplay();
         makeControls();
-        highlightedMove.getChildren().clear();
+        if (turnNumber > 2) {
+            String placementString = game.getPlacement();
+            String moveString = placementString.substring(placementString.length()-4, placementString.length());
+            Coordinate c = new Coordinate("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(0)), "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(1)));
+            Move m = new Move(c, moveString.substring(2, 3), moveString.substring(3, 4));
+            highlightThisMove(m);
+        }
+    }
+
+    private void goForwards() {
+        int turnNumber = game.getTurnNumber();
+
+        if (turnNumber == gameHistory.size()) {
+            System.out.println("The future is not now yet.");
+            return;
+        }
+        game = gameHistory.get(turnNumber);
+        redrawDraggablePieces();
+        redrawInfoTexts();
+        redrawBoardDisplay();
+        makeControls();
+
+        String placementString = game.getPlacement();
+        String moveString = placementString.substring(placementString.length()-4, placementString.length());
+        Coordinate c = new Coordinate("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(0)), "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(moveString.charAt(1)));
+        Move m = new Move(c, moveString.substring(2, 3), moveString.substring(3, 4));
+        highlightThisMove(m);
+
     }
 
     // This method highlight the move. Makes it easier to see.
@@ -589,16 +635,34 @@ public class Board extends Application {
         });
         controls.getChildren().add(creditButton);
 
-        Button regretButton = new Button("Regret");
-        regretButton.setLayoutX((LEFT_MARGIN + 26 + 1) * SQUARE_SIZE);
-        regretButton.setLayoutY((UP_MARGIN + 26 - 2) * SQUARE_SIZE);
-        regretButton.setPrefWidth((LEFT_MARGIN - 2) * SQUARE_SIZE);
-        regretButton.setOnAction(new EventHandler<ActionEvent>() {
+        Button forwardsButton = new Button(">");
+        forwardsButton.setLayoutX((LEFT_MARGIN + 26 + 4) * SQUARE_SIZE);
+        forwardsButton.setLayoutY((UP_MARGIN + 26 - 2) * SQUARE_SIZE);
+        forwardsButton.setPrefWidth(2 * SQUARE_SIZE);
+        forwardsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                makeRegret();
+                goForwards();
             }
         });
-        controls.getChildren().add(regretButton);
+        controls.getChildren().add(forwardsButton);
+
+        Button backwardsButton = new Button("<");
+        backwardsButton.setLayoutX((LEFT_MARGIN + 26 + 1) * SQUARE_SIZE);
+        backwardsButton.setLayoutY((UP_MARGIN + 26 - 2) * SQUARE_SIZE);
+        backwardsButton.setPrefWidth(2 * SQUARE_SIZE);
+        backwardsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                goBackwards();
+            }
+        });
+        controls.getChildren().add(backwardsButton);
+
+        if(game.getTurnNumber() == 1) {
+            backwardsButton.setDisable(true);
+        }
+        if(game.getTurnNumber() == gameHistory.size()) {
+            forwardsButton.setDisable(true);
+        }
 
         // these two buttons cause the computer players to make one move.
         // I chose to use buttons to make them move, instead of making them move automatically, because I don't want to
