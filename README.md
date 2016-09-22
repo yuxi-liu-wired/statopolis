@@ -179,9 +179,11 @@ In the illustrations above, the height of the tiles is indicated with a black nu
 
 Each player's score is calculated as follows:
 * The largest region of connected (edge-to-edge) tiles of the player's color is found.
+  (If multiple regions share the same maximial size, then the region among them which
+  has the highest point is chosen.)
   Connections are as seen from above, so when determining the size of the region, it does not matter which level the tiles 
   are on.
-* The highest point in the region is established.
+* The highest point in the maximal region is established.
 * The player's score is the size of the region multiplied by the region's greatest
   height.
   
