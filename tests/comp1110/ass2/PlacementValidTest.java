@@ -30,6 +30,7 @@ public class PlacementValidTest {
 
         for (int i = 0; i < PLACEMENTS.length; i++) {
             String p = PLACEMENTS[i];
+            assertTrue("Placement '" + p + "' is valid, but failed ", StratoGame.isPlacementValid(p));
             for (int j = 0; j < BASE_ITERATIONS / 4; j++) {
                 int end = 1 + r.nextInt((p.length()/4) - 1);
                 String test = p.substring(0, 4*end);
