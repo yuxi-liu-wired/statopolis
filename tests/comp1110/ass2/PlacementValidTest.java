@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 public class PlacementValidTest {
 
     @Rule
-    public Timeout globalTimeout = Timeout.millis(500);
+    public Timeout globalTimeout = Timeout.millis(5000);
 
     @Test
     public void testEmpty() {

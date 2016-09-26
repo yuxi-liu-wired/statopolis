@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class GenerateMoveTest {
 
-    @Test(timeout=1000)
+    @Test(timeout=10000)
     public void testMove() {
 
         /* first ensure that the game correctly identifies broken placements */

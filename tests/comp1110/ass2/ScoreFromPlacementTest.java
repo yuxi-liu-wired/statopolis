@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class ScoreFromPlacementTest {
 
-    @Test(timeout=1000)
+    @Test(timeout=10000)
     public void testScore() {
         int score = -1;
         int ref = -1;

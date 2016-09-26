@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 public class TilePlacementWellFormed {
 
     @Rule
-    public Timeout globalTimeout = Timeout.millis(200);
+    public Timeout globalTimeout = Timeout.millis(2000);
 
     @Test
     public void testSimple() {
