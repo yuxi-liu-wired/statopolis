@@ -1,6 +1,8 @@
 package comp1110.ass2;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 
 import java.util.Random;
 
@@ -17,6 +19,9 @@ import static org.junit.Assert.assertTrue;
  * and each tile placement must follow the game's placement rules.
  */
 public class PlacementValidTest {
+
+    @Rule
+    public Timeout globalTimeout = Timeout.millis(5000);
 
     @Test
     public void testEmpty() {

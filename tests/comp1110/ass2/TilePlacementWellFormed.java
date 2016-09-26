@@ -1,6 +1,8 @@
 package comp1110.ass2;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 
 import java.util.Random;
 
@@ -21,6 +23,9 @@ import static org.junit.Assert.assertTrue;
  * - the fourth character is in the range A .. D
  */
 public class TilePlacementWellFormed {
+
+    @Rule
+    public Timeout globalTimeout = Timeout.millis(2000);
 
     @Test
     public void testSimple() {

@@ -1,6 +1,8 @@
 package comp1110.ass2;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 
 import java.util.Random;
 
@@ -22,6 +24,9 @@ import static org.junit.Assert.assertTrue;
  */
 public class PlacementWellFormedTest {
 
+    @Rule
+    public Timeout globalTimeout = Timeout.millis(2000);
+
     @Test
     public void testEmpty() {
         assertFalse("Null placement string is not OK, but passed", StratoGame.isPlacementWellFormed(null));
@@ -34,7 +39,7 @@ public class PlacementWellFormedTest {
         assertFalse("Placement string '"+incomplete+"'was incomplete, but passed", StratoGame.isPlacementWellFormed(incomplete));
     }
 
-    @Test
+    @Test(timeout=500)
     public void testBadStart() {
         String bad = PLACEMENTS[0].substring(4,PLACEMENTS[0].length());
         assertFalse("Placement string '"+bad+"' started incorrectly, but passed", StratoGame.isPlacementWellFormed(bad));
