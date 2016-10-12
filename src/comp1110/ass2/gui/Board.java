@@ -497,7 +497,7 @@ public class Board extends Application {
         creditRectangle.setStroke(Color.BLACK);
         creditScreen.getChildren().add(creditRectangle);
 
-        Text creditText = new Text("Stratopolis is © Gigamic, 2012.\nThis program created by Yuxi Liu, Xinyi Qian and Woojin Ra in 2016 August, as an assignment project for COMP1140 course in Australian National University.");
+        Text creditText = new Text("Stratopolis is © Gigamic, 2012.\nThis program created by Yuxi Liu in 2016 August, as an assignment project for COMP1140 course in Australian National University.");
         creditText.setLayoutX((LEFT_MARGIN + 2) * SQUARE_SIZE);
         creditText.setLayoutY((UP_MARGIN + 11) * SQUARE_SIZE);
         creditText.setWrappingWidth(22 * SQUARE_SIZE);
