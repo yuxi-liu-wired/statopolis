@@ -198,7 +198,10 @@ public class StratoGame {
      * @return A string indicating a valid tile placement that represents your move.
      */
     static String generateMove(String placement, char piece, char opponentsPiece) {
-        return generatePossibleMoves(placement, Character.toString(piece))[0];
+        OneLookaheadPlayer p = new OneLookaheadPlayer();
+        Move m = p.move(placement, piece+"", opponentsPiece+"");
+        String moveString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.x, m.origin.x + 1) + "ABCDEFGHIJKLMNOPQRSTUVWXYZ".substring(m.origin.y, m.origin.y + 1)  + m.pieceName + m.orientation;
+        return moveString;
     }
 
     /**

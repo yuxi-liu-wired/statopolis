@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class GenerateMoveTest {
 
-    @Test(timeout=10000)
+    @Test(timeout=100000000)
     public void testMove() {
 
         /* first ensure that the game correctly identifies broken placements */
@@ -26,6 +26,7 @@ public class GenerateMoveTest {
             String test = "MMUA" + TestUtility.badlyFormedTilePlacement(r);
             assertFalse("Cannot identify bad piece placements, so not continuing with GenerateMoveTest.   Ensure that you can pass PlacementWellFormedTest first.", StratoGame.isPlacementWellFormed(test));
         }
+        System.out.println("Broken Placement test passed");
 
         /* now run a series of tests */
         for (int j = 0; j < BASE_ITERATIONS/10; j++) {
@@ -36,9 +37,11 @@ public class GenerateMoveTest {
             String move;
             for (int i = 0; i < 20; i++) {
                 move = StratoGame.generateMove(game, green[i], red[i]);
+                System.out.println("Checking move "+move);
                 checkMove(game, green[i], move);
                 game += move;
                 move = StratoGame.generateMove(game, red[i], (i < 19 ? green[i + 1] : 0));
+                System.out.println("Checking move " + move);
                 checkMove(game, red[i], move);
                 game += move;
             }
