@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import com.sun.glass.ui.Size;
+
 import java.util.*;
 
 /**
@@ -296,6 +298,59 @@ public class GameField {
         return possibleMoves.toArray(new Move[possibleMoves.size()]);
     }
 
+
+    public List<SizeHeight> sizeHeightScore(Color color){
+        if (color == Color.BLACK) {
+            return null;
+        }
+
+        int[][] ccLabelMatrix = connectedComponents();
+
+        Map<Integer, SizeHeight> redMap = new HashMap<Integer, SizeHeight>();
+        Map<Integer, SizeHeight> greenMap = new HashMap<Integer, SizeHeight>();
+        // Integer is the name of the cluster, and SizeHeight is the size and height of the cluster.
+
+        int cluster; // The cluster that the block belongs to.
+        int height; // The height of the block.
+        SizeHeight sizeHeight;
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            for (int j = 0; j < FIELD_SIZE; j++) {
+                if (colorField[i][j] == Color.GREEN) {
+                    cluster = ccLabelMatrix[i][j];
+                    height = heightField[i][j];
+                    sizeHeight = greenMap.get(cluster);
+                    if (sizeHeight == null) {
+                        greenMap.put(cluster, new SizeHeight(1, height));
+                    } else {
+                        sizeHeight.size++;
+                        sizeHeight.height = Math.max(sizeHeight.height, height);
+                    }
+                } else if (colorField[i][j] == Color.RED) { // the same thing, just with red, not green.
+                    cluster = ccLabelMatrix[i][j];
+                    height = heightField[i][j];
+                    sizeHeight = redMap.get(cluster);
+                    if (sizeHeight == null) {
+                        redMap.put(cluster, new SizeHeight(1, height));
+                    } else {
+                        sizeHeight.size++;
+                        sizeHeight.height = Math.max(sizeHeight.height, height);
+                    }
+                }
+            }
+        }
+
+        int[] scoreValues;
+        if (color == Color.GREEN) {
+            List<SizeHeight> greenClusterList = new ArrayList<SizeHeight>(greenMap.values());
+            Collections.sort(greenClusterList);
+            return greenClusterList;
+        } else if (color == Color.RED) {
+            List<SizeHeight> redClusterList = new ArrayList<SizeHeight>(redMap.values());
+            Collections.sort(redClusterList);
+            return redClusterList;
+        } else { return null; }
+    }
+
     /**
      * Returns the list of score of each connected component, sorted by the AREA (height is IRRELEVANT) of the
      * components, from big to small. If some components have the same area, then sort from high to low.
@@ -367,7 +422,7 @@ public class GameField {
         return scoreValues;
     }
     // only used in scoring(), as a tuple with an ordering
-    private class SizeHeight implements Comparable<SizeHeight> {
+    class SizeHeight implements Comparable<SizeHeight> {
         public int size;
         public int height;
         SizeHeight (int size, int height) {

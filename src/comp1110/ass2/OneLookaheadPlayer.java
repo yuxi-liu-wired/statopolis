@@ -126,7 +126,7 @@ public class OneLookaheadPlayer extends Player {
         return myMoves[bestMove];
     }
 
-    private Color whatsMyColor(String myPiece) {
+    public Color whatsMyColor(String myPiece) {
         if (myPiece == null) {
             return Color.BLACK;
         }
@@ -146,7 +146,7 @@ public class OneLookaheadPlayer extends Player {
      * @param myColor Which color to use. If it's GREEN, then the score would be high if the board favors GREEN.
      * @return An integer score of how good the board is.
      */
-    private int evaluationFunction(GameField field, Color myColor) {
+    public int evaluationFunction(GameField field, Color myColor) {
         int[] greenScores = field.scoring(Color.GREEN);
         int greenScore = 0;
         for (int i : greenScores) {
