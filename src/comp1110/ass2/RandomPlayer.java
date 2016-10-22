@@ -9,15 +9,29 @@ import java.util.Random;
  * Created by Yuxi Liu (u5950011) on 8/12/16.
  */
 public class RandomPlayer extends OneLookaheadPlayer {
+    double coeffOfHeight = 0.5; // Set it higher to value height more.
+    double coeffOfSize = 0.3; // Set it higher to value size more.
+    double coeffOfPrecedence = 1.0; // Set it less than 1, so that smaller clusters are less important.
 
     public RandomPlayer() {
         super();
         this.name = "Random Player";
     }
 
+    public RandomPlayer(double coeffOfHeight, double coeffOfSize, double coeffOfPrecedence) {
+        super();
+        this.name = "Random Player";
+        this.coeffOfHeight = coeffOfHeight;
+        this.coeffOfSize = coeffOfSize;
+        this.coeffOfPrecedence = coeffOfPrecedence;
+    }
+
+    public String reportCoeff() {
+        return "coeffOfHeight = " + coeffOfHeight + " , coeffOfSize = " + coeffOfSize + " , coeffOfPrecedence = " + coeffOfPrecedence;
+    }
+
     @Override
     public int evaluationFunction(GameField field, Color myColor) {
-        final double coeffOfPrecedence = (float) 1.0; // Set it less than 1, so that smaller clusters are less important.
 
         List<GameField.SizeHeight> greenScores = field.sizeHeightScore(Color.GREEN);
         double greenScore = 0;
@@ -49,15 +63,11 @@ public class RandomPlayer extends OneLookaheadPlayer {
     }
 
     private double heightBonusCalculator(int height) {
-        final double coeffOfHeight = 0.5; // Set it higher to value height more.
         return Math.exp(coeffOfHeight * (height - 1));
-        // return 1;
     }
 
     private double sizeBonusCalculator(int size) {
-        final double coeffOfSize = 0.3; // Set it higher to value size more.
         return Math.exp(coeffOfSize * (size - 1));
-        // return 1;
     }
 
 
