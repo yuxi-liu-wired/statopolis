@@ -9,6 +9,12 @@ import java.util.Random;
  * Created by Yuxi Liu (u5950011) on 8/12/16.
  */
 public class RandomPlayer extends OneLookaheadPlayer {
+
+    public RandomPlayer() {
+        super();
+        this.name = "Random Player";
+    }
+
     @Override
     public int evaluationFunction(GameField field, Color myColor) {
         final double coeffOfPrecedence = (float) 1.0; // Set it less than 1, so that smaller clusters are less important.
