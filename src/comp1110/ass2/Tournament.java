@@ -1,5 +1,6 @@
 package comp1110.ass2;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,7 +10,7 @@ import java.util.List;
  * Created by Yuxi Liu (u5950011) on 10/22/16.
  */
 public class Tournament {
-    static final int TOURNAMENT_LIMIT = 1;
+    static final int TOURNAMENT_LIMIT = 10;
 
     static class Coeff {
         double coeffOfHeight;
@@ -27,8 +28,8 @@ public class Tournament {
 
     static ArrayList<Coeff> generateCoeffList() {
         ArrayList<Coeff> coeffList = new ArrayList<>();
-        List<Double> heights = Arrays.asList(0.5);
-        List<Double> sizes = Arrays.asList(0.3);
+        List<Double> heights = Arrays.asList(0.4, 0.7, 1.0);
+        List<Double> sizes = Arrays.asList(0.1, 0.25, 0.4); // 0.1 means not much bias. 0.4 means extreme bias
         List<Double> precedences = Arrays.asList(1.0, 0.8, 0.6, 0.4, 0.2);
         for (Double height : heights)
             for (Double size : sizes)
@@ -80,6 +81,7 @@ public class Tournament {
     }
 
     public static void main(String[] args) {
+
         RandomPlayer randomPlayer = new RandomPlayer();
         OneLookaheadPlayer onePlayer = new OneLookaheadPlayer();
 
@@ -139,10 +141,15 @@ public class Tournament {
 
         }
 
-        for (Record r : recordList) {
-            System.out.println(r);
+        try {
+            PrintWriter writer = new PrintWriter("tournamentRecords.txt", "UTF-8");
+            for (Record r : recordList) {
+                writer.println(r);
+            }
+            writer.close();
+        } catch (Exception e) {
+            System.out.println(e);
         }
-
     }
 
     static class Record {
