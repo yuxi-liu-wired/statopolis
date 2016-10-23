@@ -9,9 +9,9 @@ import java.util.Random;
  * Created by Yuxi Liu (u5950011) on 8/12/16.
  */
 public class RandomPlayer extends OneLookaheadPlayer {
-    double coeffOfHeight = 0.5; // Set it higher to value height more.
-    double coeffOfSize = 0.3; // Set it higher to value size more.
-    double coeffOfPrecedence = 1.0; // Set it less than 1, so that smaller clusters are less important.
+    double coeffOfHeight = 0.4; // Set it higher to value height more.
+    double coeffOfSize = 0.1; // Set it higher to value size more.
+    double coeffOfPrecedence = 0.85; // Set it less than 1, so that smaller clusters are less important.
 
     public RandomPlayer() {
         super();

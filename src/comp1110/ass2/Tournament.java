@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Yuxi Liu (u5950011) on 10/22/16.
  */
 public class Tournament {
-    static final int TOURNAMENT_LIMIT = 10;
+    static final int TOURNAMENT_LIMIT = 50;
 
     static class Coeff {
         double coeffOfHeight;
@@ -27,14 +27,22 @@ public class Tournament {
     }
 
     static ArrayList<Coeff> generateCoeffList() {
-        ArrayList<Coeff> coeffList = new ArrayList<>();
-        List<Double> heights = Arrays.asList(0.4, 0.7, 1.0);
-        List<Double> sizes = Arrays.asList(0.1, 0.25, 0.4); // 0.1 means not much bias. 0.4 means extreme bias
+        ArrayList<Coeff> coeffList = new ArrayList<>();/*
+        List<Double> heights = Arrays.asList(1.0);
+        List<Double> sizes = Arrays.asList(0.1); // 0.1 means not much bias. 0.4 means extreme bias
         List<Double> precedences = Arrays.asList(1.0, 0.8, 0.6, 0.4, 0.2);
         for (Double height : heights)
             for (Double size : sizes)
                 for (Double precedence : precedences)
-                    coeffList.add(new Coeff(height, size, precedence));
+                    coeffList.add(new Coeff(height, size, precedence));*/
+
+        coeffList.add(new Coeff(0.4, 0.1, 0.8));
+        coeffList.add(new Coeff(0.5, 0.1, 0.8));
+        coeffList.add(new Coeff(0.3, 0.1, 0.8));
+        coeffList.add(new Coeff(0.4, 0.2, 0.8));
+        coeffList.add(new Coeff(0.4, 0.05, 0.8));
+        coeffList.add(new Coeff(0.4, 0.1, 0.85));
+        coeffList.add(new Coeff(0.4, 0.1, 0.7));
 
         return coeffList;
     }
