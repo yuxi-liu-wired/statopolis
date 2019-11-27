@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="base64_conversion.svg">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;">
+      <path
+         id="path3850"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.86961538"
+     inkscape:cx="387.8091"
+     inkscape:cy="774.26369"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1440"
+     inkscape:window-height="847"
+     inkscape:window-x="0"
+     inkscape:window-y="29"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g4397"
+       inkscape:export-filename="/home/cosmia/Desktop/ANU/COMP1140/comp1140-ass2-report/image/base64_conversion.png"
+       inkscape:export-xdpi="120"
+       inkscape:export-ydpi="120">
+      <text
+         sodipodi:linespacing="125%"
+         id="text2985-0"
+         y="302.83997"
+         x="-85.546692"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+         xml:space="preserve"><tspan
+           style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Courier;-inkscape-font-specification:Courier Bold"
+           y="302.83997"
+           x="-85.546692"
+           id="tspan2987-8"
+           sodipodi:role="line">TU1VQU5OUEFPTUhETUtSQUtLQUEsRUlBQkZDSURCREdKR0hDSkZFLFRMTVFOTlJTS09TS1BMUVRNTw==</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text2985-6"
+         y="249.08698"
+         x="381.97177"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+         xml:space="preserve"><tspan
+           style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Courier;-inkscape-font-specification:Courier Bold"
+           y="249.08698"
+           x="381.97177"
+           id="tspan2987-6"
+           sodipodi:role="line">Base64 encoding</tspan></text>
+      <path
+         inkscape:connector-curvature="0"
+         id="path3073"
+         d="m 367.73619,206.91454 0,74.80758"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Lend)" />
+      <g
+         id="g4382">
+        <g
+           id="g4319">
+          <text
+             sodipodi:linespacing="125%"
+             id="text2985"
+             y="184.95316"
+             x="25.264694"
+             style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica;-inkscape-font-specification:Helvetica"
+             xml:space="preserve"><tspan
+               style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Courier;-inkscape-font-specification:Courier Bold"
+               y="184.95316"
+               x="25.264694"
+               id="tspan2987"
+               sodipodi:role="line">MMUANNPAOMHDMKRAKKAA,EIABFCIDBDGJGHCJFE,TLMQNNRSKOSKPLQTMO</tspan></text>
+          <g
+             id="g4314">
+            <path
+               style="fill:none;stroke:#159200;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+               d="m 506.09056,168.08778 212.57676,0"
+               id="path4287-8"
+               inkscape:connector-curvature="0"
+               sodipodi:nodetypes="cc" />
+            <path
+               style="fill:none;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+               d="m 277.96296,168.08778 216.31404,0"
+               id="path4287"
+               inkscape:connector-curvature="0"
+               sodipodi:nodetypes="cc" />
+            <path
+               style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+               d="m 24.789063,168.08778 239.894697,0"
+               id="path4287-2"
+               inkscape:connector-curvature="0"
+               sodipodi:nodetypes="cc" />
+          </g>
+        </g>
+        <text
+           xml:space="preserve"
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Courier;-inkscape-font-specification:Courier"
+           x="96.060104"
+           y="157.90262"
+           id="text4327"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4329"
+             x="96.060104"
+             y="157.90262"
+             style="font-size:15px;font-weight:bold;-inkscape-font-specification:Courier Bold">Game history</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Courier;-inkscape-font-specification:Courier"
+           x="293.88184"
+           y="157.87262"
+           id="text4327-3"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4329-3"
+             x="293.88184"
+             y="157.87262"
+             style="font-size:15px;font-weight:bold;fill:#ff0000;fill-opacity:1;-inkscape-font-specification:Courier Bold">Red's stack of pieces</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#159200;fill-opacity:1;stroke:none;font-family:Courier;-inkscape-font-specification:Courier"
+           x="510.06363"
+           y="157.87262"
+           id="text4327-3-0"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4329-3-4"
+             x="510.06363"
+             y="157.87262"
+             style="font-size:15px;font-weight:bold;fill:#159200;fill-opacity:1;-inkscape-font-specification:Courier Bold">Green's stack of pieces</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>
