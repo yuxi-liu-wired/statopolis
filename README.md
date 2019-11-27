@@ -1,12 +1,19 @@
 # Stratopolis
 
-This is a Java implementation of the boardgame Stratopolis, written for the [COMP1140 course in Australian National University, 2016](https://web.archive.org/web/20180514193201/https://programsandcourses.anu.edu.au/2016/course/COMP1140). The assignment started with a code template, upon which I coded the rest.
+This is a Java implementation of the boardgame [Stratopolis](https://www.boardgamegeek.com/boardgame/125022/stratopolis), published by Gigamic in 2012. I wrote it as the final project for the [COMP1140 course in Australian National University, 2016](https://web.archive.org/web/20180514193201/https://programsandcourses.anu.edu.au/2016/course/COMP1140). The assignment started with a code template, upon which I coded the rest.
 
-Implemented in Java and JavaFX.
+Coded in Java and JavaFX.
+
+### Game instructions
+
+For general rules of Stratopolis, please search online.
+
+For my implementation specifically, Green always moves first. There are two AI players available:
+
+* `RandomPlayer` plays randomly;
+* `OneLookaheadPlayer` plays the minimax strategy with one step lookahead.
 
 Example screenshot: ![gui_screenshot](presentation/images/gui_screenshot.png)
-
-
 
 ### File structure
 
