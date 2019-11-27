@@ -4,7 +4,7 @@ This is a Java implementation of the boardgame Stratopolis, written for the [COM
 
 Implemented in Java and JavaFX.
 
-Example screenshot: ![gui_screenshot](presentation\images\gui_screenshot.png)
+Example screenshot: ![gui_screenshot](presentation/images/gui_screenshot.png)
 
 
 
@@ -15,4 +15,3 @@ Example screenshot: ![gui_screenshot](presentation\images\gui_screenshot.png)
 
 * [`src`](src): Folder of the Java source code.
 * [`presentation`](presentation): Folder containing the final presentation slides and the LaTeX files used to generate it.
-
